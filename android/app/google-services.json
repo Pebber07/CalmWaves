@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "299934911671",
+    "project_id": "calmwaves-c6569",
+    "storage_bucket": "calmwaves-c6569.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:299934911671:android:464c5c843422121e929132",
+        "android_client_info": {
+          "package_name": "com.example.calmwaves_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbUR11io-huK70GyLylwNoz8Xi5786QVg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
