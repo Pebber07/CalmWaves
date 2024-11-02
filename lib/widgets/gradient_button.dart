@@ -3,7 +3,8 @@ import "package:calmwaves_app/palette.dart";
 
 class GradientButton extends StatelessWidget {
   final VoidCallback onPressed;
-  const GradientButton({super.key, required this.onPressed});
+  final String text;
+  const GradientButton({super.key, required this.onPressed, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +13,6 @@ class GradientButton extends StatelessWidget {
         gradient: const LinearGradient(colors: [
           Pallete.gradient1,
           Pallete.gradient2,
-          Pallete.gradient3,
         ],
         begin: Alignment.bottomLeft,
         end: Alignment.topRight,
@@ -26,9 +26,9 @@ class GradientButton extends StatelessWidget {
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
         ),
-        child: const Text(
-          'Log In',
-          style: TextStyle(
+        child: Text(
+          text,
+          style: const TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 17,
           ),

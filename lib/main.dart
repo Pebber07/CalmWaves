@@ -2,7 +2,9 @@
 import 'package:calmwaves_app/firebase_options.dart';
 import 'package:calmwaves_app/pages/home_screen.dart';
 import 'package:calmwaves_app/pages/login_screen.dart';
+// import 'package:calmwaves_app/pages/login_screen.dart';
 import 'package:calmwaves_app/pages/register_screen.dart';
+import 'package:calmwaves_app/pages/starter_screen.dart';
 // import 'package:calmwaves_app/pages/register_screen.dart';
 import 'package:calmwaves_app/palette.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,18 +27,18 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Pallete.backgroundColor,
       ),
-      home: StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.data != null){
-            return const HomeScreen();
-          }
-          return const RegisterScreen();
-        },
-      ), //LoginScreen(),
+      home: const StarterScreen(), //StreamBuilder(
+      //   stream: FirebaseAuth.instance.authStateChanges(),
+      //   builder: (context, snapshot) {
+      //     if (snapshot.connectionState == ConnectionState.waiting) {
+      //       return const Center(child: CircularProgressIndicator());
+      //     }
+      //     if (snapshot.data != null){
+      //       return const HomeScreen();
+      //     }
+      //     return const RegisterScreen();
+      //   },
+      // ), //LoginScreen(),
     );
   }
 }

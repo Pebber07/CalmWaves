@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
+import 'package:calmwaves_app/widgets/gradient_button.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -20,6 +22,12 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(
                 height: 50,
+              ),
+              GradientButton(
+                text: "Log out",
+                onPressed: () async {
+                  await FirebaseAuth.instance.signOut();
+                },
               ),
             ],
           ),

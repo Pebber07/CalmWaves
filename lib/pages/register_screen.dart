@@ -51,7 +51,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               children: [
                 Image.asset('assets/images/signin_balls.png'),
                 const Text(
-                  'Welcome',
+                  'Register',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 50,
@@ -98,6 +98,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   height: 15,
                 ),
                 GradientButton(
+                  text: "Register",
                   onPressed: () async {
                     createUserWithEmailAndPassword();
                   },
@@ -111,11 +112,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                   child: RichText(
                     text: TextSpan(
-                      text: 'Don\'t have an account? ',
+                      text: 'Already have an account? ',
                       style: Theme.of(context).textTheme.titleMedium,
                       children: [
                         TextSpan(
-                          text: 'Sign Up',
+                          text: 'Sign In',
                           style:
                               Theme.of(context).textTheme.titleMedium?.copyWith(
                                     fontWeight: FontWeight.bold,
