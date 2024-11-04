@@ -5,6 +5,7 @@ import 'package:calmwaves_app/pages/login_screen.dart';
 // import 'package:calmwaves_app/pages/login_screen.dart';
 import 'package:calmwaves_app/pages/register_screen.dart';
 import 'package:calmwaves_app/pages/starter_screen.dart';
+import 'package:calmwaves_app/pages/welcome_screen.dart';
 // import 'package:calmwaves_app/pages/register_screen.dart';
 import 'package:calmwaves_app/palette.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Pallete.backgroundColor,
       ),
-      home: const StarterScreen(), //StreamBuilder(
+      home: const WelcomeScreen(), //StreamBuilder(
       //   stream: FirebaseAuth.instance.authStateChanges(),
       //   builder: (context, snapshot) {
       //     if (snapshot.connectionState == ConnectionState.waiting) {
