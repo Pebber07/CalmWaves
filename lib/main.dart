@@ -1,6 +1,8 @@
 // import 'package:calmwaves_app/pages/home_screen.dart';
 import 'package:calmwaves_app/firebase_options.dart';
+import 'package:calmwaves_app/pages/articles_screen.dart';
 import 'package:calmwaves_app/pages/home_screen.dart';
+import 'package:calmwaves_app/pages/journal_screen.dart';
 import 'package:calmwaves_app/pages/login_screen.dart';
 // import 'package:calmwaves_app/pages/login_screen.dart';
 import 'package:calmwaves_app/pages/register_screen.dart';
@@ -28,7 +30,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Pallete.backgroundColor,
       ),
-      home: const HomeScreen(), // StreamBuilder(
+      home: const JournalScreen(), // StreamBuilder(
       //   stream: FirebaseAuth.instance.authStateChanges(),
       //   builder: (context, snapshot) {
       //     if (snapshot.connectionState == ConnectionState.waiting) {
