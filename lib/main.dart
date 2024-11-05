@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Pallete.backgroundColor,
       ),
-      home: const WelcomeScreen(), //StreamBuilder(
+      home: const HomeScreen(), // StreamBuilder(
       //   stream: FirebaseAuth.instance.authStateChanges(),
       //   builder: (context, snapshot) {
       //     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
       //     }
       //     return const RegisterScreen();
       //   },
-      // ), //LoginScreen(),
+      // ), 
     );
   }
 }
