@@ -3,6 +3,7 @@ import "package:calmwaves_app/widgets/calendar_theme_card.dart";
 import "package:calmwaves_app/widgets/choose_day_widget.dart";
 import "package:calmwaves_app/widgets/choose_time_widget.dart";
 import "package:calmwaves_app/widgets/custom_app_bar.dart";
+import "package:calmwaves_app/widgets/custom_drawer.dart";
 import "package:calmwaves_app/widgets/gradient_button.dart";
 import "package:flutter/material.dart";
 
@@ -18,6 +19,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(),
+      drawer: const CustomDrawer(),
       body: SingleChildScrollView(
         child: Center(
           child: Column(

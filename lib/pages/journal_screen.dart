@@ -1,4 +1,5 @@
 import "package:calmwaves_app/widgets/custom_app_bar.dart";
+import "package:calmwaves_app/widgets/custom_drawer.dart";
 import "package:calmwaves_app/widgets/feeling_card.dart";
 import "package:calmwaves_app/widgets/gradient_button.dart";
 import "package:flutter/material.dart";
@@ -10,6 +11,7 @@ class JournalScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       appBar: CustomAppBar(),
+      drawer: CustomDrawer(),
       body: SingleChildScrollView(
         child: Center(
           child: Column(

@@ -1,6 +1,7 @@
 import 'package:calmwaves_app/palette.dart';
 import 'package:calmwaves_app/widgets/activity_type.dart';
 import 'package:calmwaves_app/widgets/custom_app_bar.dart';
+import 'package:calmwaves_app/widgets/custom_drawer.dart';
 import 'package:calmwaves_app/widgets/event_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(),
+      drawer: const CustomDrawer(),
       body: Column(
         children: [
           const Center(

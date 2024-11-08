@@ -1,6 +1,7 @@
 import "package:calmwaves_app/pages/article_detail_screen.dart";
 import "package:calmwaves_app/widgets/article_card.dart";
 import "package:calmwaves_app/widgets/custom_app_bar.dart";
+import "package:calmwaves_app/widgets/custom_drawer.dart";
 import "package:flutter/material.dart";
 // import 'custom_app_bar.dart';
 // import 'article_card.dart';
@@ -35,6 +36,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(),
+      drawer: const CustomDrawer(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

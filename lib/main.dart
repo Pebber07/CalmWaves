@@ -7,6 +7,7 @@ import 'package:calmwaves_app/pages/journal_screen.dart';
 import 'package:calmwaves_app/pages/login_screen.dart';
 // import 'package:calmwaves_app/pages/login_screen.dart';
 import 'package:calmwaves_app/pages/register_screen.dart';
+import 'package:calmwaves_app/pages/settings_screen.dart';
 import 'package:calmwaves_app/pages/starter_screen.dart';
 import 'package:calmwaves_app/pages/welcome_screen.dart';
 // import 'package:calmwaves_app/pages/register_screen.dart';
@@ -27,22 +28,34 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'CalmWaves',
+      title: "CalmWaves",
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Pallete.backgroundColor,
       ),
-      home: const CreateEventScreen(), // StreamBuilder(
-      //   stream: FirebaseAuth.instance.authStateChanges(),
-      //   builder: (context, snapshot) {
-      //     if (snapshot.connectionState == ConnectionState.waiting) {
-      //       return const Center(child: CircularProgressIndicator());
-      //     }
-      //     if (snapshot.data != null){
-      //       return const HomeScreen();
-      //     }
-      //     return const RegisterScreen();
-      //   },
-      // ), 
+      initialRoute: "/home",
+      routes: {
+        "/home": (context) => const HomeScreen(),
+        "/settings": (context) => const SettingsScreen(),
+        "/articles": (context) => const ArticlesScreen(),
+        "/events": (context) => const CreateEventScreen(),
+        "/journal": (context) => const JournalScreen(),
+        "/login": (context) => const LoginScreen(),
+        "/register": (context) => const RegisterScreen(),
+        "/starter": (context) => const StarterScreen(),
+        "/welcome": (context) => const WelcomeScreen(),     
+      },
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.data != null){
+            return const HomeScreen();
+          }
+          return const RegisterScreen();
+        },
+      ), 
     );
   }
 }
