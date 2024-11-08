@@ -1,6 +1,6 @@
 import "dart:convert";
 
-import "package:calmwaves_app/widgets/card.dart";
+import "package:calmwaves_app/widgets/features_card.dart";
 import "package:calmwaves_app/widgets/feature.dart";
 import "package:calmwaves_app/widgets/gradient_button.dart";
 import "package:flutter/material.dart";
@@ -40,6 +40,7 @@ class WelcomeScreen extends StatelessWidget {
                 height: 60,
               ),
               GradientButton(
+                buttonWidth: double.infinity,
                 text: "Next", // It would be nice in the footer
                 onPressed: () {},
               ),

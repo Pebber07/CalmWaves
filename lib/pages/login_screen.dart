@@ -96,6 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 20,
               ),
               GradientButton(
+                buttonWidth: double.infinity,
                 text: "Log In",
                 onPressed: () async {
                   await loginUserWithEmailAndPassword();

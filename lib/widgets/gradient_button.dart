@@ -4,11 +4,13 @@ import "package:calmwaves_app/palette.dart";
 class GradientButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
-  const GradientButton({super.key, required this.onPressed, required this.text});
+  final double buttonWidth;
+  const GradientButton({super.key, required this.onPressed, required this.text, required this.buttonWidth});
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: buttonWidth,
       decoration: BoxDecoration(
         gradient: const LinearGradient(colors: [
           Pallete.gradient1,

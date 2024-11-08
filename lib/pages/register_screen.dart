@@ -98,6 +98,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   height: 15,
                 ),
                 GradientButton(
+                  buttonWidth: double.infinity,
                   text: "Register",
                   onPressed: () async {
                     createUserWithEmailAndPassword();
