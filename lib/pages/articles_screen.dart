@@ -2,6 +2,7 @@ import "package:calmwaves_app/pages/article_detail_screen.dart";
 import "package:calmwaves_app/widgets/article_card.dart";
 import "package:calmwaves_app/widgets/custom_app_bar.dart";
 import "package:calmwaves_app/widgets/custom_drawer.dart";
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 // import 'custom_app_bar.dart';
 // import 'article_card.dart';
@@ -15,22 +16,20 @@ class ArticlesScreen extends StatefulWidget {
 }
 
 class _ArticlesScreenState extends State<ArticlesScreen> {
-  List<Map<String, dynamic>> articles = [
-    {
-      'title': 'Cikk 1',
-      'excerpt': 'Ez a cikk rövid összefoglalója...',
-      'content': 'Ez a teljes cikk szövege...',
-      'isFavorite': false,
-    },
-    {
-      'title': 'Cikk 2',
-      'excerpt': 'Ez egy másik cikk összefoglalója...',
-      'content': 'Ez egy másik teljes cikk szövege...',
-      'isFavorite': false,
-    },
-  ];
+  final CollectionReference articlesCollection =
+      FirebaseFirestore.instance.collection('articles');
 
   String filter = 'Hot';
+
+  Future<void> _addArticle() async {
+    // Új cikk hozzáadása a Firestore-hoz
+    await articlesCollection.add({
+      'title': 'Új cikk',
+      'excerpt': 'Ez egy új cikk rövid összefoglalója...',
+      'content': 'Ez egy új cikk teljes szövege...',
+      'isFavorite': false,
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,31 +80,50 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
             ],
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: articles.length,
-              itemBuilder: (context, index) {
-                final article = articles[index];
-                if (filter == 'Favorites' && !article['isFavorite']) {
-                  return const SizedBox.shrink();
+            child: StreamBuilder(
+              stream: articlesCollection.snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
                 }
-                return ArticleCard(
-                  title: article['title'],
-                  articleText: article['excerpt'],
-                  isFavorite: article['isFavorite'],
-                  onFavoriteToggle: () {
-                    setState(() {
-                      article['isFavorite'] = !article['isFavorite'];
-                    });
-                  },
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ArticleDetailScreen(
-                          title: article['title'],
-                          content: article['content'],
-                        ),
-                      ),
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return const Center(
+                    child: Text("Nincsenek elérhető cikkek."),
+                  );
+                }
+                final articles = snapshot.data!.docs;
+
+                return ListView.builder(
+                  itemCount: articles.length,
+                  itemBuilder: (context, index) {
+                    final article = articles[index];
+                    final isFavorite = article["isFavorite"] as bool;
+
+                    if (filter == "Favorites" && !isFavorite) {
+                      return const SizedBox.shrink();
+                    }
+
+                    return ArticleCard(
+                      title: article["title"],
+                      articleText: article["excerpt"],
+                      isFavorite: isFavorite,
+                      onFavoriteToggle: () {
+                        article.reference.update({'isFavorite': !isFavorite});
+                      },
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ArticleDetailScreen(
+                              title: article["title"] as String,
+                              content: article["content"] as String,
+                              imageUrl: article["imageUrl"] as String,
+                            ),
+                          ),
+                        );
+                      },
                     );
                   },
                 );
@@ -113,6 +131,10 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addArticle,
+        child: const Icon(Icons.add),
       ),
     );
   }
