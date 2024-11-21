@@ -3,10 +3,37 @@ import "package:calmwaves_app/widgets/custom_app_bar.dart";
 import "package:calmwaves_app/widgets/custom_drawer.dart";
 import "package:calmwaves_app/widgets/gradient_button.dart";
 import "package:calmwaves_app/widgets/social_button.dart";
+import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
+import "package:fluttertoast/fluttertoast.dart";
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
+
+  Future<void> _signOut(BuildContext context) async {
+    try {
+      await FirebaseAuth.instance.signOut();
+
+      Fluttertoast.showToast(
+      msg: "Signing off...",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.black,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+  
+      if (context.mounted) {
+        Navigator.pushReplacementNamed(context, "/login");
+      }
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: "Hiba történt a kijelentkezés során!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +119,7 @@ class SettingsScreen extends StatelessWidget {
                       onPressed: () {},
                       child: const Text(
                         "Connect",
-                        style:TextStyle(
+                        style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
@@ -106,7 +133,11 @@ class SettingsScreen extends StatelessWidget {
                 height: 20,
               ),
               GradientButton(
-                  onPressed: () {}, text: "Sign Out", buttonWidth: 150),
+                  onPressed: () async {
+                    await _signOut(context);
+                  },
+                  text: "Sign Out",
+                  buttonMargin: 20),
             ],
           ),
         ),

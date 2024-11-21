@@ -4,7 +4,8 @@ import "package:calmwaves_app/palette.dart";
 class LoginField extends StatelessWidget {
   final String hintText;
   final TextEditingController controller; // I'm not sure if this is correct
-  const LoginField({super.key, required this.hintText, required this.controller});
+  final String buttonLabelText;
+  const LoginField({super.key, required this.hintText, required this.controller, required this.buttonLabelText});
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +31,8 @@ class LoginField extends StatelessWidget {
             ),
             borderRadius: BorderRadius.circular(10),
           ),
+          labelText: buttonLabelText ,
+          floatingLabelBehavior: FloatingLabelBehavior.always,
           hintText: hintText,
         ),
       ),

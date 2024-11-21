@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Pallete.backgroundColor,
       ),
-      initialRoute: "/home",
+      initialRoute: "/starter",
       routes: {
         "/home": (context) => const HomeScreen(),
         "/settings": (context) => const SettingsScreen(),

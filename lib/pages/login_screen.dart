@@ -34,9 +34,30 @@ class _LoginScreenState extends State<LoginScreen> {
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
-      print(userCredential);
+
+      if (!userCredential.user!.emailVerified) {
+        if (!mounted) return;
+        showDialog(
+          context: context,
+          builder: (context) => const AlertDialog(
+            title: Text('Email not verified'),
+            content: Text('Kérlek, erősítsd meg az email címedet!'),
+          ),
+        );
+        return;
+      }
+
+      // Sikeres bejelentkezés
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, '/home');
     } on FirebaseAuthException catch (e) {
-      print(e.message);
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Hiba'),
+          content: Text(e.message ?? 'Ismeretlen hiba történt.'),
+        ),
+      );
     }
   }
 
@@ -61,16 +82,8 @@ class _LoginScreenState extends State<LoginScreen> {
               const SocialButton(
                   iconPath: 'assets/svgs/g_logo.svg',
                   label: 'Continue with Google'),
-              // const SizedBox(
-              //   height: 20,
-              // ),
-              // const SocialButton(
-              //   iconPath: 'assets/svgs/f_logo.svg',
-              //   label: 'Continue with Facebook',
-              //   horizontalPaddding: 40,
-              // ),
               const SizedBox(
-                height: 15,
+                height: 10,
               ),
               const Text(
                 'or',
@@ -79,24 +92,26 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(
-                height: 15,
+                height: 10,
               ),
               LoginField(
                 controller: emailController,
-                hintText: 'Email',
+                buttonLabelText: "Username",
+                hintText: 'Enter your username',
               ),
               const SizedBox(
-                height: 15,
+                height: 13,
               ),
               LoginField(
                 controller: passwordController,
-                hintText: 'Password',
+                buttonLabelText: "Password",
+                hintText: 'Enter your password',
               ),
               const SizedBox(
-                height: 20,
+                height: 120,
               ),
               GradientButton(
-                buttonWidth: double.infinity,
+                buttonMargin: 20,
                 text: "Log In",
                 onPressed: () async {
                   await loginUserWithEmailAndPassword();

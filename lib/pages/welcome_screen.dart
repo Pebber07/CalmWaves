@@ -40,7 +40,7 @@ class WelcomeScreen extends StatelessWidget {
                 height: 60,
               ),
               GradientButton(
-                buttonWidth: double.infinity,
+                buttonMargin: 20,
                 text: "Next", // It would be nice in the footer
                 onPressed: () {},
               ),

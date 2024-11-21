@@ -39,7 +39,7 @@ class StarterScreen extends StatelessWidget {
                 height: 40,
               ),
               GradientButton(
-                buttonWidth: double.infinity,
+                buttonMargin: 20,
                 text: "Get Started",
                 onPressed: () {},
               ),

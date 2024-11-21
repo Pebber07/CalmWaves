@@ -37,9 +37,9 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               Row(
                 children: [
                   const SizedBox(width: 50,),
-                  GradientButton(onPressed: () {}, text: "Save date", buttonWidth: 100),
+                  GradientButton(onPressed: () {}, text: "Save date", buttonMargin: 20),
                   const SizedBox(width: 50,),
-                  GradientButton(onPressed: () {}, text: "Save date and continue", buttonWidth: 100),  
+                  GradientButton(onPressed: () {}, text: "Save date and continue", buttonMargin: 20),  
                 ],
               ),  
             ],
