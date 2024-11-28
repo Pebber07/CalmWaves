@@ -5,7 +5,8 @@ class LoginField extends StatelessWidget {
   final String hintText;
   final TextEditingController controller; // I'm not sure if this is correct
   final String buttonLabelText;
-  const LoginField({super.key, required this.hintText, required this.controller, required this.buttonLabelText});
+  final bool hideText;
+  const LoginField({super.key, required this.hintText, required this.controller, required this.buttonLabelText, required this.hideText});
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +16,7 @@ class LoginField extends StatelessWidget {
       ),
       child: TextFormField(
         controller: controller,
+        obscureText: hideText,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.all(15),
           enabledBorder: OutlineInputBorder(

@@ -12,7 +12,20 @@
           "package_name": "com.example.calmwaves_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "299934911671-7siseqnpikoipujuda1l7q59e8pm483p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.calmwaves_app",
+            "certificate_hash": "1b2abad2d710e64651d9bf9eed94ef8bf1bc4c8a"
+          }
+        },
+        {
+          "client_id": "299934911671-vhar7m4gkgcbp8updc5aj3r9kj6dn9ju.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBbUR11io-huK70GyLylwNoz8Xi5786QVg"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "299934911671-vhar7m4gkgcbp8updc5aj3r9kj6dn9ju.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "299934911671-8i5ujbjntnun96jfhh1c0rmbv5dhdid0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.calmwavesApp"
+              }
+            }
+          ]
         }
       }
     }

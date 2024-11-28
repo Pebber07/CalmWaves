@@ -6,12 +6,13 @@ class SocialButton extends StatelessWidget {
   final String iconPath;
   final String label;
   final double horizontalPaddding;
-  const SocialButton({super.key, required this.iconPath, required this.label, this.horizontalPaddding = 50});
+  final VoidCallback buttonOnPressed;
+  const SocialButton({super.key, required this.iconPath, required this.label, this.horizontalPaddding = 50, required this.buttonOnPressed});
 
   @override
   Widget build(BuildContext context) {
     return TextButton.icon(
-      onPressed: () {},
+      onPressed: buttonOnPressed,
       icon: SvgPicture.asset(
         iconPath,
         width: 25,

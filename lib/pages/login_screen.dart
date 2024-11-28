@@ -1,9 +1,12 @@
 import "package:calmwaves_app/pages/register_screen.dart";
+import "package:calmwaves_app/services/google_auth.dart";
 import "package:calmwaves_app/widgets/gradient_button.dart";
 import "package:calmwaves_app/widgets/login_field.dart";
 import "package:calmwaves_app/widgets/social_button.dart";
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
+import "package:google_sign_in/google_sign_in.dart";
 
 class LoginScreen extends StatefulWidget {
   static route() => MaterialPageRoute(
@@ -26,6 +29,8 @@ class _LoginScreenState extends State<LoginScreen> {
     passwordController.dispose();
     super.dispose();
   }
+
+  final googleAuthService = GoogleAuthService();
 
   Future<void> loginUserWithEmailAndPassword() async {
     try {
@@ -79,9 +84,28 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 50,
               ),
-              const SocialButton(
-                  iconPath: 'assets/svgs/g_logo.svg',
-                  label: 'Continue with Google'),
+              SocialButton(
+                iconPath: 'assets/svgs/g_logo.svg',
+                label: 'Continue with Google',
+                buttonOnPressed: () async {
+                  try {
+                    final userCredential = await googleAuthService.signInWithGoogle();
+                    if (userCredential != null) {
+                      if(!mounted) return;
+                      Navigator.pushReplacementNamed(context, '/home');
+                    }
+                  } catch (e) {
+                    if(!mounted) return;
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Hiba'),
+                        content: Text(e.toString()),
+                      ),
+                    );
+                  }
+                },
+              ),
               const SizedBox(
                 height: 10,
               ),
@@ -96,6 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               LoginField(
                 controller: emailController,
+                hideText: false,
                 buttonLabelText: "Username",
                 hintText: 'Enter your username',
               ),
@@ -104,6 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               LoginField(
                 controller: passwordController,
+                hideText: true,
                 buttonLabelText: "Password",
                 hintText: 'Enter your password',
               ),

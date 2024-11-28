@@ -1,10 +1,13 @@
 import "package:calmwaves_app/pages/login_screen.dart";
+import "package:calmwaves_app/services/google_auth.dart";
 import "package:calmwaves_app/widgets/gradient_button.dart";
 import "package:calmwaves_app/widgets/login_field.dart";
 import "package:calmwaves_app/widgets/social_button.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
+import "package:fluttertoast/fluttertoast.dart";
+import "package:google_sign_in/google_sign_in.dart";
 
 class RegisterScreen extends StatefulWidget {
   static route() => MaterialPageRoute(
@@ -31,6 +34,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     confirmPasswordController.dispose();
     super.dispose();
   }
+
+  final googleAuthService = GoogleAuthService();
 
   bool areFieldsFilled() {
     return emailController.text.trim().isNotEmpty &&
@@ -89,6 +94,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       await FirebaseFirestore.instance.collection('users').doc(userId).set({
         'userinfo': {
           'username': usernameController.text.trim(),
+          'isPasswordChanged': false,
+          'profilePicture': "", // Todo: Download a template Profile picture.
           'email': emailController.text.trim(),
         },
         'messages': [],
@@ -147,9 +154,59 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                   height: 35,
                 ),
-                const SocialButton(
-                    iconPath: 'assets/svgs/g_logo.svg',
-                    label: 'Continue with Google'),
+                SocialButton(
+                  iconPath: 'assets/svgs/g_logo.svg',
+                  label: 'Continue with Google',
+                  buttonOnPressed: () async {
+                    try {
+                      final userCredential =
+                          await googleAuthService.signInWithGoogle();
+                      if (userCredential != null) {
+                        final user = userCredential.user!;
+                        final userRef = FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(user.uid);
+                        final docSnapshot = await userRef.get();
+
+                        if (!docSnapshot.exists) {
+                          // Ha új felhasználó, hozd létre az adatokat
+                          await userRef.set({
+                            'userinfo': {
+                              'username': user.displayName ?? 'No Name',
+                              'email': user.email,
+                            },
+                            'articles': [],
+                            'messages': [],
+                            'calendar': [],
+                            'mood': [],
+                            'settings': {'notificationsEnabled': true},
+                          });
+                        }
+
+                        if (!mounted) return;
+                        Navigator.pushReplacementNamed(context, '/home');
+                      } else {
+                        Fluttertoast.showToast(
+                          msg: "Nem választott fiókot!",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          backgroundColor: Colors.black,
+                          textColor: Colors.white,
+                          fontSize: 16.0,
+                        );
+                      }
+                    } catch (e) {
+                      if (!mounted) return;
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('Hiba'),
+                          content: Text(e.toString()),
+                        ),
+                      );
+                    }
+                  },
+                ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -164,14 +221,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 LoginField(
                   controller: emailController,
+                  hideText: false,
                   buttonLabelText: "Email",
-                  hintText: 'Someone@gmail.com',
+                  hintText: 'Someone@gmail.com', 
                 ),
                 const SizedBox(
                   height: 13,
                 ),
                 LoginField(
                   controller: usernameController,
+                  hideText: false,
                   buttonLabelText: "Username",
                   hintText: 'MentalKing02',
                 ),
@@ -180,6 +239,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 LoginField(
                   controller: passwordController,
+                  hideText: false,
                   buttonLabelText: "Password",
                   hintText: 'Randompassword1010',
                 ),
@@ -188,6 +248,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 LoginField(
                   controller: confirmPasswordController,
+                  hideText: false,
                   buttonLabelText: "Password Again",
                   hintText: 'Randompassword1010',
                 ),
