@@ -140,6 +140,14 @@ class CustomDrawer extends StatelessWidget {
               Navigator.pushNamed(context, '/welcome');
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.notifications),
+            title: const Text('Értesítések'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/notifications');
+            },
+          ),
         ],
       ),
     );

@@ -1,12 +1,14 @@
+import "dart:convert";
+
 import "package:calmwaves_app/pages/article_detail_screen.dart";
+import "package:calmwaves_app/widgets/add_article.dart";
 import "package:calmwaves_app/widgets/article_card.dart";
 import "package:calmwaves_app/widgets/custom_app_bar.dart";
 import "package:calmwaves_app/widgets/custom_drawer.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
+import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
-// import 'custom_app_bar.dart';
-// import 'article_card.dart';
-// import 'article_detail_screen.dart';
+import "package:fluttertoast/fluttertoast.dart";
 
 class ArticlesScreen extends StatefulWidget {
   const ArticlesScreen({super.key});
@@ -21,14 +23,82 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
 
   String filter = 'Hot';
 
-  Future<void> _addArticle() async {
-    // Új cikk hozzáadása a Firestore-hoz
-    await articlesCollection.add({
-      'title': 'Új cikk',
-      'excerpt': 'Ez egy új cikk rövid összefoglalója...',
-      'content': 'Ez egy új cikk teljes szövege...',
-      'isFavorite': false,
-    });
+  Future<void> _addArticleToFirestore(
+    String title,
+    String excerpt,
+    String imageUrl,
+    String content,
+  ) async {
+    final isAdmin = await _isAdmin();
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      Fluttertoast.showToast(msg: "Nincs bejelentkezve a felhasználó.");
+      return;
+    }
+
+    if (isAdmin) {
+      await articlesCollection.add({
+        'title': title,
+        'excerpt': excerpt,
+        'content': content,
+        'imageUrl': imageUrl,
+        'isFavorite': true,
+        'status': 'approved',
+        'author': currentUser.uid,
+      });
+    } else {
+      await articlesCollection.add({
+        'title': title,
+        'excerpt': excerpt,
+        'content': content,
+        'imageUrl': imageUrl,
+        'isFavorite': true,
+        'status': 'pending',
+        'author': currentUser.uid,
+      });
+    }
+  }
+
+  Future<bool> _isAdmin() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) return false;
+
+    final userDoc =
+        await FirebaseFirestore.instance.collection("users").doc(userId).get();
+    return userDoc.data()?["userinfo"]["role"] == "admin";
+  }
+
+  Future<void> _showAddArticlePopup(BuildContext context) async {
+    TextEditingController titleController = TextEditingController();
+    TextEditingController excerptController = TextEditingController();
+    TextEditingController imageController = TextEditingController();
+    TextEditingController contentController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: AddArticle(
+            articleTitle: "",
+            articleImage: "",
+            articleText: "",
+            articleTitleController: titleController,
+            articleExcerptController: excerptController,
+            articleOptionalImageController: imageController,
+            articleTextController: contentController,
+            pressPostArticle: () async {
+              Navigator.pop(context);
+              await _addArticleToFirestore(
+                titleController.text.trim(),
+                excerptController.text.trim(),
+                imageController.text.trim(),
+                contentController.text.trim(),
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -81,7 +151,9 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
           ),
           Expanded(
             child: StreamBuilder(
-              stream: articlesCollection.snapshots(),
+              stream: articlesCollection
+                  .where("status", isEqualTo: "approved")
+                  .snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
@@ -133,7 +205,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _addArticle,
+        onPressed: () => _showAddArticlePopup(context),
         child: const Icon(Icons.add),
       ),
     );
