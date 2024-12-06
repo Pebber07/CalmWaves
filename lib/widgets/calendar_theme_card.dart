@@ -7,7 +7,8 @@ class CalendarThemeCard extends StatelessWidget {
   final String themeNote;
   final Color backgroundColor;
   final String hintText;
-  final TextEditingController controller;
+  final TextEditingController titleController;
+  final TextEditingController descriptionController;
   const CalendarThemeCard(
       {super.key,
       required this.themeCaption,
@@ -15,7 +16,8 @@ class CalendarThemeCard extends StatelessWidget {
       required this.themeNote,
       required this.backgroundColor,
       required this.hintText,
-      required this.controller});
+      required this.titleController,
+      required this.descriptionController});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,7 @@ class CalendarThemeCard extends StatelessWidget {
             height: 10,
           ),
           TextFormField(
-            controller: controller,
+            controller: titleController,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.all(15),
               enabledBorder: OutlineInputBorder(
@@ -49,7 +51,7 @@ class CalendarThemeCard extends StatelessWidget {
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
-                  color: Pallete.gradient2,
+                  color: Pallete.borderColor,
                   width: 3,
                 ),
                 borderRadius: BorderRadius.circular(10),
@@ -61,7 +63,7 @@ class CalendarThemeCard extends StatelessWidget {
             height: 5,
           ),
           TextFormField(
-            controller: controller,
+            controller: descriptionController,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.all(15),
               enabledBorder: OutlineInputBorder(
@@ -73,7 +75,7 @@ class CalendarThemeCard extends StatelessWidget {
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
-                  color: Pallete.gradient2,
+                  color: Pallete.borderColor,
                   width: 3,
                 ),
                 borderRadius: BorderRadius.circular(10),

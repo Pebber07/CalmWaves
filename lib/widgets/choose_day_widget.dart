@@ -1,13 +1,37 @@
 import 'package:calmwaves_app/palette.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class ChooseDayWidget extends StatelessWidget {
+class ChooseDayWidget extends StatefulWidget {
+  final Function(DateTime) onDateChanged;
   const ChooseDayWidget({
     super.key,
+    required this.onDateChanged,
   });
 
   @override
+  State<ChooseDayWidget> createState() => _ChooseDayWidgetState();
+}
+
+class _ChooseDayWidgetState extends State<ChooseDayWidget> {
+  DateTime selectedMonth = DateTime.now();
+  DateTime? selectedDay;
+
+  List<int> getDaysInMonth(DateTime month) {
+    // final firstDayOfMonth = DateTime(month.year, month.month, 1);
+    final lastDayOfMonth = DateTime(month.year, month.month + 1, 0);
+
+    List<int> days = [];
+    for (int i = 1; i <= lastDayOfMonth.day; i++) {
+      days.add(i);
+    }
+    return days;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    List<int> days = getDaysInMonth(selectedMonth);
+
     return Container(
       margin: const EdgeInsets.all(10),
       padding: const EdgeInsets.all(10),
@@ -22,23 +46,39 @@ class ChooseDayWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Row(
+              Row(
                 children: [
-                  Icon(Icons.calendar_today, color: Colors.white),
-                  SizedBox(width: 8),
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    onPressed: () {
+                      setState(() {
+                        selectedMonth = DateTime(
+                            selectedMonth.year, selectedMonth.month - 1);
+                      });
+                    },
+                  ),
                   Text(
-                    "Choose a day",
-                    style: TextStyle(
+                    '${selectedMonth.year} - ${selectedMonth.month}',
+                    style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.bold),
                   ),
+                  IconButton(
+                    icon: const Icon(Icons.arrow_forward),
+                    onPressed: () {
+                      setState(() {
+                        selectedMonth = DateTime(
+                            selectedMonth.year, selectedMonth.month + 1);
+                      });
+                    },
+                  ),
                 ],
               ),
               const SizedBox(height: 8),
-              const Text(
-                "January 2023",
-                style: TextStyle(color: Colors.white70),
+              Text(
+                DateFormat('MMMM yyyy').format(selectedMonth),
+                style: const TextStyle(color: Colors.white70),
               ),
               const SizedBox(height: 8),
               GridView.builder(
@@ -49,35 +89,52 @@ class ChooseDayWidget extends StatelessWidget {
                   mainAxisSpacing: 4,
                   crossAxisSpacing: 4,
                 ),
-                itemCount: 31,
+                itemCount: days.length,
                 itemBuilder: (context, index) {
-                  bool isUpgradeDay =
-                      index == 27; 
-                  return Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      CircleAvatar(
-                        radius: 18,
-                        backgroundColor: Pallete.gradient1,
-                        child: Text(
-                          "${index + 1}",
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      ),
-                      if (isUpgradeDay)
-                        Positioned(
-                          bottom: 0,
-                          child: Container(
-                            color: Colors.black,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 4, vertical: 2),
-                            child: const Text(
-                              "Nice",
-                              style: TextStyle(color: Colors.white, fontSize: 10),
-                            ),
+                  int day = days[index];
+                  DateTime currentDay =
+                      DateTime(selectedMonth.year, selectedMonth.month, day);
+
+                  bool isToday = currentDay.day == DateTime.now().day &&
+                      currentDay.month == DateTime.now().month &&
+                      currentDay.year == DateTime.now().year;
+
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedDay = currentDay;
+                      });
+                      widget.onDateChanged(currentDay);
+                    },
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        CircleAvatar(
+                          radius: 18,
+                          backgroundColor: isToday
+                              ? Colors.yellow
+                              : Pallete.gradient1, 
+                          child: Text(
+                            "$day",
+                            style: const TextStyle(color: Colors.white),
                           ),
                         ),
-                    ],
+                        if (selectedDay?.day == day)
+                          Positioned(
+                            bottom: 0,
+                            child: Container(
+                              color: Colors.lightBlue,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 4, vertical: 2),
+                              child: const Text(
+                                "Kijelölt",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 10),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
                   );
                 },
               ),

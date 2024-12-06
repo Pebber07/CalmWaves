@@ -1,6 +1,3 @@
-import "dart:convert";
-
-import "package:calmwaves_app/widgets/features_card.dart";
 import "package:calmwaves_app/widgets/feature.dart";
 import "package:calmwaves_app/widgets/gradient_button.dart";
 import "package:flutter/material.dart";
