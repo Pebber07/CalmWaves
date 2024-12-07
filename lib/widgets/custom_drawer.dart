@@ -102,10 +102,10 @@ class CustomDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.health_and_safety),
-            title: const Text('Napló'),
+            title: const Text('Hangulat'),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, '/journal');
+              Navigator.pushNamed(context, '/mood');
             },
           ),
           ListTile(
