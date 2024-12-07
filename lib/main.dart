@@ -3,6 +3,7 @@ import 'package:calmwaves_app/firebase_options.dart';
 import 'package:calmwaves_app/pages/articles_screen.dart';
 import 'package:calmwaves_app/pages/create_event_screen.dart';
 import 'package:calmwaves_app/pages/home_screen.dart';
+import 'package:calmwaves_app/pages/journal_screen.dart';
 import 'package:calmwaves_app/pages/mood_screen.dart';
 import 'package:calmwaves_app/pages/login_screen.dart';
 import 'package:calmwaves_app/pages/notifications_screen.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
         "/starter": (context) => const StarterScreen(),
         "/welcome": (context) => const WelcomeScreen(),     
         "/notifications": (context) => const NotificationsScreen(),     
+        "/journal": (context) => const JournalScreen(),     
       },
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),

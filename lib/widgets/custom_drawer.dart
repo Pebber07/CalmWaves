@@ -148,6 +148,14 @@ class CustomDrawer extends StatelessWidget {
               Navigator.pushNamed(context, '/notifications');
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.healing),
+            title: const Text('Napló'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/journal');
+            },
+          ),
         ],
       ),
     );
