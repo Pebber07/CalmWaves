@@ -156,6 +156,14 @@ class CustomDrawer extends StatelessWidget {
               Navigator.pushNamed(context, '/journal');
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.chat),
+            title: const Text('Beszélgetés'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/chatbot');
+            },
+          ),
         ],
       ),
     );
