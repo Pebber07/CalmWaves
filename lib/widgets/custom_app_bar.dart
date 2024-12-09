@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:calmwaves_app/palette.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +21,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         IconButton(
           icon: const Icon(Icons.notifications),
-          onPressed: () {},
+          onPressed: () {
+            AwesomeNotifications().createNotification(
+              content: NotificationContent(
+                  id: 1,
+                  channelKey: "basic_channel",
+                  title: "CalmWaves",
+                  body: "My Mental Health local notification"),
+            );
+          },
         ),
         IconButton(
           icon: const Icon(Icons.account_circle),

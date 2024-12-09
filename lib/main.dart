@@ -1,4 +1,5 @@
 // import 'package:calmwaves_app/pages/home_screen.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:calmwaves_app/firebase_options.dart';
 import 'package:calmwaves_app/pages/articles_screen.dart';
 import 'package:calmwaves_app/pages/chatbot_screen.dart';
@@ -15,6 +16,7 @@ import 'package:calmwaves_app/pages/starter_screen.dart';
 import 'package:calmwaves_app/pages/welcome_screen.dart';
 // import 'package:calmwaves_app/pages/register_screen.dart';
 import 'package:calmwaves_app/palette.dart';
+import 'package:calmwaves_app/services/notification_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,11 +24,54 @@ import 'package:firebase_core/firebase_core.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await AwesomeNotifications().initialize(
+    null,
+    [
+      NotificationChannel(
+        channelGroupKey: "basic_channel_group",
+        channelKey: "basic_channel",
+        channelName: "Basic Notification",
+        channelDescription: "Basic Test notifications channel",
+        ledColor: Colors.blue,
+      ),
+    ],
+    channelGroups: [
+      NotificationChannelGroup(
+        channelGroupKey: "basic_channel_group",
+        channelGroupName: "Basic Group",
+      ),
+    ],
+  ); // or pass my own icon.
+  bool isAllowedToSendNotification =
+      await AwesomeNotifications().isNotificationAllowed();
+  if (!isAllowedToSendNotification) {
+    AwesomeNotifications().requestPermissionToSendNotifications();
+  }
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    // --> initialize callback functions
+    AwesomeNotifications().setListeners(
+        onActionReceivedMethod: NotificationController.onActionReceivedMethod,
+        onNotificationCreatedMethod:
+            NotificationController.onNotificationCreatedMethod,
+        onNotificationDisplayedMethod:
+            NotificationController.onNotificationDisplayedMethod,
+        onDismissActionReceivedMethod:
+            NotificationController.onDismissActionReceivedMethod);
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,10 +90,10 @@ class MyApp extends StatelessWidget {
         "/login": (context) => const LoginScreen(),
         "/register": (context) => const RegisterScreen(),
         "/starter": (context) => const StarterScreen(),
-        "/welcome": (context) => const WelcomeScreen(),     
-        "/notifications": (context) => const NotificationsScreen(),     
-        "/journal": (context) => const JournalScreen(),     
-        "/chatbot": (context) => const ChatbotScreen(),     
+        "/welcome": (context) => const WelcomeScreen(),
+        "/notifications": (context) => const NotificationsScreen(),
+        "/journal": (context) => const JournalScreen(),
+        "/chatbot": (context) => const ChatbotScreen(),
       },
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
@@ -56,12 +101,12 @@ class MyApp extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (snapshot.data != null){
+          if (snapshot.data != null) {
             return const HomeScreen();
           }
           return const RegisterScreen();
         },
-      ), 
+      ),
     );
   }
 }
