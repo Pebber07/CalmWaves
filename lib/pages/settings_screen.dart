@@ -3,6 +3,7 @@ import "package:calmwaves_app/widgets/custom_app_bar.dart";
 import "package:calmwaves_app/widgets/custom_drawer.dart";
 import "package:calmwaves_app/widgets/gradient_button.dart";
 import "package:calmwaves_app/widgets/login_field.dart";
+import "package:calmwaves_app/widgets/profile_picture_picker.dart";
 import "package:calmwaves_app/widgets/social_button.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
@@ -173,16 +174,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: Center(
           child: Column(
             children: [
-              const CircleAvatar(
-                radius: 50,
-                backgroundImage: AssetImage(
-                    "assets/images/own_profile_pic.jpg"), // felhasználó dokumentumából kell származnia.
-              ),
-              const Text(
-                "CalmWaves",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 50,
+              const ProfilePicturePicker(),
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.only(left: 10),
+                child: const Text(
+                  "Reach out to us",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
                 ),
               ),
               const InkWell(
@@ -196,7 +197,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ), //does it needed?
               const SizedBox(
-                height: 20,
+                height: 5,
               ),
               Container(
                 alignment: Alignment.centerLeft,
@@ -208,6 +209,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     fontSize: 24,
                   ),
                 ),
+              ),
+              const SizedBox(
+                height: 5,
               ),
 
               LoginField(
