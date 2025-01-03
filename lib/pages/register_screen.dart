@@ -143,7 +143,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             key: formKey,
             child: Column(
               children: [
-                Image.asset('assets/images/signin_balls.png'),
+                // Image.asset('assets/images/signin_balls.png'),
+                const SizedBox(
+                  height: 100,
+                ),
                 const Text(
                   'Register',
                   style: TextStyle(
@@ -223,7 +226,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   controller: emailController,
                   hideText: false,
                   buttonLabelText: "Email",
-                  hintText: 'Someone@gmail.com', 
+                  hintText: 'Someone@gmail.com',
                 ),
                 const SizedBox(
                   height: 13,

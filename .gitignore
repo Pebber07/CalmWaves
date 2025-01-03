@@ -44,3 +44,6 @@ app.*.map.json
 
 # ChatGPT kizárása
 /lib/secrets.dart
+
+# firebase_options kizárása
+/lib/firebase_options.dart

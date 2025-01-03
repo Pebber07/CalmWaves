@@ -57,7 +57,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             return const Center(child: CircularProgressIndicator());
           }
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text("Nincs pending article"));
+            return const Center(child: Text("Nincs várakozó cikked"));
           }
 
           final pendingArticles = snapshot.data!;

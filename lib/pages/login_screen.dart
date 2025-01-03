@@ -73,7 +73,10 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Center(
           child: Column(
             children: [
-              Image.asset('assets/images/signin_balls.png'),
+              // Image.asset('assets/images/signin_balls.png'),
+              const SizedBox(
+                height: 100,
+              ),
               const Text(
                 'Sign In',
                 style: TextStyle(
@@ -89,13 +92,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 label: 'Continue with Google',
                 buttonOnPressed: () async {
                   try {
-                    final userCredential = await googleAuthService.signInWithGoogle();
+                    final userCredential =
+                        await googleAuthService.signInWithGoogle();
                     if (userCredential != null) {
-                      if(!mounted) return;
+                      if (!mounted) return;
                       Navigator.pushReplacementNamed(context, '/home');
                     }
                   } catch (e) {
-                    if(!mounted) return;
+                    if (!mounted) return;
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(

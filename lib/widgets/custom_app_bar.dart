@@ -27,7 +27,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   id: 1,
                   channelKey: "basic_channel",
                   title: "CalmWaves",
-                  body: "My Mental Health local notification"),
+                  body: "It's time to calm down!"),
             );
           },
         ),

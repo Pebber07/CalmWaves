@@ -81,6 +81,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Pallete.backgroundColor,
       ),
+      debugShowCheckedModeBanner: false, // don't show the debug label
       initialRoute: "/starter",
       routes: {
         "/home": (context) => const HomeScreen(),
