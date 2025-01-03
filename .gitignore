@@ -47,3 +47,6 @@ app.*.map.json
 
 # firebase_options kizárása
 /lib/firebase_options.dart
+
+# google-services.json kizárása
+/android/app/google-services.json
