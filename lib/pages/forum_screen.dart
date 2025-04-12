@@ -2,9 +2,18 @@ import "package:calmwaves_app/widgets/custom_app_bar.dart";
 import "package:calmwaves_app/widgets/custom_drawer.dart";
 import "package:calmwaves_app/widgets/forum_post_tile.dart";
 import "package:flutter/material.dart";
+import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'new_post_popup.dart';
 
-class ForumScreen extends StatelessWidget {
+class ForumScreen extends StatefulWidget {
   const ForumScreen({super.key});
+
+  @override
+  State<ForumScreen> createState() => _ForumScreenState();
+}
+
+class _ForumScreenState extends State<ForumScreen> {
+  String searchQuery = "";
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +59,8 @@ class ForumScreen extends StatelessWidget {
               height: 12,
             ),
             TextField(
+              onChanged: (val) =>
+                  setState(() => searchQuery = val.toLowerCase()),
               decoration: InputDecoration(
                 hintText: "Search",
                 prefixIcon: const Icon(Icons.search),
@@ -67,7 +78,10 @@ class ForumScreen extends StatelessWidget {
               height: 16,
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () => showDialog(
+                context: context,
+                builder: (_) => const NewPostPopup(),
+              ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.lightBlue,
                 minimumSize: const Size.fromHeight(48),
@@ -81,19 +95,46 @@ class ForumScreen extends StatelessWidget {
               height: 16,
             ),
             Expanded(
-              child: ListView(
-                children: const [
-                  // Create ForumPostTile widget and fill with example content.
-                  ForumPostTile(
-                    title: "Example Title",
-                    category: "Example Category",
-                    categoryColor: Colors.lightBlue,
-                    date: "Example Date",
-                    profilePic: "Example Profile Picture",
-                  ), // Lter convert to time datatype
-                  // ...
-                ],
-              ),
+              child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection("forum")
+                      .orderBy("date", descending: true)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    final docs = snapshot.data!.docs.where((doc) {
+                      final title = doc["title"].toString().toLowerCase();
+                      return title.contains(searchQuery);
+                    }).toList();
+
+                    if (docs.isEmpty) {
+                      return const Center(
+                        child: Text("Nincs találat"),
+                      );
+                    }
+
+                    return ListView.builder(
+                      itemCount: docs.length,
+                      itemBuilder: (context, index) {
+                        final data = docs[index];
+                        return ForumPostTile(
+                            title: data["title"],
+                            category: "Yes",
+                            categoryColor: Colors.transparent,
+                            date: (data["date"] as Timestamp)
+                                .toDate()
+                                .toLocal()
+                                .toString()
+                                .split(".")[0],
+                            postId: data.id,
+                            userId: data['userId'],
+                            likeCount: data["like"]);
+                      },
+                    );
+                  }),
             ),
           ],
         ),
