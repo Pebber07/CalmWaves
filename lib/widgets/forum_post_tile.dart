@@ -1,5 +1,4 @@
-import 'dart:ffi';
-
+import 'package:calmwaves_app/pages/forum_post_detail_screen.dart';
 import 'package:flutter/material.dart';
 
 class ForumPostTile extends StatelessWidget {
@@ -10,30 +9,36 @@ class ForumPostTile extends StatelessWidget {
   final String postId;
   final String userId;
   final int likeCount;
-   
+
   const ForumPostTile({
     super.key,
     required this.title,
     required this.date,
-    this.profilePic, required this.content, required this.postId, required this.userId, required this.likeCount,
+    this.profilePic,
+    required this.content,
+    required this.postId,
+    required this.userId,
+    required this.likeCount,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(
+        Navigator.push(
           context,
-          '/forum_post_detail',
-          arguments: {
-            'title': title,
-            'content': content,
-            'date': date,
-            'profilePic': profilePic,
-            'postId': postId,
-            'userId': userId,
-            'likeCount': likeCount,
-          },
+          MaterialPageRoute(
+            builder: (_) => const ForumPostDetailScreen(),
+            settings: RouteSettings(arguments: {
+              'title': title,
+              'content': content,
+              'date': date,
+              'profilePic': profilePic,
+              'postId': postId,
+              'userId': userId,
+              'likeCount': likeCount,
+            }),
+          ),
         );
       },
       child: Column(

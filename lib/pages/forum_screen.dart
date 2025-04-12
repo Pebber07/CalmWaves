@@ -132,8 +132,15 @@ class _ForumScreenState extends State<ForumScreen> {
                               return const SizedBox();
                             }
 
-                            final userData = userSnapshot.data!.data()
-                                as Map<String, dynamic>;
+                            final userDoc = userSnapshot.data!;
+                            final rawData = userDoc.data();
+
+                            if (rawData == null ||
+                                rawData is! Map<String, dynamic>) {
+                              return const SizedBox();
+                            }
+
+                            final userData = rawData;
                             final profilePic =
                                 userData['userinfo']?['profilePicture'];
 
