@@ -3,7 +3,7 @@ import "package:calmwaves_app/widgets/custom_drawer.dart";
 import "package:calmwaves_app/widgets/forum_post_tile.dart";
 import "package:flutter/material.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'new_post_popup.dart';
+import '../widgets/new_post_popup.dart';
 
 class ForumScreen extends StatefulWidget {
   const ForumScreen({super.key});
@@ -120,18 +120,38 @@ class _ForumScreenState extends State<ForumScreen> {
                       itemCount: docs.length,
                       itemBuilder: (context, index) {
                         final data = docs[index];
-                        return ForumPostTile(
-                            title: data["title"],
-                            category: "Yes",
-                            categoryColor: Colors.transparent,
-                            date: (data["date"] as Timestamp)
-                                .toDate()
-                                .toLocal()
-                                .toString()
-                                .split(".")[0],
-                            postId: data.id,
-                            userId: data['userId'],
-                            likeCount: data["like"]);
+                        final userId = data['userId'];
+
+                        return FutureBuilder<DocumentSnapshot>(
+                          future: FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(userId)
+                              .get(),
+                          builder: (context, userSnapshot) {
+                            if (!userSnapshot.hasData) {
+                              return const SizedBox();
+                            }
+
+                            final userData = userSnapshot.data!.data()
+                                as Map<String, dynamic>;
+                            final profilePic =
+                                userData['userinfo']?['profilePicture'];
+
+                            return ForumPostTile(
+                              title: data['title'],
+                              content: data['content'],
+                              date: (data['date'] as Timestamp)
+                                  .toDate()
+                                  .toLocal()
+                                  .toString()
+                                  .split('.')[0],
+                              postId: data.id,
+                              userId: userId,
+                              profilePic: profilePic,
+                              likeCount: data['like'] ?? 0,
+                            );
+                          },
+                        );
                       },
                     );
                   }),
