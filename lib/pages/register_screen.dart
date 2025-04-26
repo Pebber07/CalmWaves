@@ -1,6 +1,7 @@
 import "package:calmwaves_app/pages/login_screen.dart";
 import "package:calmwaves_app/services/google_auth.dart";
 import "package:calmwaves_app/widgets/gradient_button.dart";
+import "package:calmwaves_app/widgets/language_selector_widget.dart";
 import "package:calmwaves_app/widgets/login_field.dart";
 import "package:calmwaves_app/widgets/social_button.dart";
 import "package:firebase_auth/firebase_auth.dart";
@@ -145,8 +146,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
               children: [
                 // Image.asset('assets/images/signin_balls.png'),
                 const SizedBox(
-                  height: 100,
-                ),
+                height: 50,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 16),
+                    child: LanguageSelector(
+                        initialLanguage: 'hu', onLanguageSelected: (langCode) {
+                          // Translate the texts to the given language
+                        }),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 50,
+              ),
                 const Text(
                   'Register',
                   style: TextStyle(
