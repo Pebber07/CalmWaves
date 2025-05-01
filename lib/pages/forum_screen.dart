@@ -4,6 +4,7 @@ import "package:calmwaves_app/widgets/forum_post_tile.dart";
 import "package:flutter/material.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../widgets/new_post_popup.dart';
+import 'package:intl/intl.dart';
 
 class ForumScreen extends StatefulWidget {
   const ForumScreen({super.key});
@@ -142,16 +143,12 @@ class _ForumScreenState extends State<ForumScreen> {
 
                             final userData = rawData;
                             final profilePic =
-                                userData['userinfo']?['profilePicture'];
+                                userData['userinfo']?['profileImage'];
 
                             return ForumPostTile(
                               title: data['title'],
                               content: data['content'],
-                              date: (data['date'] as Timestamp)
-                                  .toDate()
-                                  .toLocal()
-                                  .toString()
-                                  .split('.')[0],
+                              date: DateFormat('yyyy-MM-dd HH:mm').format((data['date'] as Timestamp).toDate().toLocal()),
                               postId: data.id,
                               userId: userId,
                               profilePic: profilePic,
