@@ -12,7 +12,8 @@ class ProfileScreen extends StatelessWidget {
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId == null) return null;
 
-    final doc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    final doc =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
     if (!doc.exists) return null;
 
     final data = doc.data();
@@ -27,6 +28,108 @@ class ProfileScreen extends StatelessWidget {
     await FirebaseAuth.instance.signOut();
     if (context.mounted) {
       Navigator.pushReplacementNamed(context, '/login');
+    }
+  }
+
+  Future<int> _calculateStreak(String userId) async {
+    final now = DateTime.now();
+    final moodSnapshot = await FirebaseFirestore.instance
+        .collection('mood')
+        .where('userId', isEqualTo: userId)
+        .get();
+
+    final loggedDates = <DateTime>{};
+
+    for (var doc in moodSnapshot.docs) {
+      final timestamp = doc['timestamp'] as Timestamp;
+      final date = timestamp.toDate();
+      loggedDates.add(DateTime(date.year, date.month, date.day));
+    }
+
+    int streak = 0;
+    DateTime current = DateTime(now.year, now.month, now.day);
+
+    while (loggedDates.contains(current)) {
+      streak += 1;
+      current = current.subtract(const Duration(days: 1));
+    }
+
+    return streak;
+  }
+
+  Future<void> _deleteAccount(BuildContext context) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text("Fiók zárolása"),
+        content: const Text("Biztosan törölni szeretnéd a fiókodat?"),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: const Text("Mégse")),
+          ElevatedButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              child: const Text("Törlés")),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    try {
+      final email = user.email!;
+      final passwordController = TextEditingController();
+
+      final success = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text("Újrahitelesítés"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text("Add meg a jelszavad a törlés megerősítéséhez:"),
+              TextField(
+                controller: passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(labelText: "Jelszó"),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.pop(ctx, false),
+                child: const Text("Mégse")),
+            ElevatedButton(
+                onPressed: () => Navigator.pop(ctx, true),
+                child: const Text("Folytatás")),
+          ],
+        ),
+      );
+
+      if (success != true) return;
+
+      final credential = EmailAuthProvider.credential(
+        email: email,
+        password: passwordController.text.trim(),
+      );
+
+      await user.reauthenticateWithCredential(credential);
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .delete();
+      await user.delete();
+
+      if (context.mounted) {
+        Navigator.pushReplacementNamed(context, '/login');
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Hiba történt a fiók zárolása közben."),
+      ));
     }
   }
 
@@ -68,25 +171,45 @@ class ProfileScreen extends StatelessWidget {
                 const SizedBox(height: 16),
                 Text(
                   username,
-                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
                 Text("Regisztráció: $formattedDate"),
                 const SizedBox(height: 16),
                 const Divider(),
                 const SizedBox(height: 16),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Heti aktivitás", style: TextStyle(fontSize: 18)),
-                    Chip(
-                      label: Text(
-                        "5 nap",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      backgroundColor: Colors.lightBlue,
-                    ),
-                  ],
+                FutureBuilder<int>(
+                  future:
+                      _calculateStreak(FirebaseAuth.instance.currentUser!.uid),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    final streak = snapshot.data!;
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("Aktivitás", style: TextStyle(fontSize: 18)),
+                        Row(
+                          children: [
+                            Text(
+                              "$streak nap",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                            const SizedBox(width: 6),
+                            Image.asset(
+                              "assets/images/streak_fire.png",
+                              width: 24,
+                              height: 24,
+                            ),
+                          ],
+                        ),
+                      ],
+                    );
+                  },
                 ),
                 const SizedBox(height: 32),
                 ElevatedButton.icon(
@@ -100,13 +223,9 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 OutlinedButton.icon(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("Profil zárolás"),
-                    ));
-                  },
+                  onPressed: () => _deleteAccount(context),
                   icon: const Icon(Icons.lock_outline),
-                  label: const Text("Profil zárolása"), //TODO
+                  label: const Text("Profil zárolása"),
                 ),
               ],
             ),
