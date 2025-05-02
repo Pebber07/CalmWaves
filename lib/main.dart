@@ -10,6 +10,7 @@ import 'package:calmwaves_app/pages/journal_screen.dart';
 import 'package:calmwaves_app/pages/mood_screen.dart';
 import 'package:calmwaves_app/pages/login_screen.dart';
 import 'package:calmwaves_app/pages/notifications_screen.dart';
+import 'package:calmwaves_app/pages/profile_screen.dart';
 // import 'package:calmwaves_app/pages/login_screen.dart';
 import 'package:calmwaves_app/pages/register_screen.dart';
 import 'package:calmwaves_app/pages/settings_screen.dart';
@@ -98,6 +99,7 @@ class _MyAppState extends State<MyApp> {
         "/journal": (context) => const JournalScreen(),
         "/chatbot": (context) => const ChatbotScreen(),
         "/forum": (context) => const ForumScreen(),
+        "/profile": (context) => const ProfileScreen(),
       },
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),

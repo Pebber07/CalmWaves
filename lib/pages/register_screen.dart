@@ -95,15 +95,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
       await FirebaseFirestore.instance.collection('users').doc(userId).set({
         'userinfo': {
           'username': usernameController.text.trim(),
-          'isPasswordChanged': false,
-          'profilePicture': "", // Todo: Download a template Profile picture.
+          'isUsernameChanged': false,
+          //'profilePicture': "", Todo: Download a template Profile picture.
+          'profileImage': "", 
           'email': emailController.text.trim(),
+          'role': 'user',
+          'createdAt': Timestamp.now(),
         },
         'messages': [],
         'calendar': [],
         'mood': [],
         'settings': {
           'notificationsEnabled': true,
+          'theme' : 'light'
         },
         'articles': [],
       });

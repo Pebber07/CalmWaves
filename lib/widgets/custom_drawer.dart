@@ -172,6 +172,14 @@ class CustomDrawer extends StatelessWidget {
               Navigator.pushNamed(context, '/forum');
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.person),
+            title: const Text('Profil'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/profile');
+            },
+          ),
         ],
       ),
     );

@@ -1,10 +1,7 @@
-import "package:calmwaves_app/palette.dart";
 import "package:calmwaves_app/widgets/custom_app_bar.dart";
 import "package:calmwaves_app/widgets/custom_drawer.dart";
 import "package:calmwaves_app/widgets/gradient_button.dart";
 import "package:calmwaves_app/widgets/login_field.dart";
-import "package:calmwaves_app/widgets/profile_picture_picker.dart";
-import "package:calmwaves_app/widgets/social_button.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
@@ -24,145 +21,89 @@ class _SettingsScreenState extends State<SettingsScreen> {
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
-  bool usernameChanged = false;
+  bool isUsernameChanged = false;
+  bool isDarkTheme = false;
 
-  Future<String> getOldPassword(String userId) async {
-    final userDoc = FirebaseFirestore.instance.collection("users").doc(userId);
-    final docSnapshot = await userDoc.get();
-    if (docSnapshot.exists) {
-      return docSnapshot.data()?["userinfo"]["password"] ?? "";
-    } else {
-      return ""; // This document doesn't exists.
-    }
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
   }
 
-  void _onSaveChanges(BuildContext context, String userId) async {
-    String oldPassword = oldPasswordController.text.trim();
-    String newPassword = newPasswordController.text.trim();
-    String confirmPassword = confirmPasswordController.text.trim();
+  Future<void> _loadUserData() async {
+    final doc =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    if (!doc.exists) return;
 
-    // Get current user to reauthenticate
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      Fluttertoast.showToast(
-        msg: "Nincs bejelentkezve felhasználó!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
+    final data = doc['userinfo'];
+    final settings = doc['settings'];
+
+    setState(() {
+      isUsernameChanged = data['isUsernameChanged'] ?? true;
+      isDarkTheme = (settings['theme'] ?? 'light') == 'dark';
+    });
+  }
+
+  Future<void> _changeUsername() async {
+    final newUsername = newUsernameController.text.trim();
+    if (newUsername.isEmpty) return;
+
+    final isTaken = await FirebaseFirestore.instance
+        .collection('users')
+        .where('userinfo.username', isEqualTo: newUsername)
+        .get();
+    if (isTaken.docs.isNotEmpty) {
+      Fluttertoast.showToast(msg: "Ez a felhasználónév már foglalt!");
       return;
     }
 
-    // Reauthenticate user to confirm old password
+    await FirebaseFirestore.instance.collection('users').doc(userId).update({
+      'userinfo.username': newUsername,
+      'userinfo.isUsernameChanged': true,
+    });
+
+    setState(() {
+      isUsernameChanged = true;
+    });
+
+    Fluttertoast.showToast(msg: "Felhasználónév frissítve.");
+  }
+
+  Future<void> _changePassword() async {
+    final oldPass = oldPasswordController.text.trim();
+    final newPass = newPasswordController.text.trim();
+    final confirmPass = confirmPasswordController.text.trim();
+
+    if (newPass != confirmPass) {
+      Fluttertoast.showToast(msg: "A jelszavak nem egyeznek.");
+      return;
+    }
+
     try {
-      AuthCredential credential = EmailAuthProvider.credential(
-        email: user.email!,
-        password: oldPassword,
-      );
+      final user = FirebaseAuth.instance.currentUser!;
+      final credential =
+          EmailAuthProvider.credential(email: user.email!, password: oldPass);
       await user.reauthenticateWithCredential(credential);
-
-      bool confirmChange = await _showConfirmationDialog(context);
-      if (confirmChange) {
-        await _updatePassword(newPassword);
-        Fluttertoast.showToast(
-          msg: "A jelszó sikeresen megváltozott!",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-        );
-      }
+      await user.updatePassword(newPass);
+      Fluttertoast.showToast(msg: "Jelszó frissítve.");
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: "Hiba történt a jelszó ellenőrzésekor vagy frissítésekor!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
+      Fluttertoast.showToast(msg: "Hiba a jelszó módosításakor.");
     }
   }
 
-  Future<bool> _showConfirmationDialog(BuildContext context) async {
-    return await showDialog<bool>(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text("Biztos vagy benne?"),
-              content: const Text("Biztosan meg akarod változtatni a jelszót?"),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(false);
-                  },
-                  child: const Text("Nem"),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                  child: const Text("Igen"),
-                ),
-              ],
-            );
-          },
-        ) ??
-        false;
+  Future<void> _updateTheme(bool isDark) async {
+    setState(() {
+      isDarkTheme = isDark;
+    });
+
+    await FirebaseFirestore.instance.collection('users').doc(userId).update({
+      'settings.theme': isDark ? 'dark' : 'light',
+    });
   }
 
-  Future<void> _updatePassword(String newPassword) async {
-     User? user = FirebaseAuth.instance.currentUser;
-    if (user == null) return;
-
-    try {
-      await user.updatePassword(newPassword);
-    } catch (e) {
-      Fluttertoast.showToast(
-        msg: "Hiba történt a jelszó frissítésekor!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
-    }
-  }
-
-  Future<void> _deleteAccount(BuildContext context, String userId) async {
-    try {
-      final userDoc =
-          FirebaseFirestore.instance.collection("userid").doc(userId);
-      await userDoc.delete();
-      await FirebaseAuth.instance.currentUser?.delete();
-      Fluttertoast.showToast(
-          msg: "Fiók törölve!",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM);
-      Navigator.pushReplacementNamed(context, "/login");
-    } catch (e) {
-      Fluttertoast.showToast(
-          msg: "Hiba történt a törlés során!",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM);
-    }
-  }
-
-  Future<void> _signOut(BuildContext context) async {
-    try {
-      await FirebaseAuth.instance.signOut();
-
-      Fluttertoast.showToast(
-        msg: "Signing off...",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-
-      if (context.mounted) {
-        Navigator.pushReplacementNamed(context, "/login");
-      }
-    } catch (e) {
-      Fluttertoast.showToast(
-        msg: "Hiba történt a kijelentkezés során!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
-    }
+  Future<void> _signOut() async {
+    await FirebaseAuth.instance.signOut();
+    if (mounted) Navigator.pushReplacementNamed(context, '/login');
   }
 
   @override
@@ -171,102 +112,100 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: const CustomAppBar(),
       drawer: const CustomDrawer(),
       body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              const ProfilePicturePicker(),
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.only(left: 10),
-                child: const Text(
-                  "Reach out to us",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                  ),
-                ),
-              ),
-              const InkWell(
-                child: Text(
-                  "calmwaves@support.com",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 18,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-              ), //does it needed?
-              const SizedBox(
-                height: 5,
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.only(left: 10),
-                child: const Text(
-                  "Update Your Account",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text("Fiókbeállítások",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            if (!isUsernameChanged) ...[
               LoginField(
-                  hintText: "Enter your new username",
-                  controller: newUsernameController,
-                  hideText: false,
-                  buttonLabelText: "New username"),
-              const SizedBox(
-                height: 10,
-              ), // only once
-              LoginField(
-                  hintText: "Enter your old password",
-                  controller: oldPasswordController,
-                  hideText: true,
-                  buttonLabelText: "Old password"),
-              const SizedBox(
-                height: 10,
+                hintText: "Új felhasználónév",
+                controller: newUsernameController,
+                hideText: false,
+                buttonLabelText: "New username",
               ),
-              LoginField(
-                  hintText: "Enter your new password",
-                  controller: newPasswordController,
-                  hideText: true,
-                  buttonLabelText: "New password"),
-              const SizedBox(
-                height: 10,
-              ),
-              LoginField(
-                  hintText: "Enter your new password again",
-                  controller: confirmPasswordController,
-                  hideText: true,
-                  buttonLabelText: "New password again"),
-              const SizedBox(
-                height: 10,
-              ),
-
               GradientButton(
-                  onPressed: () => _onSaveChanges(context, userId),
-                  text:
-                      "Save Changes", 
-                  buttonMargin: 5),
-              // GradientButton(
-              //     onPressed: () => _deleteAccount(context, userId),
-              //     text:
-              //         "Delete Account", // If someone presses on it, then it deletes the users whole profile.
-              //     buttonMargin: 5),
-              GradientButton(
-                  onPressed: () async {
-                    await _signOut(context);
-                  },
-                  text: "Sign Out",
-                  buttonMargin: 5),
-            ],
-          ),
+                onPressed: _changeUsername,
+                text: "Felhasználónév mentése",
+                buttonMargin: 8,
+              ),
+            ] else
+              const Text("A felhasználónév már módosítva.",
+                  style: TextStyle(color: Colors.grey)),
+            const SizedBox(height: 20),
+            const Divider(),
+            const Text("Jelszó módosítása",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            LoginField(
+              hintText: "Jelenlegi jelszó",
+              controller: oldPasswordController,
+              hideText: true,
+              buttonLabelText: "Old password",
+            ),
+            const SizedBox(height: 10),
+            LoginField(
+              hintText: "Új jelszó",
+              controller: newPasswordController,
+              hideText: true,
+              buttonLabelText: "New password",
+            ),
+            const SizedBox(height: 10),
+            LoginField(
+              hintText: "Új jelszó újra",
+              controller: confirmPasswordController,
+              hideText: true,
+              buttonLabelText: "New password again",
+            ),
+            GradientButton(
+              onPressed: _changePassword,
+              text: "Jelszó frissítése",
+              buttonMargin: 8,
+            ),
+            const SizedBox(height: 30),
+            const Divider(),
+            const Text("Téma",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            SwitchListTile(
+              value: isDarkTheme,
+              onChanged: _updateTheme,
+              title: const Text("Sötét mód"),
+            ),
+            const Divider(),
+            const SizedBox(height: 10),
+            const Text("Kapcsolat",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            InkWell(
+              onTap: () => launchEmail(),
+              child: const Text(
+                "support@calmwaves.com",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.blueAccent,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+            const SizedBox(height: 30),
+            const Divider(),
+            const Text("Műveletek",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            GradientButton(
+              onPressed: _signOut,
+              text: "Kijelentkezés",
+              buttonMargin: 8,
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  void launchEmail() {
+    Fluttertoast.showToast(msg: "Email küldés: support@calmwaves.com"); //TODO
   }
 }
