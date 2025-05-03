@@ -6,6 +6,7 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:fluttertoast/fluttertoast.dart";
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -99,6 +100,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
     await FirebaseFirestore.instance.collection('users').doc(userId).update({
       'settings.theme': isDark ? 'dark' : 'light',
     });
+  }
+
+  void launchEmail() async {
+    final Uri emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: 'tapodinorman7@gmail.com',
+      query: Uri.encodeFull('subject=Támogatás&body=Kérdés/Kérés szövege:'),
+    );
+
+    if (await canLaunchUrl(emailLaunchUri)) {
+      await launchUrl(emailLaunchUri);
+    } else {
+      Fluttertoast.showToast(msg: "Nem sikerült megnyitni az email klienst.");
+    }
   }
 
   Future<void> _signOut() async {
@@ -203,9 +218,5 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
       ),
     );
-  }
-
-  void launchEmail() {
-    Fluttertoast.showToast(msg: "Email küldés: support@calmwaves.com"); //TODO
   }
 }
