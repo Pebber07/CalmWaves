@@ -50,3 +50,6 @@ app.*.map.json
 
 # google-services.json kizárása
 /android/app/google-services.json
+
+# background_tasks kizárása
+/lib/widgets/background_tasks.dart

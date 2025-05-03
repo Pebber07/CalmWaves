@@ -1,10 +1,22 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <application
         android:label="calmwaves_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <receiver
+            android:name="be.tramckrijte.workmanager.WorkManagerBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.REBOOT"/>
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

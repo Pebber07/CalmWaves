@@ -19,9 +19,11 @@ import 'package:calmwaves_app/pages/welcome_screen.dart';
 // import 'package:calmwaves_app/pages/register_screen.dart';
 import 'package:calmwaves_app/palette.dart';
 import 'package:calmwaves_app/services/notification_controller.dart';
+import 'package:calmwaves_app/widgets/background_tasks.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:workmanager/workmanager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,8 +34,8 @@ void main() async {
       NotificationChannel(
         channelGroupKey: "basic_channel_group",
         channelKey: "basic_channel",
-        channelName: "Basic Notification",
-        channelDescription: "Basic Test notifications channel",
+        channelName: "Napi értesítések",
+        channelDescription: "Napi mentáhigiénés idézetek",
         ledColor: Colors.blue,
       ),
     ],
@@ -44,6 +46,21 @@ void main() async {
       ),
     ],
   ); // or pass my own icon.
+
+  // Initialize workmanager
+  Workmanager()
+      .initialize(notificationCallbackDispatcher, isInDebugMode: false);
+
+  Workmanager().registerPeriodicTask(
+    "dailyQuoteTaskId",
+    "dailyQuoteTask",
+    frequency: const Duration(hours: 24),
+    initialDelay: Duration(
+      hours: 8 - DateTime.now().hour,
+    ),
+    existingWorkPolicy: ExistingWorkPolicy.keep,
+  );
+
   bool isAllowedToSendNotification =
       await AwesomeNotifications().isNotificationAllowed();
   if (!isAllowedToSendNotification) {
@@ -60,7 +77,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   void initState() {
     // --> initialize callback functions
