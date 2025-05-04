@@ -19,13 +19,11 @@ class _LanguageSelectorState extends State<LanguageSelector> {
   final Map<String, String> languageNames = {
     "hu": "Magyar",
     "gb": "English",
-    "de": "Deutsch",
   };
 
   final Map<String, String> flagAssets = {
     "hu": "assets/flags/hu.png",
     "gb": "assets/flags/gb.png",
-    "de": "assets/flags/de.png",
   };
 
   @override
