@@ -108,7 +108,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         'settings': {
           'notificationsEnabled': true,
           'preferredLangugae' : 'hu',
-          'theme' : 'light'
+          'preferredTheme' : 'light'
         },
         'articles': [],
       });

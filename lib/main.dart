@@ -33,12 +33,24 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   Locale initialLocale = const Locale('en');
+  String initialTheme = 'light';
+
   final user = FirebaseAuth.instance.currentUser;
   if (user != null) {
-    final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
-    final preferredLanguage = doc.data()?['settings']?['preferredLanguage'];
+    final doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
+
+    final data = doc.data();
+    final preferredLanguage = data?['settings']?['preferredLanguage'];
+    final preferredTheme = data?['settings']?['theme'];
+
     if (preferredLanguage == 'hu' || preferredLanguage == 'en') {
       initialLocale = Locale(preferredLanguage);
+    }
+    if (preferredTheme == 'dark' || preferredTheme == 'light') {
+      initialTheme = preferredTheme;
     }
   }
 
@@ -80,12 +92,14 @@ void main() async {
   if (!isAllowedToSendNotification) {
     AwesomeNotifications().requestPermissionToSendNotifications();
   }
-  runApp(MyApp( initialLocale: initialLocale));
+  runApp(MyApp(initialLocale: initialLocale, initialTheme: initialTheme));
 }
 
 class MyApp extends StatefulWidget {
   final Locale initialLocale;
-  const MyApp({super.key, required this.initialLocale});
+  final String initialTheme;
+  const MyApp(
+      {super.key, required this.initialLocale, required this.initialTheme});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -93,11 +107,14 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late Locale _locale;
+  late bool _isDarkTheme;
 
   @override
   void initState() {
     // --> initialize callback functions
     _locale = widget.initialLocale;
+    _isDarkTheme = widget.initialTheme == 'dark';
+
     AwesomeNotifications().setListeners(
         onActionReceivedMethod: NotificationController.onActionReceivedMethod,
         onNotificationCreatedMethod:
@@ -116,12 +133,22 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void toggleTheme(bool isDark) {
+    setState(() {
+      _isDarkTheme = isDark;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "CalmWaves",
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: Pallete.backgroundColor,
+      theme:
+          // ThemeData.dark().copyWith(scaffoldBackgroundColor: Pallete.backgroundColor,),
+          ThemeData(
+        scaffoldBackgroundColor:
+            _isDarkTheme ? Colors.blueGrey[900] : Colors.lightBlue[100],
+        brightness: _isDarkTheme ? Brightness.dark : Brightness.light,
       ),
       debugShowCheckedModeBanner: false, // don't show the debug label
       localizationsDelegates: const [
@@ -139,7 +166,10 @@ class _MyAppState extends State<MyApp> {
       initialRoute: "/starter",
       routes: {
         "/home": (context) => const HomeScreen(),
-        "/settings": (context) => SettingsScreen(setLocale: setLocale),
+        "/settings": (context) => SettingsScreen(
+              setLocale: setLocale,
+              toggleTheme: toggleTheme,
+            ),
         "/articles": (context) => const ArticlesScreen(),
         "/events": (context) => const CreateEventScreen(),
         "/mood": (context) => const MoodScreen(),
@@ -162,7 +192,7 @@ class _MyAppState extends State<MyApp> {
           if (snapshot.data != null) {
             return const HomeScreen();
           }
-          return const RegisterScreen(); 
+          return const RegisterScreen();
         },
       ),
     );

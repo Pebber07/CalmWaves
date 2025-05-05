@@ -1,3 +1,5 @@
+import "dart:ffi";
+
 import "package:calmwaves_app/widgets/custom_app_bar.dart";
 import "package:calmwaves_app/widgets/custom_drawer.dart";
 import "package:calmwaves_app/widgets/gradient_button.dart";
@@ -12,7 +14,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsScreen extends StatefulWidget {
   final void Function(Locale) setLocale;
-  const SettingsScreen({super.key, required this.setLocale});
+  final void Function(bool) toggleTheme;
+
+  const SettingsScreen(
+      {super.key, required this.setLocale, required this.toggleTheme});
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -186,10 +191,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const Divider(),
             const Text("Téma",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            /*
             SwitchListTile(
               value: isDarkTheme,
               onChanged: _updateTheme,
               title: const Text("Sötét mód"),
+            ),
+            */
+            SwitchListTile(
+              value: isDarkTheme,
+              onChanged: (bool newValue) {
+                setState(() {
+                  isDarkTheme = newValue;
+                });
+                widget.toggleTheme(newValue);
+                FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(userId)
+                    .update({'settings.theme': newValue ? 'dark' : 'light'});
+              },
+              title: const Text("Téma"),
             ),
             const Divider(),
             const SizedBox(height: 10),
