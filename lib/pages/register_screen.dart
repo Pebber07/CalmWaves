@@ -107,6 +107,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         'mood': [],
         'settings': {
           'notificationsEnabled': true,
+          'preferredLangugae' : 'hu',
           'theme' : 'light'
         },
         'articles': [],
@@ -152,6 +153,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                 height: 50,
               ),
+              /*
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -164,6 +166,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ],
               ),
+              */
               const SizedBox(
                 height: 50,
               ),

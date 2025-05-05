@@ -1,15 +1,18 @@
 import "package:calmwaves_app/widgets/custom_app_bar.dart";
 import "package:calmwaves_app/widgets/custom_drawer.dart";
 import "package:calmwaves_app/widgets/gradient_button.dart";
+import "package:calmwaves_app/widgets/language_selector_widget.dart";
 import "package:calmwaves_app/widgets/login_field.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:fluttertoast/fluttertoast.dart";
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+  final void Function(Locale) setLocale;
+  const SettingsScreen({super.key, required this.setLocale});
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -190,8 +193,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             const Divider(),
             const SizedBox(height: 10),
-            const Text("Kapcsolat",
+            const Text("Alkalmazás nyelve",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const SizedBox(
+              height: 16,
+            ),
+            LanguageSelector(
+              initialLanguage: "hu",
+              onLanguageSelected: (langCode) {
+                widget.setLocale(
+                  Locale(langCode),
+                );
+                FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(userId)
+                    .update({'settings.preferredLanguage': langCode});
+              },
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Text(AppLocalizations.of(context)!.connection, // Kapcsolat
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
             InkWell(
               onTap: () => launchEmail(),

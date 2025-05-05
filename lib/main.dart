@@ -20,14 +20,28 @@ import 'package:calmwaves_app/pages/welcome_screen.dart';
 import 'package:calmwaves_app/palette.dart';
 import 'package:calmwaves_app/services/notification_controller.dart';
 import 'package:calmwaves_app/widgets/background_tasks.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:workmanager/workmanager.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  Locale initialLocale = const Locale('en');
+  final user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+    final preferredLanguage = doc.data()?['settings']?['preferredLanguage'];
+    if (preferredLanguage == 'hu' || preferredLanguage == 'en') {
+      initialLocale = Locale(preferredLanguage);
+    }
+  }
+
   await AwesomeNotifications().initialize(
     null,
     [
@@ -66,20 +80,24 @@ void main() async {
   if (!isAllowedToSendNotification) {
     AwesomeNotifications().requestPermissionToSendNotifications();
   }
-  runApp(const MyApp());
+  runApp(MyApp( initialLocale: initialLocale));
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  final Locale initialLocale;
+  const MyApp({super.key, required this.initialLocale});
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+  late Locale _locale;
+
   @override
   void initState() {
     // --> initialize callback functions
+    _locale = widget.initialLocale;
     AwesomeNotifications().setListeners(
         onActionReceivedMethod: NotificationController.onActionReceivedMethod,
         onNotificationCreatedMethod:
@@ -92,6 +110,12 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
+  void setLocale(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -100,10 +124,22 @@ class _MyAppState extends State<MyApp> {
         scaffoldBackgroundColor: Pallete.backgroundColor,
       ),
       debugShowCheckedModeBanner: false, // don't show the debug label
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en'),
+        Locale('hu'),
+      ],
+      locale: _locale,
+
       initialRoute: "/starter",
       routes: {
         "/home": (context) => const HomeScreen(),
-        "/settings": (context) => const SettingsScreen(),
+        "/settings": (context) => SettingsScreen(setLocale: setLocale),
         "/articles": (context) => const ArticlesScreen(),
         "/events": (context) => const CreateEventScreen(),
         "/mood": (context) => const MoodScreen(),
@@ -126,7 +162,7 @@ class _MyAppState extends State<MyApp> {
           if (snapshot.data != null) {
             return const HomeScreen();
           }
-          return const RegisterScreen();
+          return const RegisterScreen(); 
         },
       ),
     );

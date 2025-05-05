@@ -29,10 +29,10 @@ packages:
     dependency: "direct main"
     description:
       name: awesome_notifications
-      sha256: "65f730f9c0e73a346039ef746384bcff1773f9f03821b859705a7ab8db977b23"
+      sha256: "3eeb9e0cdfc72c7b4b83e9924da38ea86edd65a2af02bd5429aa41dce634ee90"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.2"
+    version: "0.8.3"
   boolean_selector:
     dependency: transitive
     description:
@@ -157,10 +157,10 @@ packages:
     dependency: "direct main"
     description:
       name: dash_chat_2
-      sha256: "23e5e87360a143117e4d0f5237f242aabed7b07e75f3975c15046edcd7e0d10a"
+      sha256: "87ff33cbd1d5fe6241eb6c2044de32d64ef888f5d2ec9b4ab75a949d4b3742d3"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.18"
+    version: "0.0.21"
   dio:
     dependency: transitive
     description:
@@ -374,6 +374,19 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
+  flutter_localizations:
+    dependency: "direct main"
+    description: flutter
+    source: sdk
+    version: "0.0.0"
+  flutter_markdown:
+    dependency: transitive
+    description:
+      name: flutter_markdown
+      sha256: "634622a3a826d67cb05c0e3e576d1812c430fa98404e95b60b131775c73d76ec"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.7"
   flutter_parsed_text:
     dependency: transitive
     description:
@@ -553,13 +566,13 @@ packages:
     source: hosted
     version: "0.2.1+1"
   intl:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: intl
-      sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
+      sha256: d6f56758b7d3014a48af9701c085700aac781a92a87a62b1333b46d8879661cf
       url: "https://pub.dev"
     source: hosted
-    version: "0.18.1"
+    version: "0.19.0"
   leak_tracker:
     dependency: transitive
     description:
@@ -592,6 +605,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
+  markdown:
+    dependency: transitive
+    description:
+      name: markdown
+      sha256: "935e23e1ff3bc02d390bad4d4be001208ee92cc217cb5b5a6c19bc14aaa318c1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.3.0"
   matcher:
     dependency: transitive
     description:

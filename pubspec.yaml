@@ -31,9 +31,9 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_svg: ^2.0.10+1
-  # flutter_localizations:
-  #  sdk: flutter
-  # intl: ^0.18.0  
+  flutter_localizations:
+    sdk: flutter
+    
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -46,8 +46,8 @@ dependencies:
   fluttertoast: ^8.2.8
   google_sign_in: ^6.2.2
   http: ^1.2.2
-  intl: ^0.18.0
-  dash_chat_2: 0.0.18
+  # intl: ^0.18.0
+  dash_chat_2: 0.0.21
   fl_chart: ^0.69.2
   chat_gpt_sdk: ^3.1.3
   awesome_notifications: ^0.8.2
@@ -76,7 +76,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
+  # helps at translating the app.
+  generate: true
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/

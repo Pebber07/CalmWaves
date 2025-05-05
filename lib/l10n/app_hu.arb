@@ -1,0 +1,8 @@
+{
+    "@@locale": "hu",
+    "login": "Bejelentkezés",
+    "register": "Regisztráció",
+    "email": "Email",
+    "password": "Jelszó",
+    "connection": "Kapcsolat"
+  }
