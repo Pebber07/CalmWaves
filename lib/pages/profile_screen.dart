@@ -1,5 +1,6 @@
 import "package:calmwaves_app/widgets/custom_app_bar.dart";
 import "package:calmwaves_app/widgets/custom_drawer.dart";
+import "package:calmwaves_app/widgets/streak_row_widget.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
@@ -32,11 +33,20 @@ class ProfileScreen extends StatelessWidget {
     }
   }
 
+  Future<Map<String, dynamic>> _loadStreakData(String userId) async {
+  final weekly = await _getWeeklyStreaks(userId);
+  final count = await _calculateStreak(userId);
+  return {
+    'weekly': weekly,
+    'count': count,
+  };
+}
+
   Future<int> _calculateStreak(String userId) async {
     final now = DateTime.now();
     final moodSnapshot = await FirebaseFirestore.instance
         .collection('mood')
-        .where('userId', isEqualTo: userId)
+        .where('userid', isEqualTo: userId)
         .get();
 
     final loggedDates = <DateTime>{};
@@ -57,6 +67,28 @@ class ProfileScreen extends StatelessWidget {
 
     return streak;
   }
+
+  Future<List<bool>> _getWeeklyStreaks(String userId) async {
+  final now = DateTime.now();
+  final monday = now.subtract(Duration(days: now.weekday - 1));
+  final sunday = monday.add(const Duration(days: 6, hours: 23, minutes: 59, seconds: 59));
+
+  final querySnapshot = await FirebaseFirestore.instance
+      .collection('mood')
+      .where('userid', isEqualTo: userId)
+      .where('timestamp', isGreaterThanOrEqualTo: monday)
+      .where('timestamp', isLessThanOrEqualTo: sunday)
+      .get();
+
+  List<bool> weekly = List.generate(7, (_) => false);
+  for (var doc in querySnapshot.docs) {
+    final timestamp = (doc['timestamp'] as Timestamp).toDate();
+    final dayIndex = timestamp.weekday - 1;
+    weekly[dayIndex] = true;
+  }
+
+  return weekly;
+}
 
   Future<void> _deleteAccount(BuildContext context) async {
     final user = FirebaseAuth.instance.currentUser;
@@ -215,36 +247,21 @@ class ProfileScreen extends StatelessWidget {
                 if (!isGuest) ...[
                   const Divider(),
                   const SizedBox(height: 16),
-                  FutureBuilder<int>(
-                    future: _calculateStreak(
-                        FirebaseAuth.instance.currentUser!.uid),
+                  FutureBuilder<Map<String, dynamic>>(
+                    future:
+                        _loadStreakData(FirebaseAuth.instance.currentUser!.uid),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const CircularProgressIndicator();
                       }
 
-                      final streak = snapshot.data!;
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text("Aktivitás",
-                              style: TextStyle(fontSize: 18)),
-                          Row(
-                            children: [
-                              Text(
-                                "$streak nap",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 16),
-                              ),
-                              const SizedBox(width: 6),
-                              Image.asset(
-                                "assets/images/streak_fire.png",
-                                width: 24,
-                                height: 24,
-                              ),
-                            ],
-                          ),
-                        ],
+                      final weeklyStreaks =
+                          snapshot.data!['weekly'] as List<bool>;
+                      final currentStreakCount = snapshot.data!['count'] as int;
+
+                      return StreakRowWidget(
+                        weeklyStreaks: weeklyStreaks,
+                        currentStreakCount: currentStreakCount,
                       );
                     },
                   ),
