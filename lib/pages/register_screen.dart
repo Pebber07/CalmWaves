@@ -80,6 +80,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
         return;
       }
 
+      final username = usernameController.text.trim();
+      if (username.startsWith("Guest#")) {
+        if (!mounted) return;
+        showDialog(
+          context: context,
+          builder: (context) => const AlertDialog(
+            title: Text("Hiba"),
+            content:
+                Text("A 'Guest#' kezdetű felhasználónevek nem választhatók."),
+          ),
+        );
+        return;
+      }
+
       // Felhasználó létrehozása
       final userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -97,7 +111,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           'username': usernameController.text.trim(),
           'isUsernameChanged': false,
           //'profilePicture': "", Todo: Download a template Profile picture.
-          'profileImage': "", 
+          'profileImage': "",
           'email': emailController.text.trim(),
           'role': 'user',
           'createdAt': Timestamp.now(),
@@ -107,8 +121,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         'mood': [],
         'settings': {
           'notificationsEnabled': true,
-          'preferredLangugae' : 'hu',
-          'preferredTheme' : 'light'
+          'preferredLangugae': 'hu',
+          'preferredTheme': 'light'
         },
         'articles': [],
       });
@@ -151,9 +165,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               children: [
                 // Image.asset('assets/images/signin_balls.png'),
                 const SizedBox(
-                height: 50,
-              ),
-              /*
+                  height: 50,
+                ),
+                /*
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -167,9 +181,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ],
               ),
               */
-              const SizedBox(
-                height: 50,
-              ),
+                const SizedBox(
+                  height: 50,
+                ),
                 const Text(
                   'Register',
                   style: TextStyle(

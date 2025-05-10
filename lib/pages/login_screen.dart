@@ -156,13 +156,64 @@ class _LoginScreenState extends State<LoginScreen> {
                 hintText: 'Enter your password',
               ),
               const SizedBox(
-                height: 120,
+                height: 65,
               ),
               GradientButton(
                 buttonMargin: 20,
                 text: "Log In",
                 onPressed: () async {
                   await loginUserWithEmailAndPassword();
+                },
+              ),
+              GradientButton(
+                buttonMargin: 8,
+                text: "Continue as a Guest",
+                onPressed: () async {
+                  final credential =
+                      await FirebaseAuth.instance.signInAnonymously();
+                  final userId = credential.user!.uid;
+
+                  final existingDoc = await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(userId)
+                      .get();
+
+                  if (!existingDoc.exists) {
+                    final guests = await FirebaseFirestore.instance
+                        .collection('users')
+                        .where('userinfo.username',
+                            isGreaterThanOrEqualTo: 'Guest#')
+                        .get();
+                    final guestNumber =
+                        (guests.docs.length + 1).toString().padLeft(3, '0');
+                    final generatedUsername = 'Guest#$guestNumber';
+
+                    await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(userId)
+                        .set({
+                      'userinfo': {
+                        'username': generatedUsername,
+                        'isUsernameChanged': true,
+                        'profileImage': "",
+                        'email': "",
+                        'role': 'guest',
+                        'createdAt': Timestamp.now(),
+                      },
+                      'messages': [],
+                      'calendar': [],
+                      'mood': [],
+                      'settings': {
+                        'notificationsEnabled': false,
+                        'preferredLangugae': 'hu',
+                        'preferredTheme': 'light',
+                      },
+                      'articles': [],
+                    });
+                  }
+
+                  if (!mounted) return;
+                  Navigator.pushReplacementNamed(context, '/home');
                 },
               ),
               GestureDetector(

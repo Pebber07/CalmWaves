@@ -32,6 +32,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   bool isUsernameChanged = false;
   bool isDarkTheme = false;
+  bool _isGuest = false;
 
   @override
   void initState() {
@@ -46,10 +47,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     final data = doc['userinfo'];
     final settings = doc['settings'];
+    final role = data['role'] ?? 'user';
+    final isGuest = role == 'guest';
 
     setState(() {
       isUsernameChanged = data['isUsernameChanged'] ?? true;
       isDarkTheme = (settings['theme'] ?? 'light') == 'dark';
+      _isGuest = isGuest;
     });
   }
 
@@ -142,7 +146,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const Text("Fiókbeállítások",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
-            if (!isUsernameChanged) ...[
+            if (!isUsernameChanged && !_isGuest) ...[
               LoginField(
                 hintText: "Új felhasználónév",
                 controller: newUsernameController,
@@ -159,36 +163,38 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   style: TextStyle(color: Colors.grey)),
             const SizedBox(height: 20),
             const Divider(),
-            const Text("Jelszó módosítása",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 10),
-            LoginField(
-              hintText: "Jelenlegi jelszó",
-              controller: oldPasswordController,
-              hideText: true,
-              buttonLabelText: "Old password",
-            ),
-            const SizedBox(height: 10),
-            LoginField(
-              hintText: "Új jelszó",
-              controller: newPasswordController,
-              hideText: true,
-              buttonLabelText: "New password",
-            ),
-            const SizedBox(height: 10),
-            LoginField(
-              hintText: "Új jelszó újra",
-              controller: confirmPasswordController,
-              hideText: true,
-              buttonLabelText: "New password again",
-            ),
-            GradientButton(
-              onPressed: _changePassword,
-              text: "Jelszó frissítése",
-              buttonMargin: 8,
-            ),
-            const SizedBox(height: 30),
-            const Divider(),
+            if (!_isGuest) ...[
+              const Text("Jelszó módosítása",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 10),
+              LoginField(
+                hintText: "Jelenlegi jelszó",
+                controller: oldPasswordController,
+                hideText: true,
+                buttonLabelText: "Old password",
+              ),
+              const SizedBox(height: 10),
+              LoginField(
+                hintText: "Új jelszó",
+                controller: newPasswordController,
+                hideText: true,
+                buttonLabelText: "New password",
+              ),
+              const SizedBox(height: 10),
+              LoginField(
+                hintText: "Új jelszó újra",
+                controller: confirmPasswordController,
+                hideText: true,
+                buttonLabelText: "New password again",
+              ),
+              GradientButton(
+                onPressed: _changePassword,
+                text: "Jelszó frissítése",
+                buttonMargin: 8,
+              ),
+              const SizedBox(height: 30),
+              const Divider(),
+            ],
             const Text("Téma",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             /*

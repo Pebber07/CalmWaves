@@ -21,6 +21,7 @@ class ProfileScreen extends StatelessWidget {
       'username': data?['userinfo']?['username'] ?? '',
       'createdAt': data?['userinfo']?['createdAt'],
       'profileImage': data?['userinfo']?['profileImage'] ?? '',
+      'role': data?['userinfo']?['role'] ?? 'user',
     };
   }
 
@@ -149,6 +150,8 @@ class ProfileScreen extends StatelessWidget {
           final username = userData['username'];
           final createdAt = userData['createdAt'] as Timestamp?;
           final profileImage = userData['profileImage'];
+          final role = userData['role'];
+          final isGuest = role == 'guest';
           final formattedDate = createdAt != null
               ? DateFormat('yyyy.MM.dd').format(createdAt.toDate())
               : 'Ismeretlen';
@@ -177,40 +180,75 @@ class ProfileScreen extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text("Regisztráció: $formattedDate"),
                 const SizedBox(height: 16),
-                const Divider(),
-                const SizedBox(height: 16),
-                FutureBuilder<int>(
-                  future:
-                      _calculateStreak(FirebaseAuth.instance.currentUser!.uid),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-
-                    final streak = snapshot.data!;
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                if (isGuest) ...[
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.blueAccent,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Column(
                       children: [
-                        const Text("Aktivitás", style: TextStyle(fontSize: 18)),
-                        Row(
-                          children: [
-                            Text(
-                              "$streak nap",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
-                            ),
-                            const SizedBox(width: 6),
-                            Image.asset(
-                              "assets/images/streak_fire.png",
-                              width: 24,
-                              height: 24,
-                            ),
-                          ],
+                        const Text(
+                          "Vendég fiókkal vagy bejelentkezve.",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        const Text(
+                          "Regisztrálj, hogy elérd az összes funkciót és elmentsd az adataidat.",
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 12),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/register');
+                          },
+                          child: const Text("Regisztráció"),
                         ),
                       ],
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                ],
+                if (!isGuest) ...[
+                  const Divider(),
+                  const SizedBox(height: 16),
+                  FutureBuilder<int>(
+                    future: _calculateStreak(
+                        FirebaseAuth.instance.currentUser!.uid),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      final streak = snapshot.data!;
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text("Aktivitás",
+                              style: TextStyle(fontSize: 18)),
+                          Row(
+                            children: [
+                              Text(
+                                "$streak nap",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                              const SizedBox(width: 6),
+                              Image.asset(
+                                "assets/images/streak_fire.png",
+                                width: 24,
+                                height: 24,
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ],
                 const SizedBox(height: 32),
                 ElevatedButton.icon(
                   onPressed: () => _signOut(context),
@@ -222,11 +260,12 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-                OutlinedButton.icon(
-                  onPressed: () => _deleteAccount(context),
-                  icon: const Icon(Icons.lock_outline),
-                  label: const Text("Profil zárolása"),
-                ),
+                if (!isGuest)
+                  OutlinedButton.icon(
+                    onPressed: () => _deleteAccount(context),
+                    icon: const Icon(Icons.lock_outline),
+                    label: const Text("Profil zárolása"),
+                  ),
               ],
             ),
           );
