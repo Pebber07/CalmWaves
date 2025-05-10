@@ -11,6 +11,7 @@ import "package:flutter/material.dart";
 import "package:fluttertoast/fluttertoast.dart";
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:workmanager/workmanager.dart";
 
 class SettingsScreen extends StatefulWidget {
   final void Function(Locale) setLocale;
@@ -33,6 +34,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool isUsernameChanged = false;
   bool isDarkTheme = false;
   bool _isGuest = false;
+  Map<String, dynamic>? notificationSettings;
 
   @override
   void initState() {
@@ -54,6 +56,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       isUsernameChanged = data['isUsernameChanged'] ?? true;
       isDarkTheme = (settings['theme'] ?? 'light') == 'dark';
       _isGuest = isGuest;
+      notificationSettings = settings;
     });
   }
 
@@ -192,31 +195,75 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 text: "Jelszó frissítése",
                 buttonMargin: 8,
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 10),
               const Divider(),
             ],
-            const Text("Téma",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            /*
-            SwitchListTile(
-              value: isDarkTheme,
-              onChanged: _updateTheme,
-              title: const Text("Sötét mód"),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Sötét mód",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                Switch(
+                  value: isDarkTheme,
+                  onChanged: (bool newValue) {
+                    setState(() {
+                      isDarkTheme = newValue;
+                    });
+                    widget.toggleTheme(newValue);
+                    FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(userId)
+                        .update(
+                            {'settings.theme': newValue ? 'dark' : 'light'});
+                  },
+                ),
+              ],
             ),
-            */
-            SwitchListTile(
-              value: isDarkTheme,
-              onChanged: (bool newValue) {
-                setState(() {
-                  isDarkTheme = newValue;
-                });
-                widget.toggleTheme(newValue);
-                FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(userId)
-                    .update({'settings.theme': newValue ? 'dark' : 'light'});
-              },
-              title: const Text("Téma"),
+            const Divider(),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Értesítések",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                Switch(
+                  value: !_isGuest &&
+                      (notificationSettings?['notificationsEnabled'] ?? true),
+                  onChanged: _isGuest
+                      ? null
+                      : (bool newValue) async {
+                          await FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(userId)
+                              .update(
+                                  {'settings.notificationsEnabled': newValue});
+
+                          setState(() {
+                            notificationSettings?['notificationsEnabled'] =
+                                newValue;
+                          });
+
+                          if (newValue) {
+                            Workmanager().registerPeriodicTask(
+                              "dailyQuoteTaskId",
+                              "dailyQuoteTask",
+                              frequency: const Duration(hours: 24),
+                              initialDelay: Duration(
+                                hours: (8 - DateTime.now().hour) % 24,
+                              ),
+                              existingWorkPolicy: ExistingWorkPolicy.keep,
+                            );
+                          } else {
+                            Workmanager()
+                                .cancelByUniqueName("dailyQuoteTaskId");
+                          }
+                        },
+                ),
+              ],
             ),
             const Divider(),
             const SizedBox(height: 10),

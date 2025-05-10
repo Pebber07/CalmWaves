@@ -34,6 +34,7 @@ void main() async {
 
   Locale initialLocale = const Locale('en');
   String initialTheme = 'light';
+  bool shouldRegisterNotification = false;
 
   final user = FirebaseAuth.instance.currentUser;
   if (user != null) {
@@ -45,6 +46,8 @@ void main() async {
     final data = doc.data();
     final preferredLanguage = data?['settings']?['preferredLanguage'];
     final preferredTheme = data?['settings']?['theme'];
+    final notificationsEnabled =
+        data?['settings']?['notificationsEnabled'] ?? true;
 
     if (preferredLanguage == 'hu' || preferredLanguage == 'en') {
       initialLocale = Locale(preferredLanguage);
@@ -52,6 +55,7 @@ void main() async {
     if (preferredTheme == 'dark' || preferredTheme == 'light') {
       initialTheme = preferredTheme;
     }
+    shouldRegisterNotification = notificationsEnabled == true;
   }
 
   await AwesomeNotifications().initialize(
@@ -77,15 +81,19 @@ void main() async {
   Workmanager()
       .initialize(notificationCallbackDispatcher, isInDebugMode: false);
 
-  Workmanager().registerPeriodicTask(
-    "dailyQuoteTaskId",
-    "dailyQuoteTask",
-    frequency: const Duration(hours: 24),
-    initialDelay: Duration(
-      hours: 8 - DateTime.now().hour,
-    ),
-    existingWorkPolicy: ExistingWorkPolicy.keep,
-  );
+  if (shouldRegisterNotification) {
+    Workmanager().registerPeriodicTask(
+      "dailyQuoteTaskId",
+      "dailyQuoteTask",
+      frequency: const Duration(hours: 24),
+      initialDelay: Duration(
+        hours: (8 - DateTime.now().hour) % 24,
+      ),
+      existingWorkPolicy: ExistingWorkPolicy.keep,
+    );
+  } else {
+    Workmanager().cancelByUniqueName("dailyQuoteTaskId");
+  }
 
   bool isAllowedToSendNotification =
       await AwesomeNotifications().isNotificationAllowed();
