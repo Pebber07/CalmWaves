@@ -5,6 +5,7 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:intl/intl.dart";
+import 'package:calmwaves_app/widgets/profile_picture_picker.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -181,7 +182,6 @@ class ProfileScreen extends StatelessWidget {
           final userData = snapshot.data!;
           final username = userData['username'];
           final createdAt = userData['createdAt'] as Timestamp?;
-          final profileImage = userData['profileImage'];
           final role = userData['role'];
           final isGuest = role == 'guest';
           final formattedDate = createdAt != null
@@ -192,17 +192,7 @@ class ProfileScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
             child: Column(
               children: [
-                Center(
-                  child: CircleAvatar(
-                    radius: 60,
-                    backgroundImage: profileImage.isNotEmpty
-                        ? NetworkImage(profileImage)
-                        : null,
-                    child: profileImage.isEmpty
-                        ? const Icon(Icons.person, size: 60)
-                        : null,
-                  ),
-                ),
+                const ProfilePicturePicker(),
                 const SizedBox(height: 16),
                 Text(
                   username,
