@@ -287,7 +287,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(
               height: 16,
             ),
-            Text(AppLocalizations.of(context)!.connection, // Kapcsolat
+            Text(AppLocalizations.of(context)!.contactUs, // Kapcsolat
                 style:
                     const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
