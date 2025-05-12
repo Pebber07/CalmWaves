@@ -6,6 +6,7 @@ import "package:calmwaves_app/widgets/mood_trends_chart.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MoodScreen extends StatelessWidget {
   const MoodScreen({super.key});
@@ -21,31 +22,31 @@ class MoodScreen extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-              const Text(
-                "How are you today?",
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.howAreYouToday,
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
                 ),
               ),
-              const Row(
+              Row(
                 children: [
                   FeelingCard(
-                    caption: "Mérges",
+                    caption: AppLocalizations.of(context)!.angry,
                     cardColor: Colors.red,
                     emoji: "\ud83d\ude20",
                     cardWidth: 100,
                     moodNumber: 1,
                   ),
                   FeelingCard(
-                    caption: "Szomorú",
+                    caption: AppLocalizations.of(context)!.sad,
                     cardColor: Colors.orange,
                     emoji: "\ud83d\ude41",
                     cardWidth: 100,
                     moodNumber: 2,
                   ),
                   FeelingCard(
-                    caption: "Elmegy",
+                    caption: AppLocalizations.of(context)!.itsGoing,
                     cardColor: Colors.yellow,
                     emoji: "\ud83d\ude10",
                     cardWidth: 100,
@@ -53,24 +54,24 @@ class MoodScreen extends StatelessWidget {
                   ),
                 ],
               ), // I could create an Enum for this.
-              const Row(
+              Row(
                 children: [
                   FeelingCard(
-                    caption: "Boldog",
+                    caption: AppLocalizations.of(context)!.happy,
                     cardColor: Colors.lightBlue,
                     emoji: "\ud83d\ude0a",
                     cardWidth: 100,
                     moodNumber: 4,
                   ),
                   FeelingCard(
-                    caption: "Izgatott",
+                    caption: AppLocalizations.of(context)!.excited,
                     cardColor: Colors.cyan,
                     emoji: "\ud83d\ude04",
                     cardWidth: 100,
                     moodNumber: 5,
                   ),
                   FeelingCard(
-                    caption: "Ultra vidám",
+                    caption: AppLocalizations.of(context)!.ultraHappy,
                     cardColor: Colors.purple,
                     emoji: "\ud83d\ude0d",
                     cardWidth: 100,
@@ -81,9 +82,9 @@ class MoodScreen extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              const Text(
-                "Mood History",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              Text(
+                AppLocalizations.of(context)!.moodHistory,
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
               const SizedBox(
                 height: 10,

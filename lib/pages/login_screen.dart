@@ -8,6 +8,7 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:google_sign_in/google_sign_in.dart";
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
   static route() => MaterialPageRoute(
@@ -95,9 +96,9 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 50,
               ),
-              const Text(
-                'Sign In',
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.signIn,
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 50,
                 ),
@@ -107,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               SocialButton(
                 iconPath: 'assets/svgs/g_logo.svg',
-                label: 'Continue with Google',
+                label: AppLocalizations.of(context)!.continueWithGoogle,
                 buttonOnPressed: () async {
                   try {
                     final userCredential =
@@ -131,9 +132,9 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 10,
               ),
-              const Text(
-                'or',
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.or,
+                style: const TextStyle(
                   fontSize: 17,
                 ),
               ),
@@ -143,8 +144,8 @@ class _LoginScreenState extends State<LoginScreen> {
               LoginField(
                 controller: emailController,
                 hideText: false,
-                buttonLabelText: "Username",
-                hintText: 'Enter your username',
+                buttonLabelText: AppLocalizations.of(context)!.username,
+                hintText: AppLocalizations.of(context)!.enterYourUsername,
               ),
               const SizedBox(
                 height: 13,
@@ -152,15 +153,15 @@ class _LoginScreenState extends State<LoginScreen> {
               LoginField(
                 controller: passwordController,
                 hideText: true,
-                buttonLabelText: "Password",
-                hintText: 'Enter your password',
+                buttonLabelText: AppLocalizations.of(context)!.password,
+                hintText: AppLocalizations.of(context)!.enterYourPassword,
               ),
               const SizedBox(
                 height: 65,
               ),
               GradientButton(
                 buttonMargin: 20,
-                text: "Log In",
+                text: AppLocalizations.of(context)!.logIN,
                 onPressed: () async {
                   await loginUserWithEmailAndPassword();
                 },
@@ -222,11 +223,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
                 child: RichText(
                   text: TextSpan(
-                    text: 'Don\'t have an account? ',
+                    text: AppLocalizations.of(context)!.dontHaveAnAccount,
                     style: Theme.of(context).textTheme.titleMedium,
                     children: [
                       TextSpan(
-                        text: 'Sign Up',
+                        text: AppLocalizations.of(context)!.signUp,
                         style:
                             Theme.of(context).textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.bold,

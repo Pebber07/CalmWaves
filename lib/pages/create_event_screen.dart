@@ -9,6 +9,7 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:intl/intl.dart";
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CreateEventScreen extends StatefulWidget {
   const CreateEventScreen({super.key});
@@ -58,9 +59,9 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
         child: Center(
           child: Column(
             children: [
-              const Text(
-                "Create event",
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.createEvent,
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
                 ),

@@ -12,6 +12,7 @@ import "package:fluttertoast/fluttertoast.dart";
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import "package:workmanager/workmanager.dart";
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsScreen extends StatefulWidget {
   final void Function(Locale) setLocale;
@@ -146,19 +147,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Fiókbeállítások",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Text(AppLocalizations.of(context)!.userProfileSettings,
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
             if (!isUsernameChanged && !_isGuest) ...[
               LoginField(
-                hintText: "Új felhasználónév",
+                hintText: AppLocalizations.of(context)!.newUsername,
                 controller: newUsernameController,
                 hideText: false,
-                buttonLabelText: "New username",
+                buttonLabelText: AppLocalizations.of(context)!.newUsername,
               ),
               GradientButton(
                 onPressed: _changeUsername,
-                text: "Felhasználónév mentése",
+                text: AppLocalizations.of(context)!.saveNewUsername,
                 buttonMargin: 8,
               ),
             ] else
@@ -167,32 +168,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(height: 20),
             const Divider(),
             if (!_isGuest) ...[
-              const Text("Jelszó módosítása",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              Text(AppLocalizations.of(context)!.modifyPassword,
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
               LoginField(
                 hintText: "Jelenlegi jelszó",
                 controller: oldPasswordController,
                 hideText: true,
-                buttonLabelText: "Old password",
+                buttonLabelText: AppLocalizations.of(context)!.oldPassword,
               ),
               const SizedBox(height: 10),
               LoginField(
-                hintText: "Új jelszó",
+                hintText: AppLocalizations.of(context)!.newPassword,
                 controller: newPasswordController,
                 hideText: true,
-                buttonLabelText: "New password",
+                buttonLabelText: AppLocalizations.of(context)!.newPasswordAgain,
               ),
               const SizedBox(height: 10),
               LoginField(
-                hintText: "Új jelszó újra",
+                hintText: AppLocalizations.of(context)!.newPasswordAgain,
                 controller: confirmPasswordController,
                 hideText: true,
-                buttonLabelText: "New password again",
+                buttonLabelText: AppLocalizations.of(context)!.newPasswordAgain,
               ),
               GradientButton(
                 onPressed: _changePassword,
-                text: "Jelszó frissítése",
+                text: AppLocalizations.of(context)!.refreshPassword,
                 buttonMargin: 8,
               ),
               const SizedBox(height: 10),
@@ -287,7 +288,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(
               height: 16,
             ),
-            Text(AppLocalizations.of(context)!.contactUs, // Kapcsolat
+            Text(AppLocalizations.of(context)!.contactUs, 
                 style:
                     const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
@@ -304,8 +305,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             const SizedBox(height: 30),
             const Divider(),
-            const Text("Műveletek",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Text(AppLocalizations.of(context)!.actions,
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
             GradientButton(
               onPressed: _signOut,

@@ -9,6 +9,7 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:fluttertoast/fluttertoast.dart";
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ArticlesScreen extends StatefulWidget {
   const ArticlesScreen({super.key});
@@ -109,12 +110,12 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.all(15.0),
+          Padding(
+            padding: const EdgeInsets.all(15.0),
             child: Center(
               child: Text(
-                'Articles',
-                style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                AppLocalizations.of(context)!.articles,
+                style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -128,7 +129,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
                   });
                 },
                 child: Text(
-                  'Hot',
+                  AppLocalizations.of(context)!.hot,
                   style: TextStyle(
                     color: filter == 'Hot' ? Colors.blue : Colors.black,
                   ),
@@ -141,7 +142,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
                   });
                 },
                 child: Text(
-                  'Favorites',
+                  AppLocalizations.of(context)!.favorites,
                   style: TextStyle(
                     color: filter == 'Favorites' ? Colors.blue : Colors.black,
                   ),

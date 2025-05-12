@@ -5,6 +5,7 @@ import "package:flutter/material.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../widgets/new_post_popup.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ForumScreen extends StatefulWidget {
   const ForumScreen({super.key});
@@ -45,11 +46,11 @@ class _ForumScreenState extends State<ForumScreen> {
             const SizedBox(
               height: 20,
             ),
-            const Align(
+            Align(
               alignment: Alignment.center,
               child: Text(
-                "Fórum",
-                style: TextStyle(
+                AppLocalizations.of(context)!.forum,
+                style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: Colors.lightBlue,
@@ -63,7 +64,7 @@ class _ForumScreenState extends State<ForumScreen> {
               onChanged: (val) =>
                   setState(() => searchQuery = val.toLowerCase()),
               decoration: InputDecoration(
-                hintText: "Search",
+                hintText: AppLocalizations.of(context)!.search,
                 prefixIcon: const Icon(Icons.search),
                 filled: true,
                 fillColor: Colors.grey[100],
@@ -90,7 +91,8 @@ class _ForumScreenState extends State<ForumScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: const Text('Új bejegyzés', style: TextStyle(fontSize: 16)),
+              child: Text(AppLocalizations.of(context)!.newEntry,
+                  style: const TextStyle(fontSize: 16)),
             ),
             const SizedBox(
               height: 16,
@@ -148,7 +150,10 @@ class _ForumScreenState extends State<ForumScreen> {
                             return ForumPostTile(
                               title: data['title'],
                               content: data['content'],
-                              date: DateFormat('yyyy-MM-dd HH:mm').format((data['date'] as Timestamp).toDate().toLocal()),
+                              date: DateFormat('yyyy-MM-dd HH:mm').format(
+                                  (data['date'] as Timestamp)
+                                      .toDate()
+                                      .toLocal()),
                               postId: data.id,
                               userId: userId,
                               profilePic: profilePic,

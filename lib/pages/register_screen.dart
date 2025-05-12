@@ -9,6 +9,8 @@ import "package:flutter/material.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fluttertoast/fluttertoast.dart";
 import "package:google_sign_in/google_sign_in.dart";
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class RegisterScreen extends StatefulWidget {
   static route() => MaterialPageRoute(
@@ -184,9 +186,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                   height: 50,
                 ),
-                const Text(
-                  'Register',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context)!.register,
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 50,
                   ),
@@ -196,7 +198,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 SocialButton(
                   iconPath: 'assets/svgs/g_logo.svg',
-                  label: 'Continue with Google',
+                  label: AppLocalizations.of(context)!.continueWithGoogle,
                   buttonOnPressed: () async {
                     try {
                       final userCredential =
@@ -250,9 +252,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                const Text(
-                  'or',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context)!.or,
+                  style: const TextStyle(
                     fontSize: 17,
                   ),
                 ),
@@ -262,7 +264,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 LoginField(
                   controller: emailController,
                   hideText: false,
-                  buttonLabelText: "Email",
+                  buttonLabelText: AppLocalizations.of(context)!.email,
                   hintText: 'Someone@gmail.com',
                 ),
                 const SizedBox(
@@ -271,7 +273,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 LoginField(
                   controller: usernameController,
                   hideText: false,
-                  buttonLabelText: "Username",
+                  buttonLabelText: AppLocalizations.of(context)!.username,
                   hintText: 'MentalKing02',
                 ),
                 const SizedBox(
@@ -280,7 +282,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 LoginField(
                   controller: passwordController,
                   hideText: false,
-                  buttonLabelText: "Password",
+                  buttonLabelText: AppLocalizations.of(context)!.password,
                   hintText: 'Randompassword1010',
                 ),
                 const SizedBox(
@@ -289,7 +291,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 LoginField(
                   controller: confirmPasswordController,
                   hideText: false,
-                  buttonLabelText: "Password Again",
+                  buttonLabelText: AppLocalizations.of(context)!.passwordAgain,
                   hintText: 'Randompassword1010',
                 ),
                 const SizedBox(
@@ -297,7 +299,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 GradientButton(
                   buttonMargin: 15,
-                  text: "Register",
+                  text: AppLocalizations.of(context)!.register,
                   onPressed: () async {
                     if (!areFieldsFilled()) {
                       showDialog(
@@ -341,11 +343,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                   child: RichText(
                     text: TextSpan(
-                      text: 'Already have an account? ',
+                      text: AppLocalizations.of(context)!.alreadyAMember,
                       style: Theme.of(context).textTheme.titleMedium,
                       children: [
                         TextSpan(
-                          text: 'Sign In',
+                          text: AppLocalizations.of(context)!.signIn,
                           style:
                               Theme.of(context).textTheme.titleMedium?.copyWith(
                                     fontWeight: FontWeight.bold,
