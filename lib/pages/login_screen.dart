@@ -104,20 +104,6 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 50,
               ),
-              /*
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16),
-                    child: LanguageSelector(
-                        initialLanguage: 'hu', onLanguageSelected: (langCode) {
-                          // Translate the texts to the given language
-                        }),
-                  ),
-                ],
-              ),
-              */
               const SizedBox(
                 height: 50,
               ),
@@ -191,6 +177,62 @@ class _LoginScreenState extends State<LoginScreen> {
                 hideText: true,
                 buttonLabelText: AppLocalizations.of(context)!.password,
                 hintText: AppLocalizations.of(context)!.enterYourPassword,
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () async {
+                    if (!await hasInternetConnection()) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const AlertDialog(
+                          title: Text("Hálózati hiba"),
+                          content: Text("Nincs internetkapcsolat."),
+                        ),
+                      );
+                      return;
+                    }
+
+                    final email = emailController.text.trim();
+
+                    if (email.isEmpty) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const AlertDialog(
+                          title: Text("Hiányzó email"),
+                          content: Text("Kérlek, add meg az email címed!"),
+                        ),
+                      );
+                      return;
+                    }
+
+                    try {
+                      await FirebaseAuth.instance
+                          .sendPasswordResetEmail(email: email);
+                      showDialog(
+                        context: context,
+                        builder: (context) => const AlertDialog(
+                          title: Text("Email elküldve"),
+                          content: Text(
+                              "Jelszó-visszaállító linket küldtünk az email címedre."),
+                        ),
+                      );
+                    } on FirebaseAuthException catch (e) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text("Hiba"),
+                          content:
+                              Text(e.message ?? "Ismeretlen hiba történt."),
+                        ),
+                      );
+                    }
+                  },
+                  child: const Text(
+                    "Elfelejtetted a jelszavad?",
+                    style: TextStyle(fontSize: 14, color: Colors.blue),
+                  ),
+                ),
               ),
               const SizedBox(
                 height: 65,
