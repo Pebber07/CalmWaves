@@ -1,5 +1,6 @@
 import "package:calmwaves_app/pages/login_screen.dart";
 import "package:calmwaves_app/services/google_auth.dart";
+import "package:calmwaves_app/widgets/check_internet.dart";
 import "package:calmwaves_app/widgets/gradient_button.dart";
 import "package:calmwaves_app/widgets/language_selector_widget.dart";
 import "package:calmwaves_app/widgets/login_field.dart";
@@ -10,7 +11,6 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fluttertoast/fluttertoast.dart";
 import "package:google_sign_in/google_sign_in.dart";
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 
 class RegisterScreen extends StatefulWidget {
   static route() => MaterialPageRoute(
@@ -66,6 +66,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> createUserWithEmailAndPassword() async {
+    if (!await hasInternetConnection()) {
+      if (!mounted) return;
+      showDialog(
+        context: context,
+        builder: (context) => const AlertDialog(
+          title: Text("Nincs internetkapcsolat"),
+          content: Text("Kérlek, csatlakozz egy hálózathoz."),
+        ),
+      );
+      return;
+    }
+
     if (!formKey.currentState!.validate()) return;
 
     try {
@@ -165,24 +177,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             key: formKey,
             child: Column(
               children: [
-                // Image.asset('assets/images/signin_balls.png'),
                 const SizedBox(
                   height: 50,
                 ),
-                /*
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16),
-                    child: LanguageSelector(
-                        initialLanguage: 'hu', onLanguageSelected: (langCode) {
-                          // Translate the texts to the given language
-                        }),
-                  ),
-                ],
-              ),
-              */
                 const SizedBox(
                   height: 50,
                 ),
@@ -200,6 +197,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   iconPath: 'assets/svgs/g_logo.svg',
                   label: AppLocalizations.of(context)!.continueWithGoogle,
                   buttonOnPressed: () async {
+                    if (!await hasInternetConnection()) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const AlertDialog(
+                          title: Text("Hálózati hiba"),
+                          content: Text("Nincs internetkapcsolat."),
+                        ),
+                      );
+                      return;
+                    }
+
                     try {
                       final userCredential =
                           await googleAuthService.signInWithGoogle();
@@ -263,7 +271,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 LoginField(
                   controller: emailController,
-                  hideText: false,
+                  hideText: true,
                   buttonLabelText: AppLocalizations.of(context)!.email,
                   hintText: 'Someone@gmail.com',
                 ),
@@ -272,7 +280,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 LoginField(
                   controller: usernameController,
-                  hideText: false,
+                  hideText: true,
                   buttonLabelText: AppLocalizations.of(context)!.username,
                   hintText: 'MentalKing02',
                 ),

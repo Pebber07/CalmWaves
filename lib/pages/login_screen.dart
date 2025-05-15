@@ -1,5 +1,6 @@
 import "package:calmwaves_app/pages/register_screen.dart";
 import "package:calmwaves_app/services/google_auth.dart";
+import "package:calmwaves_app/widgets/check_internet.dart";
 import "package:calmwaves_app/widgets/gradient_button.dart";
 import "package:calmwaves_app/widgets/language_selector_widget.dart";
 import "package:calmwaves_app/widgets/login_field.dart";
@@ -35,6 +36,30 @@ class _LoginScreenState extends State<LoginScreen> {
   final googleAuthService = GoogleAuthService();
 
   Future<void> loginUserWithEmailAndPassword() async {
+    if (!await hasInternetConnection()) {
+      if (!mounted) return;
+      showDialog(
+        context: context,
+        builder: (context) => const AlertDialog(
+          title: Text("Nincs internetkapcsolat"),
+          content: Text("Kérlek, csatlakozz egy hálózathoz."),
+        ),
+      );
+      return;
+    }
+
+    if (emailController.text.trim().isEmpty ||
+        passwordController.text.trim().isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => const AlertDialog(
+          title: Text('Hiba'),
+          content: Text('Kérem, az összes mezőt töltse ki!'),
+        ),
+      );
+      return;
+    }
+
     try {
       final userCredential =
           await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -110,6 +135,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 iconPath: 'assets/svgs/g_logo.svg',
                 label: AppLocalizations.of(context)!.continueWithGoogle,
                 buttonOnPressed: () async {
+                  if (!await hasInternetConnection()) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => const AlertDialog(
+                        title: Text("Hálózati hiba"),
+                        content: Text("Nincs internetkapcsolat."),
+                      ),
+                    );
+                    return;
+                  }
+
                   try {
                     final userCredential =
                         await googleAuthService.signInWithGoogle();
@@ -170,6 +206,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 buttonMargin: 8,
                 text: "Continue as a Guest",
                 onPressed: () async {
+                  if (!await hasInternetConnection()) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => const AlertDialog(
+                        title: Text("Hálózati hiba"),
+                        content: Text("Nincs internetkapcsolat."),
+                      ),
+                    );
+                    return;
+                  }
+
                   final credential =
                       await FirebaseAuth.instance.signInAnonymously();
                   final userId = credential.user!.uid;
