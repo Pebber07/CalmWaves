@@ -27,6 +27,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -106,6 +109,7 @@ void main() async {
 class MyApp extends StatefulWidget {
   final Locale initialLocale;
   final String initialTheme;
+
   const MyApp(
       {super.key, required this.initialLocale, required this.initialTheme});
 
@@ -116,9 +120,11 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late Locale _locale;
   late bool _isDarkTheme;
+  bool _isOffline = false;
 
   @override
   void initState() {
+    super.initState();
     // --> initialize callback functions
     _locale = widget.initialLocale;
     _isDarkTheme = widget.initialTheme == 'dark';
@@ -132,7 +138,37 @@ class _MyAppState extends State<MyApp> {
         onDismissActionReceivedMethod:
             NotificationController.onDismissActionReceivedMethod);
 
-    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _startConnectivityListener();
+    });
+  }
+
+  void _startConnectivityListener() {
+    Connectivity().onConnectivityChanged.listen((result) {
+      final hasConnection = result != ConnectivityResult.none;
+
+      if (hasConnection && _isOffline) {
+        _showSnackBar("Internetkapcsolat helyreállt");
+      } else if (!hasConnection && !_isOffline) {
+        _showSnackBar("Internetkapcsolat elveszett");
+      }
+
+      setState(() {
+        _isOffline = !hasConnection;
+      });
+    });
+  }
+
+  void _showSnackBar(String message) {
+    final context = navigatorKey.currentContext;
+    if (context != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          duration: const Duration(seconds: 3),
+        ),
+      );
+    }
   }
 
   void setLocale(Locale locale) {
@@ -150,6 +186,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
       title: "CalmWaves",
       theme:
           // ThemeData.dark().copyWith(scaffoldBackgroundColor: Pallete.backgroundColor,),
