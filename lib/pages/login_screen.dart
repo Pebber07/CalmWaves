@@ -235,7 +235,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(
-                height: 65,
+                height: 25,
               ),
               GradientButton(
                 buttonMargin: 20,

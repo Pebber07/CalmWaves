@@ -180,6 +180,14 @@ class CustomDrawer extends StatelessWidget {
               Navigator.pushNamed(context, '/profile');
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.person),
+            title: const Text('Felhasználók kezelése'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/manage_users');
+            },
+          ),
         ],
       ),
     );

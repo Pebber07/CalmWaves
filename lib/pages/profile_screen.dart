@@ -35,13 +35,13 @@ class ProfileScreen extends StatelessWidget {
   }
 
   Future<Map<String, dynamic>> _loadStreakData(String userId) async {
-  final weekly = await _getWeeklyStreaks(userId);
-  final count = await _calculateStreak(userId);
-  return {
-    'weekly': weekly,
-    'count': count,
-  };
-}
+    final weekly = await _getWeeklyStreaks(userId);
+    final count = await _calculateStreak(userId);
+    return {
+      'weekly': weekly,
+      'count': count,
+    };
+  }
 
   Future<int> _calculateStreak(String userId) async {
     final now = DateTime.now();
@@ -70,26 +70,27 @@ class ProfileScreen extends StatelessWidget {
   }
 
   Future<List<bool>> _getWeeklyStreaks(String userId) async {
-  final now = DateTime.now();
-  final monday = now.subtract(Duration(days: now.weekday - 1));
-  final sunday = monday.add(const Duration(days: 6, hours: 23, minutes: 59, seconds: 59));
+    final now = DateTime.now();
+    final monday = now.subtract(Duration(days: now.weekday - 1));
+    final sunday = monday
+        .add(const Duration(days: 6, hours: 23, minutes: 59, seconds: 59));
 
-  final querySnapshot = await FirebaseFirestore.instance
-      .collection('mood')
-      .where('userid', isEqualTo: userId)
-      .where('timestamp', isGreaterThanOrEqualTo: monday)
-      .where('timestamp', isLessThanOrEqualTo: sunday)
-      .get();
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('mood')
+        .where('userid', isEqualTo: userId)
+        .where('timestamp', isGreaterThanOrEqualTo: monday)
+        .where('timestamp', isLessThanOrEqualTo: sunday)
+        .get();
 
-  List<bool> weekly = List.generate(7, (_) => false);
-  for (var doc in querySnapshot.docs) {
-    final timestamp = (doc['timestamp'] as Timestamp).toDate();
-    final dayIndex = timestamp.weekday - 1;
-    weekly[dayIndex] = true;
+    List<bool> weekly = List.generate(7, (_) => false);
+    for (var doc in querySnapshot.docs) {
+      final timestamp = (doc['timestamp'] as Timestamp).toDate();
+      final dayIndex = timestamp.weekday - 1;
+      weekly[dayIndex] = true;
+    }
+
+    return weekly;
   }
-
-  return weekly;
-}
 
   Future<void> _deleteAccount(BuildContext context) async {
     final user = FirebaseAuth.instance.currentUser;
@@ -253,6 +254,19 @@ class ProfileScreen extends StatelessWidget {
                         weeklyStreaks: weeklyStreaks,
                         currentStreakCount: currentStreakCount,
                       );
+                    },
+                  ),
+                ],
+                if (role == 'admin') ...[
+                  const SizedBox(height: 16),
+                  Text("Admin funkciók",
+                      style: Theme.of(context).textTheme.titleLarge),
+                  const SizedBox(height: 8),
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.manage_accounts),
+                    label: const Text("Felhasználók kezelése"),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/manage_users');
                     },
                   ),
                 ],

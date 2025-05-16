@@ -7,6 +7,7 @@ import 'package:calmwaves_app/pages/create_event_screen.dart';
 import 'package:calmwaves_app/pages/forum_screen.dart';
 import 'package:calmwaves_app/pages/home_screen.dart';
 import 'package:calmwaves_app/pages/journal_screen.dart';
+import 'package:calmwaves_app/pages/manage_users_screen.dart';
 import 'package:calmwaves_app/pages/mood_screen.dart';
 import 'package:calmwaves_app/pages/login_screen.dart';
 import 'package:calmwaves_app/pages/notifications_screen.dart';
@@ -227,6 +228,7 @@ class _MyAppState extends State<MyApp> {
         "/chatbot": (context) => const ChatbotScreen(),
         "/forum": (context) => const ForumScreen(),
         "/profile": (context) => const ProfileScreen(),
+        "/manage_users": (context) => const ManageUsersScreen(),
       },
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
