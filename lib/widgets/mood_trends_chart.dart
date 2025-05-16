@@ -6,78 +6,137 @@ import "package:flutter/material.dart";
 class MoodTrendsChart extends StatelessWidget {
   const MoodTrendsChart({super.key});
 
-  Future<List<FlSpot>> _getMoodData() async {
+  Future<Map<String, List<FlSpot>>> _getMoodDataGroupedByMonth() async {
     final currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser == null) {
-      return [];
-    }
+    if (currentUser == null) return {};
+
+    final now = DateTime.now();
+    final currentYear = now.year;
+    final currentMonth = now.month;
+    final yearMonthKey =
+        "$currentYear-${currentMonth.toString().padLeft(2, '0')}";
 
     final querySnapshot = await FirebaseFirestore.instance
         .collection('mood')
         .where('userid', isEqualTo: currentUser.uid)
-        .orderBy('timestamp', descending: false)
+        .orderBy('timestamp')
         .get();
 
-    final moodData = querySnapshot.docs.map((doc) {
+    final Map<String, Map<int, List<double>>> grouped = {};
+
+    for (var doc in querySnapshot.docs) {
       final data = doc.data();
       final timestamp = (data['timestamp'] as Timestamp).toDate();
-      final moodNumber = data['moodNumber'] as int;
+      final moodNumber = (data['moodNumber'] as num).toDouble();
 
-      return FlSpot(timestamp.day.toDouble(), moodNumber.toDouble());
-    }).toList();
+      // csak az aktuális hónap
+      if (timestamp.year != currentYear || timestamp.month != currentMonth) {
+        continue;
+      }
 
-    return moodData;
+      final day = timestamp.day;
+      grouped.putIfAbsent(yearMonthKey, () => {});
+      grouped[yearMonthKey]!.putIfAbsent(day, () => []);
+      grouped[yearMonthKey]![day]!.add(moodNumber);
+    }
+
+    final Map<String, List<FlSpot>> result = {};
+
+    grouped.forEach((month, daysMap) {
+      final spots = daysMap.entries.map((e) {
+        final day = e.key;
+        final moodAvg = e.value.reduce((a, b) => a + b) / e.value.length;
+        return FlSpot(day.toDouble(), moodAvg);
+      }).toList();
+
+      result[month] = spots;
+    });
+
+    return result;
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<FlSpot>>(
-      future: _getMoodData(),
+    return FutureBuilder<Map<String, List<FlSpot>>>(
+      future: _getMoodDataGroupedByMonth(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
+
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return const Center(child: Text("No mood data to display."));
         }
 
-        final moodSpots = snapshot.data!;
+        final dataByMonth = snapshot.data!;
+        final monthKey = dataByMonth.keys.first;
 
-        return LineChart(
-          LineChartData(
-            lineBarsData: [
-              LineChartBarData(
-                spots: moodSpots,
-                isCurved: true,
-                barWidth: 4,
-                belowBarData: BarAreaData(show: false),
-              ),
-            ],
-            titlesData: FlTitlesData(
-              leftTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  showTitles: true,
-                  reservedSize: 40,
-                  interval: 1,
-                  getTitlesWidget: (value, meta) {
-                    return Text(value.toInt().toString(),
-                        style: const TextStyle(fontSize: 12));
-                  },
-                ),
-              ),
-              bottomTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  showTitles: true,
-                  reservedSize: 22,
-                  getTitlesWidget: (value, meta) {
-                    return Text(value.toInt().toString(),
-                        style: const TextStyle(fontSize: 12));
-                  },
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 150,
+              child: LineChart(
+                LineChartData(
+                  lineBarsData: [
+                    LineChartBarData(
+                      spots: dataByMonth[monthKey]!,
+                      isCurved: true,
+                      barWidth: 3,
+                      color: Colors.cyan,
+                      belowBarData: BarAreaData(show: false),
+                    ),
+                  ],
+                  titlesData: FlTitlesData(
+                    bottomTitles: AxisTitles(
+                      axisNameWidget: const Text("Napok"),
+                      axisNameSize: 28,
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 22,
+                        interval: 2,
+                        getTitlesWidget: (value, meta) {
+                          return Text(value.toInt().toString());
+                        },
+                      ),
+                    ),
+                    leftTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 40,
+                        interval: 1,
+                        getTitlesWidget: (value, meta) {
+                          switch (value.toInt()) {
+                            case 1:
+                              return const Text("\ud83d\ude20");
+                            case 3:
+                              return const Text("\ud83d\ude10");
+                            case 6:
+                              return const Text("\ud83d\ude0d");
+                            default:
+                              return const SizedBox.shrink();
+                          }
+                        },
+                      ),
+                    ),
+                    topTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    rightTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        getTitlesWidget: (value, meta) =>
+                            const SizedBox.shrink(),
+                        reservedSize: 32,
+                      ),
+                    ),
+                  ),
+                  gridData: const FlGridData(show: true),
+                  borderData: FlBorderData(show: true),
                 ),
               ),
             ),
-            borderData: FlBorderData(show: true),
-          ),
+          ],
         );
       },
     );

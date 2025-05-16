@@ -96,7 +96,7 @@ class _ArticleDetailScreenState extends State<ArticleDetailScreen> {
                   child: Image.network(
                     _downloadUrl!, // works well if I set the storage rules well --> Auth, Sign In
                     fit: BoxFit.cover,
-                    width: double.infinity,
+                    width: MediaQuery.of(context).size.width,
                     height: 200,
                     errorBuilder: (context, error, stackTrace) {
                       return const Icon(
@@ -112,6 +112,7 @@ class _ArticleDetailScreenState extends State<ArticleDetailScreen> {
                 child: Text(
                   widget.content,
                   style: const TextStyle(fontSize: 16),
+                  textAlign: TextAlign.justify,
                 ),
               ),
               if (_youtubeController != null)

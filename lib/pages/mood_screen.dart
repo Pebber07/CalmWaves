@@ -84,7 +84,8 @@ class MoodScreen extends StatelessWidget {
               ),
               Text(
                 AppLocalizations.of(context)!.moodHistory,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
               const SizedBox(
                 height: 10,
