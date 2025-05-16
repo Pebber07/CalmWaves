@@ -73,23 +73,6 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
     }
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
-  Future<Map<String, dynamic>?> fetchUserInfo(String userId) async {
-    final snapshot =
-        await FirebaseFirestore.instance.collection('users').doc(userId).get();
-
-    if (!snapshot.exists) return null;
-
-    final userInfo = snapshot.data()?['userinfo'];
-    if (userInfo == null || userInfo is! Map<String, dynamic>) return null;
-
-    return userInfo;
-  }
-
   Future<void> _addComment(String postId) async {
     final content = _commentController.text.trim();
     if (content.isEmpty) return;
@@ -99,7 +82,7 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
         .collection('users')
         .doc(user.uid)
         .get();
-    final profilePic = userDoc['userinfo']?['profilePicture'];
+    final profilePic = userDoc['userinfo']?['profileImage'];
 
     await FirebaseFirestore.instance
         .collection('forum')
@@ -115,6 +98,13 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
     _commentController.clear();
   }
 
+  Future<String> getCurrentUserRole() async {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final doc =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    return doc['userinfo']?['role'] ?? 'user';
+  }
+
   @override
   Widget build(BuildContext context) {
     final args =
@@ -126,78 +116,76 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
     final profilePic = args['profilePic'];
     final likeCount = args['likeCount'];
 
+    final currentUserId = FirebaseAuth.instance.currentUser!.uid;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Bejegyzés')),
+      appBar: AppBar(title: const Text('Bejegyzések')),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            ListTile(
-              leading: profilePic != null
-                  ? CircleAvatar(
-                      backgroundImage: NetworkImage(profilePic), radius: 24)
-                  : const CircleAvatar(child: Icon(Icons.person)),
-              title: Text(title,
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
-              subtitle: Text(date),
-              trailing: Text("❤ $likeCount"), // TODO
-            ),
-            const SizedBox(height: 12),
-            Text(content),
-            const Divider(height: 32),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text("Hozzászólások",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            ),
-            const SizedBox(height: 8),
-            Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('forum')
-                    .doc(postId)
-                    .collection('comment')
-                    .orderBy('date', descending: false)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+        child: FutureBuilder<String>(
+          future: getCurrentUserRole(),
+          builder: (context, roleSnapshot) {
+            if (!roleSnapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-                  final comments = snapshot.data!.docs;
-                  if (comments.isEmpty) {
-                    return const Text('Nincsenek kommentek.');
-                  }
+            final currentUserRole = roleSnapshot.data!;
 
-                  return ListView.builder(
-                    itemCount: comments.length,
-                    itemBuilder: (context, index) {
-                      final comment = comments[index];
-                      final commentId = comment.id;
-                      final content = comment['content'];
-                      final userId = comment['userId'];
-                      final date = DateFormat('yyyy-MM-dd HH:mm').format(
-                          (comment['date'] as Timestamp).toDate().toLocal());
+            return Column(
+              children: [
+                ListTile(
+                  leading: profilePic != null
+                      ? CircleAvatar(
+                          backgroundImage: NetworkImage(profilePic), radius: 24)
+                      : const CircleAvatar(child: Icon(Icons.person)),
+                  title: Text(title,
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle: Text(date),
+                  trailing: Text("❤ $likeCount"),
+                ),
+                const SizedBox(height: 12),
+                Text(content),
+                const Divider(height: 32),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Hozzászólások",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                ),
+                const SizedBox(height: 8),
+                Expanded(
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('forum')
+                        .doc(postId)
+                        .collection('comment')
+                        .orderBy('date', descending: false)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
 
-                      return FutureBuilder<Map<String, dynamic>?>(
-                        future: fetchUserInfo(userId),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return ListTile(
-                              title: Text(content),
-                              subtitle: Text(date),
-                              leading:
-                                  const CircleAvatar(child: Icon(Icons.person)),
-                            );
-                          }
+                      final comments = snapshot.data!.docs;
+                      if (comments.isEmpty) {
+                        return const Text('Nincsenek kommentek.');
+                      }
 
-                          final userInfo = snapshot.data!;
-                          final profileImage = userInfo['profileImage'] ?? "";
+                      return ListView.builder(
+                        itemCount: comments.length,
+                        itemBuilder: (context, index) {
+                          final comment = comments[index];
+                          final commentId = comment.id;
+                          final content = comment['content'];
+                          final userId = comment['userId'];
+                          final date = DateFormat('yyyy-MM-dd HH:mm').format(
+                              (comment['date'] as Timestamp)
+                                  .toDate()
+                                  .toLocal());
+                          final profileImage = comment['profilePic'] ?? "";
 
-                          final currentUserId =
-                              FirebaseAuth.instance.currentUser!.uid;
-                          final isAdmin = userInfo['role'] == 'admin';
-                          final canModify = currentUserId == userId || isAdmin;
+                          final canModify = currentUserId == userId ||
+                              currentUserRole == 'admin';
 
                           return ListTile(
                             leading: profileImage.isNotEmpty
@@ -231,27 +219,27 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
                         },
                       );
                     },
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _commentController,
-                    decoration:
-                        const InputDecoration(hintText: "Új hozzászólás..."),
                   ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.send),
-                  onPressed: () => _addComment(postId),
-                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _commentController,
+                        decoration: const InputDecoration(
+                            hintText: "Új hozzászólás..."),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.send),
+                      onPressed: () => _addComment(postId),
+                    ),
+                  ],
+                )
               ],
-            )
-          ],
+            );
+          },
         ),
       ),
     );
