@@ -6,6 +6,7 @@ import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:intl/intl.dart";
 import 'package:calmwaves_app/widgets/profile_picture_picker.dart';
+import 'package:calmwaves_app/services/user_streak_service.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -32,64 +33,6 @@ class ProfileScreen extends StatelessWidget {
     if (context.mounted) {
       Navigator.pushReplacementNamed(context, '/login');
     }
-  }
-
-  Future<Map<String, dynamic>> _loadStreakData(String userId) async {
-    final weekly = await _getWeeklyStreaks(userId);
-    final count = await _calculateStreak(userId);
-    return {
-      'weekly': weekly,
-      'count': count,
-    };
-  }
-
-  Future<int> _calculateStreak(String userId) async {
-    final now = DateTime.now();
-    final moodSnapshot = await FirebaseFirestore.instance
-        .collection('mood')
-        .where('userid', isEqualTo: userId)
-        .get();
-
-    final loggedDates = <DateTime>{};
-
-    for (var doc in moodSnapshot.docs) {
-      final timestamp = doc['timestamp'] as Timestamp;
-      final date = timestamp.toDate();
-      loggedDates.add(DateTime(date.year, date.month, date.day));
-    }
-
-    int streak = 0;
-    DateTime current = DateTime(now.year, now.month, now.day);
-
-    while (loggedDates.contains(current)) {
-      streak += 1;
-      current = current.subtract(const Duration(days: 1));
-    }
-
-    return streak;
-  }
-
-  Future<List<bool>> _getWeeklyStreaks(String userId) async {
-    final now = DateTime.now();
-    final monday = now.subtract(Duration(days: now.weekday - 1));
-    final sunday = monday
-        .add(const Duration(days: 6, hours: 23, minutes: 59, seconds: 59));
-
-    final querySnapshot = await FirebaseFirestore.instance
-        .collection('mood')
-        .where('userid', isEqualTo: userId)
-        .where('timestamp', isGreaterThanOrEqualTo: monday)
-        .where('timestamp', isLessThanOrEqualTo: sunday)
-        .get();
-
-    List<bool> weekly = List.generate(7, (_) => false);
-    for (var doc in querySnapshot.docs) {
-      final timestamp = (doc['timestamp'] as Timestamp).toDate();
-      final dayIndex = timestamp.weekday - 1;
-      weekly[dayIndex] = true;
-    }
-
-    return weekly;
   }
 
   Future<void> _deleteAccount(BuildContext context) async {
@@ -239,8 +182,15 @@ class ProfileScreen extends StatelessWidget {
                   const Divider(),
                   const SizedBox(height: 16),
                   FutureBuilder<Map<String, dynamic>>(
-                    future:
-                        _loadStreakData(FirebaseAuth.instance.currentUser!.uid),
+                    future: Future.wait([
+                      UserStreakService.getWeeklyStreaks(
+                          FirebaseAuth.instance.currentUser!.uid),
+                      UserStreakService.calculateCurrentStreak(
+                          FirebaseAuth.instance.currentUser!.uid),
+                    ]).then((results) => {
+                          'weekly': results[0],
+                          'count': results[1],
+                        }),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
                         return const CircularProgressIndicator();
