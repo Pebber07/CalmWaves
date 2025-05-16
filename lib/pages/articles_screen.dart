@@ -28,6 +28,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
     String title,
     String excerpt,
     String imageUrl,
+    String videoUrl,
     String content,
   ) async {
     final isAdmin = await _isAdmin();
@@ -43,6 +44,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
         'excerpt': excerpt,
         'content': content,
         'imageUrl': imageUrl,
+        'videoUrl': videoUrl,
         'isFavorite': true,
         'status': 'approved',
         'author': currentUser.uid,
@@ -53,6 +55,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
         'excerpt': excerpt,
         'content': content,
         'imageUrl': imageUrl,
+        'videoUrl': videoUrl,
         'isFavorite': true,
         'status': 'pending',
         'author': currentUser.uid,
@@ -73,6 +76,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
     TextEditingController titleController = TextEditingController();
     TextEditingController excerptController = TextEditingController();
     TextEditingController imageController = TextEditingController();
+    TextEditingController videoController = TextEditingController();
     TextEditingController contentController = TextEditingController();
 
     showDialog(
@@ -86,6 +90,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
             articleTitleController: titleController,
             articleExcerptController: excerptController,
             articleOptionalImageController: imageController,
+            articleOptionalVideoController: videoController,
             articleTextController: contentController,
             pressPostArticle: () async {
               Navigator.pop(context);
@@ -93,6 +98,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
                 titleController.text.trim(),
                 excerptController.text.trim(),
                 imageController.text.trim(),
+                videoController.text.trim(),
                 contentController.text.trim(),
               );
             },
@@ -115,7 +121,8 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
             child: Center(
               child: Text(
                 AppLocalizations.of(context)!.articles,
-                style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -193,6 +200,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
                               title: article["title"] as String,
                               content: article["content"] as String,
                               imageUrl: article["imageUrl"] as String,
+                              videoUrl: article["videoUrl"] ?? '',
                             ),
                           ),
                         );

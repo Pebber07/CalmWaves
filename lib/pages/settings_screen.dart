@@ -151,7 +151,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
             if (!isUsernameChanged && !_isGuest) ...[
-              LoginField(
+              CustomTextField(
                 hintText: AppLocalizations.of(context)!.newUsername,
                 controller: newUsernameController,
                 hideText: false,
@@ -171,21 +171,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Text(AppLocalizations.of(context)!.modifyPassword,
                   style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
-              LoginField(
+              CustomTextField(
                 hintText: "Jelenlegi jelszó",
                 controller: oldPasswordController,
                 hideText: true,
                 buttonLabelText: AppLocalizations.of(context)!.oldPassword,
               ),
               const SizedBox(height: 10),
-              LoginField(
+              CustomTextField(
                 hintText: AppLocalizations.of(context)!.newPassword,
                 controller: newPasswordController,
                 hideText: true,
                 buttonLabelText: AppLocalizations.of(context)!.newPasswordAgain,
               ),
               const SizedBox(height: 10),
-              LoginField(
+              CustomTextField(
                 hintText: AppLocalizations.of(context)!.newPasswordAgain,
                 controller: confirmPasswordController,
                 hideText: true,

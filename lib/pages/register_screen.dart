@@ -269,7 +269,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                LoginField(
+                CustomTextField(
                   controller: emailController,
                   hideText: true,
                   buttonLabelText: AppLocalizations.of(context)!.email,
@@ -278,7 +278,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                   height: 13,
                 ),
-                LoginField(
+                CustomTextField(
                   controller: usernameController,
                   hideText: true,
                   buttonLabelText: AppLocalizations.of(context)!.username,
@@ -287,7 +287,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                   height: 13,
                 ),
-                LoginField(
+                CustomTextField(
                   controller: passwordController,
                   hideText: false,
                   buttonLabelText: AppLocalizations.of(context)!.password,
@@ -296,7 +296,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                   height: 13,
                 ),
-                LoginField(
+                CustomTextField(
                   controller: confirmPasswordController,
                   hideText: false,
                   buttonLabelText: AppLocalizations.of(context)!.passwordAgain,

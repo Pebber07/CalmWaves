@@ -1,12 +1,12 @@
 import "package:flutter/material.dart";
 import "package:calmwaves_app/palette.dart";
 
-class LoginField extends StatelessWidget {
+class CustomTextField extends StatelessWidget {
   final String hintText;
   final TextEditingController controller; // I'm not sure if this is correct
   final String buttonLabelText;
   final bool hideText;
-  const LoginField({super.key, required this.hintText, required this.controller, required this.buttonLabelText, required this.hideText});
+  const CustomTextField({super.key, required this.hintText, required this.controller, required this.buttonLabelText, required this.hideText});
 
   @override
   Widget build(BuildContext context) {

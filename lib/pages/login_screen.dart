@@ -163,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 10,
               ),
-              LoginField(
+              CustomTextField(
                 controller: emailController,
                 hideText: false,
                 buttonLabelText: AppLocalizations.of(context)!.username,
@@ -172,7 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 13,
               ),
-              LoginField(
+              CustomTextField(
                 controller: passwordController,
                 hideText: true,
                 buttonLabelText: AppLocalizations.of(context)!.password,
