@@ -6,6 +6,7 @@ import "package:calmwaves_app/widgets/language_selector_widget.dart";
 import "package:calmwaves_app/widgets/login_field.dart";
 import "package:calmwaves_app/widgets/social_button.dart";
 import "package:firebase_auth/firebase_auth.dart";
+import "package:firebase_storage/firebase_storage.dart";
 import "package:flutter/material.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fluttertoast/fluttertoast.dart";
@@ -118,6 +119,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
       // Email megerősítés küldése
       await userCredential.user?.sendEmailVerification();
 
+      final defaultImageRef = FirebaseStorage.instance
+          .ref()
+          .child('profile_pictures/template_profile_picture.png');
+      final defaultImageUrl = await defaultImageRef.getDownloadURL();
+
       // Firestore dokumentum létrehozása
       final userId = userCredential.user!.uid;
       await FirebaseFirestore.instance.collection('users').doc(userId).set({
@@ -125,7 +131,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           'username': usernameController.text.trim(),
           'isUsernameChanged': false,
           //'profilePicture': "", Todo: Download a template Profile picture.
-          'profileImage': "",
+          'profileImage': defaultImageUrl,
           'email': emailController.text.trim(),
           'role': 'user',
           'createdAt': Timestamp.now(),
@@ -271,7 +277,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 CustomTextField(
                   controller: emailController,
-                  hideText: true,
+                  hideText: false,
                   buttonLabelText: AppLocalizations.of(context)!.email,
                   hintText: 'Someone@gmail.com',
                 ),
@@ -280,7 +286,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 CustomTextField(
                   controller: usernameController,
-                  hideText: true,
+                  hideText: false,
                   buttonLabelText: AppLocalizations.of(context)!.username,
                   hintText: 'MentalKing02',
                 ),
@@ -289,7 +295,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 CustomTextField(
                   controller: passwordController,
-                  hideText: false,
+                  hideText: true,
                   buttonLabelText: AppLocalizations.of(context)!.password,
                   hintText: 'Randompassword1010',
                 ),
@@ -298,7 +304,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 CustomTextField(
                   controller: confirmPasswordController,
-                  hideText: false,
+                  hideText: true,
                   buttonLabelText: AppLocalizations.of(context)!.passwordAgain,
                   hintText: 'Randompassword1010',
                 ),
