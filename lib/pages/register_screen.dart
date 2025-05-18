@@ -71,9 +71,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       if (!mounted) return;
       showDialog(
         context: context,
-        builder: (context) => const AlertDialog(
-          title: Text("Nincs internetkapcsolat"),
-          content: Text("Kérlek, csatlakozz egy hálózathoz."),
+        builder: (context) => AlertDialog(
+          title: Text(AppLocalizations.of(context)!.noInternetConnection),
+          content: Text(AppLocalizations.of(context)!.connectNetwork),
         ),
       );
       return;
@@ -87,9 +87,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         if (!mounted) return;
         showDialog(
           context: context,
-          builder: (context) => const AlertDialog(
-            title: Text('Hiba'),
-            content: Text('Ez a felhasználónév már foglalt.'),
+          builder: (context) => AlertDialog(
+            title: Text(AppLocalizations.of(context)!.error),
+            content: Text(AppLocalizations.of(context)!.usernameAlreadyUsed),
           ),
         );
         return;
@@ -100,10 +100,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         if (!mounted) return;
         showDialog(
           context: context,
-          builder: (context) => const AlertDialog(
-            title: Text("Hiba"),
-            content:
-                Text("A 'Guest#' kezdetű felhasználónevek nem választhatók."),
+          builder: (context) => AlertDialog(
+            title: Text(AppLocalizations.of(context)!.error),
+            content: Text(AppLocalizations.of(context)!.guestNotChoose),
           ),
         );
         return;
@@ -152,13 +151,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Sikeres regisztráció'),
-          content: const Text(
-              'Erősítsd meg az email címedet a regisztráció véglegesítéséhez.'),
+          title: Text(AppLocalizations.of(context)!.successfullRegister),
+          content: Text(AppLocalizations.of(context)!.confirmEmail),
           actions: [
             TextButton(
               onPressed: () => Navigator.push(context, LoginScreen.route()),
-              child: const Text('Belépés'),
+              child: Text(AppLocalizations.of(context)!.enter),
             ),
           ],
         ),
@@ -167,8 +165,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Hiba'),
-          content: Text(e.message ?? 'Ismeretlen hiba történt.'),
+          title: Text(AppLocalizations.of(context)!.error),
+          content:
+              Text(e.message ?? AppLocalizations.of(context)!.unknownError),
         ),
       );
     }
@@ -206,9 +205,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     if (!await hasInternetConnection()) {
                       showDialog(
                         context: context,
-                        builder: (context) => const AlertDialog(
-                          title: Text("Hálózati hiba"),
-                          content: Text("Nincs internetkapcsolat."),
+                        builder: (context) => AlertDialog(
+                          title:
+                              Text(AppLocalizations.of(context)!.networkError),
+                          content: Text(AppLocalizations.of(context)!
+                              .noInternetConnection),
                         ),
                       );
                       return;
@@ -243,7 +244,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         Navigator.pushReplacementNamed(context, '/home');
                       } else {
                         Fluttertoast.showToast(
-                          msg: "Nem választott fiókot!",
+                          msg: AppLocalizations.of(context)!.noAccountChosen,
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.BOTTOM,
                           backgroundColor: Colors.black,
@@ -256,7 +257,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                          title: const Text('Hiba'),
+                          title: Text(AppLocalizations.of(context)!.error),
                           content: Text(e.toString()),
                         ),
                       );
@@ -318,9 +319,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     if (!areFieldsFilled()) {
                       showDialog(
                         context: context,
-                        builder: (context) => const AlertDialog(
-                          title: Text('Hiba'),
-                          content: Text('Kérem, az összes mezőt töltse ki!'),
+                        builder: (context) => AlertDialog(
+                          title: Text(AppLocalizations.of(context)!.error),
+                          content:
+                              Text(AppLocalizations.of(context)!.fillAllFields),
                         ),
                       );
                       return;
@@ -330,9 +332,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         confirmPasswordController.text.trim()) {
                       showDialog(
                         context: context,
-                        builder: (context) => const AlertDialog(
-                          title: Text('Hiba'),
-                          content: Text('A jelszavak nem egyeznek meg.'),
+                        builder: (context) => AlertDialog(
+                          title: Text(AppLocalizations.of(context)!.error),
+                          content: Text(AppLocalizations.of(context)!
+                              .passwordsNotMatching),
                         ),
                       );
                       return;
@@ -341,9 +344,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     if (!validatePassword(passwordController.text.trim())) {
                       showDialog(
                         context: context,
-                        builder: (context) => const AlertDialog(
-                          title: Text('Hiba'),
-                          content: Text('A jelszó nem elég erős.'),
+                        builder: (context) => AlertDialog(
+                          title:
+                              Text(AppLocalizations.of(context)!.weakPassword),
+                          content: Text(AppLocalizations.of(context)!
+                              .weakPassword), //TODO
                         ),
                       );
                       return;

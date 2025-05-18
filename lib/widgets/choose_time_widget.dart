@@ -1,7 +1,7 @@
 import 'dart:async';
-
 import 'package:calmwaves_app/palette.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChooseTimeWidget extends StatefulWidget {
   final Function(TimeOfDay) onTimeChanged;
@@ -66,13 +66,13 @@ class _ChooseTimeWidgetState extends State<ChooseTimeWidget> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Row(
+                Row(
                   children: [
-                    Icon(Icons.access_time, color: Colors.white),
-                    SizedBox(width: 8),
+                    const Icon(Icons.access_time, color: Colors.white),
+                    const SizedBox(width: 8),
                     Text(
-                      "Choose a time",
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.chooseATime,
+                      style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
                           fontWeight: FontWeight.bold),
@@ -81,7 +81,7 @@ class _ChooseTimeWidgetState extends State<ChooseTimeWidget> {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  "Selected time: ${TimeOfDay.now().format(context)}",
+                  "${AppLocalizations.of(context)!.selectedTime}: ${TimeOfDay.now().format(context)}",
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,

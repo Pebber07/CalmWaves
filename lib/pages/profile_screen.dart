@@ -7,6 +7,7 @@ import "package:flutter/material.dart";
 import "package:intl/intl.dart";
 import 'package:calmwaves_app/widgets/profile_picture_picker.dart';
 import 'package:calmwaves_app/services/user_streak_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -42,15 +43,15 @@ class ProfileScreen extends StatelessWidget {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text("Fiók zárolása"),
-        content: const Text("Biztosan törölni szeretnéd a fiókodat?"),
+        title: Text(AppLocalizations.of(context)!.deleteProfile),
+        content: Text(AppLocalizations.of(context)!.sureDeleteProfile),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(ctx, false),
-              child: const Text("Mégse")),
+              child: Text(AppLocalizations.of(context)!.cancel)),
           ElevatedButton(
               onPressed: () => Navigator.pop(ctx, true),
-              child: const Text("Törlés")),
+              child: Text(AppLocalizations.of(context)!.delete)),
         ],
       ),
     );
@@ -64,25 +65,25 @@ class ProfileScreen extends StatelessWidget {
       final success = await showDialog<bool>(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: const Text("Újrahitelesítés"),
+          title: Text(AppLocalizations.of(context)!.reauthenticate),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text("Add meg a jelszavad a törlés megerősítéséhez:"),
+              Text(AppLocalizations.of(context)!.enterYourPassword),
               TextField(
                 controller: passwordController,
                 obscureText: true,
-                decoration: const InputDecoration(labelText: "Jelszó"),
+                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.password),
               ),
             ],
           ),
           actions: [
             TextButton(
                 onPressed: () => Navigator.pop(ctx, false),
-                child: const Text("Mégse")),
+                child: Text(AppLocalizations.of(context)!.cancel)),
             ElevatedButton(
                 onPressed: () => Navigator.pop(ctx, true),
-                child: const Text("Folytatás")),
+                child: Text(AppLocalizations.of(context)!.continueC)),
           ],
         ),
       );
@@ -105,8 +106,8 @@ class ProfileScreen extends StatelessWidget {
         Navigator.pushReplacementNamed(context, '/login');
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Hiba történt a fiók zárolása közben."),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(AppLocalizations.of(context)!.errorOccuredDuringProfileDelete),
       ));
     }
   }
@@ -144,7 +145,7 @@ class ProfileScreen extends StatelessWidget {
                       fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
-                Text("Regisztráció: $formattedDate"),
+                Text("${AppLocalizations.of(context)!.register}: $formattedDate"),
                 const SizedBox(height: 16),
                 if (isGuest) ...[
                   Container(
@@ -155,16 +156,16 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        const Text(
-                          "Vendég fiókkal vagy bejelentkezve.",
-                          style: TextStyle(
+                        Text(
+                          AppLocalizations.of(context)!.guestLoggedIn,
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         const SizedBox(height: 8),
-                        const Text(
-                          "Regisztrálj, hogy elérd az összes funkciót és elmentsd az adataidat.",
+                        Text(
+                          AppLocalizations.of(context)!.registerToAccessEveryFunc,
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 12),
@@ -172,7 +173,7 @@ class ProfileScreen extends StatelessWidget {
                           onPressed: () {
                             Navigator.pushNamed(context, '/register');
                           },
-                          child: const Text("Regisztráció"),
+                          child: Text(AppLocalizations.of(context)!.register),
                         ),
                       ],
                     ),
@@ -209,12 +210,12 @@ class ProfileScreen extends StatelessWidget {
                 ],
                 if (role == 'admin') ...[
                   const SizedBox(height: 16),
-                  Text("Admin funkciók",
+                  Text(AppLocalizations.of(context)!.adminFunctions,
                       style: Theme.of(context).textTheme.titleLarge),
                   const SizedBox(height: 8),
                   ElevatedButton.icon(
                     icon: const Icon(Icons.manage_accounts),
-                    label: const Text("Felhasználók kezelése"),
+                    label: Text(AppLocalizations.of(context)!.userHandle),
                     onPressed: () {
                       Navigator.pushNamed(context, '/manage_users');
                     },
@@ -224,7 +225,7 @@ class ProfileScreen extends StatelessWidget {
                 ElevatedButton.icon(
                   onPressed: () => _signOut(context),
                   icon: const Icon(Icons.logout),
-                  label: const Text("Kijelentkezés"),
+                  label: Text(AppLocalizations.of(context)!.logOut),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueAccent,
                     minimumSize: const Size.fromHeight(48),
@@ -235,7 +236,7 @@ class ProfileScreen extends StatelessWidget {
                   OutlinedButton.icon(
                     onPressed: () => _deleteAccount(context),
                     icon: const Icon(Icons.lock_outline),
-                    label: const Text("Profil zárolása"),
+                    label: Text(AppLocalizations.of(context)!.deleteProfile),
                   ),
               ],
             ),

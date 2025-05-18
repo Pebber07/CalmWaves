@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfilePicturePicker extends StatefulWidget {
   const ProfilePicturePicker({super.key});
@@ -61,7 +62,7 @@ class _MyWidgetState extends State<ProfilePicturePicker> {
   Future<void> uploadImage() async {
     if (_image == null) {
       Fluttertoast.showToast(
-        msg: "Nincs kiválasztott kép!",
+        msg: AppLocalizations.of(context)!.noPictureChoosed,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
       );
@@ -96,14 +97,14 @@ class _MyWidgetState extends State<ProfilePicturePicker> {
         });
 
         Fluttertoast.showToast(
-          msg: "Profilkép sikeresen feltöltve!",
+          msg: AppLocalizations.of(context)!.profilePicSuccessfullyUploaded,
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
         );
       }
     } catch (e) {
       Fluttertoast.showToast(
-        msg: "Hiba történt a kép feltöltésekor.",
+        msg: AppLocalizations.of(context)!.errorHappened,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
       );

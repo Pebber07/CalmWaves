@@ -1,18 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ManageUsersScreen extends StatelessWidget {
   const ManageUsersScreen({super.key});
 
-  Future<void> _deleteUserAndContent(BuildContext context, String userId) async {
+  Future<void> _deleteUserAndContent(
+      BuildContext context, String userId) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text("Felhasználó törlése"),
-        content: const Text("Biztosan törlöd a felhasználót és minden bejegyzését?"),
+        title: Text(AppLocalizations.of(context)!.deleteProfile),
+        content: Text(AppLocalizations.of(context)!.sureDelete),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text("Mégse")),
-          ElevatedButton(onPressed: () => Navigator.pop(context, true), child: const Text("Törlés")),
+          TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(AppLocalizations.of(context)!.cancel)),
+          ElevatedButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: Text(AppLocalizations.of(context)!.delete)),
         ],
       ),
     );
@@ -40,7 +46,8 @@ class ManageUsersScreen extends StatelessWidget {
     }
 
     // Kommentek, más posztoknál
-    final allForumDocs = await FirebaseFirestore.instance.collection('forum').get();
+    final allForumDocs =
+        await FirebaseFirestore.instance.collection('forum').get();
     for (final doc in allForumDocs.docs) {
       final comments = await doc.reference.collection('comment').get();
       for (final comment in comments.docs) {
@@ -53,18 +60,19 @@ class ManageUsersScreen extends StatelessWidget {
     await FirebaseFirestore.instance.collection('users').doc(userId).delete();
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Felhasználó és bejegyzései törölve")),
+      SnackBar(content: Text(AppLocalizations.of(context)!.userAndDataDeleted)),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Felhasználók kezelése")),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.handleUsers)),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('users').snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+          if (!snapshot.hasData)
+            return const Center(child: CircularProgressIndicator());
 
           final users = snapshot.data!.docs;
 
@@ -74,13 +82,14 @@ class ManageUsersScreen extends StatelessWidget {
               final user = users[index];
               final userId = user.id;
               final userInfo = user['userinfo'];
-              final username = userInfo['username'] ?? 'Ismeretlen';
+              final username =
+                  userInfo['username'] ?? AppLocalizations.of(context)!.unknown;
               final role = userInfo['role'] ?? 'user';
 
               return ListTile(
                 leading: const Icon(Icons.person),
                 title: Text(username),
-                subtitle: Text("Szerep: $role"),
+                subtitle: Text("${AppLocalizations.of(context)!.role}: $role"),
                 trailing: role != 'admin'
                     ? IconButton(
                         icon: const Icon(Icons.delete, color: Colors.red),

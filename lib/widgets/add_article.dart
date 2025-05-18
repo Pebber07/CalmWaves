@@ -5,6 +5,7 @@ import 'dart:io';
 import "package:calmwaves_app/widgets/gradient_button.dart";
 import "package:calmwaves_app/widgets/login_field.dart";
 import "package:flutter/material.dart";
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddArticle extends StatefulWidget {
   final String articleTitle;
@@ -85,32 +86,32 @@ class _AddArticleState extends State<AddArticle> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Add your own article",
-            style: TextStyle(
+          Text(
+            AppLocalizations.of(context)!.addOwnArticle,
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 20,
             ),
           ),
           CustomTextField(
-              hintText: "Add the articles title",
+              hintText: AppLocalizations.of(context)!.articleTitle,
               controller: widget.articleTitleController,
-              buttonLabelText: "Title",
+              buttonLabelText: AppLocalizations.of(context)!.title,
               hideText: false),
           CustomTextField(
-              hintText: "Add the articles excerpt",
+              hintText: AppLocalizations.of(context)!.articleExcerpt,
               controller: widget.articleExcerptController,
-              buttonLabelText: "Excerpt",
+              buttonLabelText: AppLocalizations.of(context)!.excerpt,
               hideText: false),
           TextField(
             controller: widget.articleTextController,
             maxLines: 5,
-            decoration: const InputDecoration(
-              hintText: "Write your article content",
-              enabledBorder: OutlineInputBorder(
+            decoration: InputDecoration(
+              hintText: AppLocalizations.of(context)!.writeArticleContent,
+              enabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.white),
               ),
-              focusedBorder: OutlineInputBorder(
+              focusedBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.white, width: 1.0),
               ),
             ),
@@ -120,18 +121,18 @@ class _AddArticleState extends State<AddArticle> {
             icon: const Icon(Icons.image),
             label: _isUploadingImage
                 ? const CircularProgressIndicator()
-                : const Text("Choose a picture"),
+                : Text(AppLocalizations.of(context)!.chooseAPicture),
           ),
           ElevatedButton.icon(
             onPressed: _isUploadingVideo ? null : _pickAndUploadVideo,
             icon: const Icon(Icons.video_library),
             label: _isUploadingVideo
                 ? const CircularProgressIndicator()
-                : const Text("Choose a video"),
+                : Text(AppLocalizations.of(context)!.chooseAVideo),
           ),
           GradientButton(
               onPressed: widget.pressPostArticle,
-              text: "Post article",
+              text: AppLocalizations.of(context)!.postArticle,
               buttonMargin: 20),
         ],
       ),

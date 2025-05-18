@@ -1,6 +1,7 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FeelingCard extends StatelessWidget {
   final String caption;
@@ -22,8 +23,8 @@ class FeelingCard extends StatelessWidget {
 
       if (user == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Please log in to save your mood."),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.pleaseLoginMood),
           ),
         );
         return;
@@ -39,11 +40,13 @@ class FeelingCard extends StatelessWidget {
       await FirebaseFirestore.instance.collection("mood").add(moodData);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Mood saved successfully!")),
+        SnackBar(content: Text(AppLocalizations.of(context)!.moodSaved)),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Hiba hangulat mentése közben: $e")),
+        SnackBar(
+            content: Text(
+                "${AppLocalizations.of(context)!.errorDuringMoodSave}: $e")),
       );
     }
   }
@@ -53,8 +56,7 @@ class FeelingCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => _saveMood(context),
       child: Container(
-        margin: const EdgeInsets.all(
-            8), 
+        margin: const EdgeInsets.all(8),
         padding: const EdgeInsets.all(20),
         width: cardWidth,
         decoration: BoxDecoration(

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ForumPostDetailScreen extends StatefulWidget {
   const ForumPostDetailScreen({super.key});
@@ -20,15 +21,17 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
     await showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text("Hozzászólás szerkesztése"),
+        title: Text(AppLocalizations.of(context)!.modifyComment),
         content: TextField(
           controller: controller,
-          decoration: const InputDecoration(labelText: "Hozzászólás"),
+          decoration:
+              InputDecoration(labelText: AppLocalizations.of(context)!.comment),
           maxLines: 4,
         ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(ctx), child: const Text("Mégse")),
+              onPressed: () => Navigator.pop(ctx),
+              child: Text(AppLocalizations.of(context)!.cancel)),
           ElevatedButton(
             onPressed: () async {
               await FirebaseFirestore.instance
@@ -39,7 +42,7 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
                   .update({'content': controller.text.trim()});
               Navigator.pop(ctx);
             },
-            child: const Text("Mentés"),
+            child: Text(AppLocalizations.of(context)!.save),
           ),
         ],
       ),
@@ -50,15 +53,15 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text("Komment törlése"),
-        content: const Text("Biztosan törölni szeretnéd ezt a hozzászólást?"),
+        title: Text(AppLocalizations.of(context)!.deleteComment),
+        content: Text(AppLocalizations.of(context)!.deleteCommentSure),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(ctx, false),
-              child: const Text("Mégse")),
+              child: Text(AppLocalizations.of(context)!.cancel)),
           ElevatedButton(
               onPressed: () => Navigator.pop(ctx, true),
-              child: const Text("Törlés")),
+              child: Text(AppLocalizations.of(context)!.delete)),
         ],
       ),
     );
@@ -119,7 +122,7 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
     final currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Bejegyzések')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.posts)),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: FutureBuilder<String>(
@@ -146,11 +149,11 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
                 const SizedBox(height: 12),
                 Text(content),
                 const Divider(height: 32),
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
-                  child: Text("Hozzászólások",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  child: Text(AppLocalizations.of(context)!.comments,
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold)),
                 ),
                 const SizedBox(height: 8),
                 Expanded(
@@ -168,7 +171,7 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
 
                       final comments = snapshot.data!.docs;
                       if (comments.isEmpty) {
-                        return const Text('Nincsenek kommentek.');
+                        return Text(AppLocalizations.of(context)!.noComments);
                       }
 
                       return ListView.builder(
@@ -206,12 +209,16 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
                                       }
                                     },
                                     itemBuilder: (ctx) => [
-                                      const PopupMenuItem(
+                                      PopupMenuItem(
                                           value: 'edit',
-                                          child: Text('Szerkesztés')),
-                                      const PopupMenuItem(
+                                          child: Text(
+                                              AppLocalizations.of(context)!
+                                                  .modify)),
+                                      PopupMenuItem(
                                           value: 'delete',
-                                          child: Text('Törlés')),
+                                          child: Text(
+                                              AppLocalizations.of(context)!
+                                                  .delete)),
                                     ],
                                   )
                                 : null,
@@ -227,8 +234,8 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
                     Expanded(
                       child: TextField(
                         controller: _commentController,
-                        decoration: const InputDecoration(
-                            hintText: "Új hozzászólás..."),
+                        decoration: InputDecoration(
+                            hintText: AppLocalizations.of(context)!.newPost), // Todo
                       ),
                     ),
                     IconButton(

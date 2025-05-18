@@ -1,6 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:calmwaves_app/palette.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});
@@ -24,10 +25,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           onPressed: () {
             AwesomeNotifications().createNotification(
               content: NotificationContent(
-                  id: 1,
-                  channelKey: "basic_channel",
-                  title: "CalmWaves",
-                  body: "It's time to calm down!"),
+                id: 1,
+                channelKey: "basic_channel",
+                title: "CalmWaves",
+                body: AppLocalizations.of(context)!.itsTime,
+              ),
             );
           },
         ),

@@ -1,5 +1,6 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class JournalCard extends StatelessWidget {
   final String title;
@@ -21,16 +22,16 @@ class JournalCard extends StatelessWidget {
     final confirm = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Biztosan törlöd?"),
-        content: const Text("A naplóbejegyzés véglegesen törlődik."),
+        title: Text(AppLocalizations.of(context)!.sureDelete),
+        content: Text(AppLocalizations.of(context)!.journalDeleteDefinitively),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text("Mégse"),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text("Törlés"),
+            child: Text(AppLocalizations.of(context)!.delete),
           ),
         ],
       ),
@@ -43,7 +44,7 @@ class JournalCard extends StatelessWidget {
             .doc(docId)
             .delete();
       } catch (e) {
-        print("Törlési hiba: $e");
+        print("Error during deletion: $e");
       }
     }
   }

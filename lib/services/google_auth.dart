@@ -44,7 +44,7 @@ class GoogleAuthService {
       return userCredential;
     } catch (e) {
       Fluttertoast.showToast(
-        msg: "Hiba a Google-s bejelentkezés során!",
+        msg: "Error during Google Sign In",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.black,

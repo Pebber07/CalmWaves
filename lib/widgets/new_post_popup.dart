@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NewPostPopup extends StatefulWidget {
   const NewPostPopup({super.key});
@@ -20,7 +21,7 @@ class _NewPostPopupState extends State<NewPostPopup> {
 
     if (title.isEmpty || content.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Töltsd ki mindkét mezőt!")),
+        SnackBar(content: Text(AppLocalizations.of(context)!.fillBothFields)),
       );
       return;
     }
@@ -29,7 +30,8 @@ class _NewPostPopupState extends State<NewPostPopup> {
 
     try {
       final user = FirebaseAuth.instance.currentUser;
-      if (user == null) throw Exception("Nincs bejelentkezve felhasználó.");
+      if (user == null)
+        throw Exception(AppLocalizations.of(context)!.userOffline);
 
       await FirebaseFirestore.instance.collection('forum').add({
         'title': title,
@@ -43,7 +45,7 @@ class _NewPostPopupState extends State<NewPostPopup> {
       Navigator.of(context).pop();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Hiba történt: ${e.toString()}")),
+        SnackBar(content: Text("Error occured: ${e.toString()}")),
       );
     } finally {
       setState(() => _isLoading = false);
@@ -53,21 +55,23 @@ class _NewPostPopupState extends State<NewPostPopup> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Új fórum bejegyzés"),
+      title: Text(AppLocalizations.of(context)!.newForumPost),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: _titleController,
-              decoration: const InputDecoration(labelText: "Cím"),
+              decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.title),
             ),
             const SizedBox(height: 8),
             TextField(
               controller: _contentController,
               maxLines: 5,
               minLines: 3,
-              decoration: const InputDecoration(labelText: "Tartalom"),
+              decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.content),
             ),
           ],
         ),
@@ -75,7 +79,7 @@ class _NewPostPopupState extends State<NewPostPopup> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text("Mégse"),
+          child: Text(AppLocalizations.of(context)!.cancel),
         ),
         ElevatedButton(
           onPressed: _isLoading ? null : _submitPost,
@@ -88,7 +92,7 @@ class _NewPostPopupState extends State<NewPostPopup> {
                   width: 16,
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
-              : const Text("Létrehozás"),
+              : Text(AppLocalizations.of(context)!.create),
         ),
       ],
     );

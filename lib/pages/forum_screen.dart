@@ -22,23 +22,6 @@ class _ForumScreenState extends State<ForumScreen> {
     return Scaffold(
       appBar: const CustomAppBar(),
       drawer: const CustomDrawer(),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.forum,
-              ),
-              label: "Fórum"),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Kezdőlap"),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.event),
-            label: "Események",
-          ),
-        ],
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.lightBlue,
-      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
@@ -114,8 +97,8 @@ class _ForumScreenState extends State<ForumScreen> {
                     }).toList();
 
                     if (docs.isEmpty) {
-                      return const Center(
-                        child: Text("Nincs találat"),
+                      return Center(
+                        child: Text(AppLocalizations.of(context)!.noDataFound),
                       );
                     }
 

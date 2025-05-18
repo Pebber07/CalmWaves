@@ -34,7 +34,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
     final isAdmin = await _isAdmin();
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) {
-      Fluttertoast.showToast(msg: "Nincs bejelentkezve a felhasználó.");
+      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.userOffline);
       return;
     }
 
@@ -169,8 +169,9 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
                   );
                 }
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return const Center(
-                    child: Text("Nincsenek elérhető cikkek."),
+                  return Center(
+                    child:
+                        Text(AppLocalizations.of(context)!.noArticlesAvailable),
                   );
                 }
                 final articles = snapshot.data!.docs;

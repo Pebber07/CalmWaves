@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class StreakRowWidget extends StatelessWidget {
   final List<bool> weeklyStreaks;
@@ -13,16 +14,24 @@ class StreakRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const dayLabels = ['H', 'K', 'Sze', 'Cs', 'P', 'Szo', 'V']; // [i:0..6]
+    var dayLabels = [
+      AppLocalizations.of(context)!.monday,
+      AppLocalizations.of(context)!.tuesday,
+      AppLocalizations.of(context)!.wednesday,
+      AppLocalizations.of(context)!.thursday,
+      AppLocalizations.of(context)!.friday,
+      AppLocalizations.of(context)!.saturday,
+      AppLocalizations.of(context)!.sunday
+    ]; // [i:0..6]
     final now = DateTime.now();
     final monday = now.subtract(Duration(days: now.weekday - 1));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Heti aktivitás:",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        Text(
+          AppLocalizations.of(context)!.weekyActivity,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 10),
         SingleChildScrollView(

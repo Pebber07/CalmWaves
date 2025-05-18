@@ -5,6 +5,7 @@ import "package:calmwaves_app/widgets/custom_drawer.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -57,7 +58,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             return const Center(child: CircularProgressIndicator());
           }
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text("Nincs várakozó cikked"));
+            return Center(
+                child: Text(AppLocalizations.of(context)!.noWaitingArticles));
           }
 
           final pendingArticles = snapshot.data!;
@@ -66,9 +68,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             itemBuilder: (context, index) {
               final article = pendingArticles[index];
               final data = article.data() as Map<String, dynamic>;
-              final title = data['title'] ?? 'No Title';
-              final excerpt = data['excerpt'] ?? 'No Excerpt';
-              final content = data['content'] ?? 'No Content Available';
+              final title =
+                  data['title'] ?? AppLocalizations.of(context)!.noTitle;
+              final excerpt =
+                  data['excerpt'] ?? AppLocalizations.of(context)!.noExcerpt;
+              final content =
+                  data['content'] ?? AppLocalizations.of(context)!.noContent;
 
               return AcceptArticleCard(
                 title: title,

@@ -70,7 +70,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         .where('userinfo.username', isEqualTo: newUsername)
         .get();
     if (isTaken.docs.isNotEmpty) {
-      Fluttertoast.showToast(msg: "Ez a felhasználónév már foglalt!");
+      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.usernameAlreadyUsed);
       return;
     }
 
@@ -83,7 +83,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       isUsernameChanged = true;
     });
 
-    Fluttertoast.showToast(msg: "Felhasználónév frissítve.");
+    Fluttertoast.showToast(msg: AppLocalizations.of(context)!.usernameUpdated);
   }
 
   Future<void> _changePassword() async {
@@ -92,7 +92,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final confirmPass = confirmPasswordController.text.trim();
 
     if (newPass != confirmPass) {
-      Fluttertoast.showToast(msg: "A jelszavak nem egyeznek.");
+      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.passwordsNotMatching);
       return;
     }
 
@@ -102,9 +102,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           EmailAuthProvider.credential(email: user.email!, password: oldPass);
       await user.reauthenticateWithCredential(credential);
       await user.updatePassword(newPass);
-      Fluttertoast.showToast(msg: "Jelszó frissítve.");
+      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.passwordUpdated);
     } catch (e) {
-      Fluttertoast.showToast(msg: "Hiba a jelszó módosításakor.");
+      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.errorDuringPassword);
     }
   }
 
@@ -128,7 +128,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (await canLaunchUrl(emailLaunchUri)) {
       await launchUrl(emailLaunchUri);
     } else {
-      Fluttertoast.showToast(msg: "Nem sikerült megnyitni az email klienst.");
+      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.errorEmailOpen);
     }
   }
 
@@ -163,8 +163,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 buttonMargin: 8,
               ),
             ] else
-              const Text("A felhasználónév már módosítva.",
-                  style: TextStyle(color: Colors.grey)),
+              Text(AppLocalizations.of(context)!.usernameAlreadyUpdated,
+                  style: const TextStyle(color: Colors.grey)),
             const SizedBox(height: 20),
             const Divider(),
             if (!_isGuest) ...[
@@ -172,7 +172,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
               CustomTextField(
-                hintText: "Jelenlegi jelszó",
+                hintText: AppLocalizations.of(context)!.currentPasword,
                 controller: oldPasswordController,
                 hideText: true,
                 buttonLabelText: AppLocalizations.of(context)!.oldPassword,
@@ -202,9 +202,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  "Sötét mód",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                Text(
+                  AppLocalizations.of(context)!.darkMode,
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 Switch(
                   value: isDarkTheme,
@@ -227,9 +227,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  "Értesítések",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                Text(
+                  AppLocalizations.of(context)!.notifications,
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 Switch(
                   value: !_isGuest &&
@@ -268,8 +268,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             const Divider(),
             const SizedBox(height: 10),
-            const Text("Alkalmazás nyelve",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Text(AppLocalizations.of(context)!.appLanguage,
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(
               height: 16,
             ),
@@ -310,7 +310,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(height: 10),
             GradientButton(
               onPressed: _signOut,
-              text: "Kijelentkezés",
+              text: AppLocalizations.of(context)!.logOut,
               buttonMargin: 8,
             ),
           ],

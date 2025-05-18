@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ForumPostTile extends StatefulWidget {
   final String title;
@@ -100,22 +101,25 @@ class _ForumPostTileState extends State<ForumPostTile> {
     await showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text("Bejegyzés szerkesztése"),
+        title: Text(AppLocalizations.of(context)!.postModify),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
                 controller: titleController,
-                decoration: const InputDecoration(labelText: "Cím")),
+                decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.title)),
             TextField(
                 controller: contentController,
-                decoration: const InputDecoration(labelText: "Tartalom"),
+                decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.content),
                 maxLines: 4),
           ],
         ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(ctx), child: const Text("Mégse")),
+              onPressed: () => Navigator.pop(ctx),
+              child: Text(AppLocalizations.of(context)!.cancel)),
           ElevatedButton(
             onPressed: () async {
               await FirebaseFirestore.instance
@@ -127,7 +131,7 @@ class _ForumPostTileState extends State<ForumPostTile> {
               });
               Navigator.pop(ctx);
             },
-            child: const Text("Mentés"),
+            child: Text(AppLocalizations.of(context)!.save),
           ),
         ],
       ),
@@ -138,15 +142,15 @@ class _ForumPostTileState extends State<ForumPostTile> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text("Törlés megerősítése"),
-        content: const Text("Biztosan törlöd a bejegyzést és hozzászólásait?"),
+        title: Text(AppLocalizations.of(context)!.sureDelete),
+        content: Text(AppLocalizations.of(context)!.deleteSurePostAndComments),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(ctx, false),
-              child: const Text("Mégse")),
+              child: Text(AppLocalizations.of(context)!.cancel)),
           ElevatedButton(
               onPressed: () => Navigator.pop(ctx, true),
-              child: const Text("Törlés")),
+              child: Text(AppLocalizations.of(context)!.delete)),
         ],
       ),
     );
@@ -216,10 +220,12 @@ class _ForumPostTileState extends State<ForumPostTile> {
                       }
                     },
                     itemBuilder: (ctx) => [
-                      const PopupMenuItem(
-                          value: 'edit', child: Text('Szerkesztés')),
-                      const PopupMenuItem(
-                          value: 'delete', child: Text('Törlés')),
+                      PopupMenuItem(
+                          value: 'edit',
+                          child: Text(AppLocalizations.of(context)!.modify)),
+                      PopupMenuItem(
+                          value: 'delete',
+                          child: Text(AppLocalizations.of(context)!.delete)),
                     ],
                   ),
               ],

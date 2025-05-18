@@ -4,6 +4,7 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_storage/firebase_storage.dart";
 import "package:flutter/material.dart";
 import "package:intl/intl.dart";
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EventCard extends StatelessWidget {
   final String author;
@@ -40,7 +41,7 @@ class EventCard extends StatelessWidget {
         return gsUrl;
       }
     } catch (e) {
-      print("Hiba történt a profilkép lekérésekor: $e");
+      print("Error occured during downloading profile picture: $e");
     }
     return '';
   }

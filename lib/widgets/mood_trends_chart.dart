@@ -2,6 +2,7 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:fl_chart/fl_chart.dart";
 import "package:flutter/material.dart";
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MoodTrendsChart extends StatelessWidget {
   const MoodTrendsChart({super.key});
@@ -65,7 +66,7 @@ class MoodTrendsChart extends StatelessWidget {
         }
 
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text("No mood data to display."));
+          return Center(child: Text(AppLocalizations.of(context)!.noMoodData));
         }
 
         final dataByMonth = snapshot.data!;
@@ -89,7 +90,7 @@ class MoodTrendsChart extends StatelessWidget {
                   ],
                   titlesData: FlTitlesData(
                     bottomTitles: AxisTitles(
-                      axisNameWidget: const Text("Napok"),
+                      axisNameWidget: Text(AppLocalizations.of(context)!.days),
                       axisNameSize: 28,
                       sideTitles: SideTitles(
                         showTitles: true,

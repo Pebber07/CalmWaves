@@ -1,6 +1,7 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class JournalEditScreen extends StatefulWidget {
   final String? docId;
@@ -52,7 +53,7 @@ class _AddJournalEntryScreenState extends State<JournalEditScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Napló létrehozása"),
+        title: Text(AppLocalizations.of(context)!.createJournal),
         backgroundColor: Colors.blue,
       ),
       body: Padding(
@@ -62,7 +63,7 @@ class _AddJournalEntryScreenState extends State<JournalEditScreen> {
             TextField(
               controller: _titleController,
               decoration: InputDecoration(
-                labelText: "Cím:",
+                labelText: "${AppLocalizations.of(context)!.title}:",
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -72,7 +73,7 @@ class _AddJournalEntryScreenState extends State<JournalEditScreen> {
             TextField(
               controller: _contentController,
               decoration: InputDecoration(
-                labelText: "Tartalom:",
+                labelText: "${AppLocalizations.of(context)!.content}:",
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -88,7 +89,7 @@ class _AddJournalEntryScreenState extends State<JournalEditScreen> {
                   Navigator.pop(context);
                 }
               },
-              child: const Text("Mentés"),
+              child: Text(AppLocalizations.of(context)!.save),
             ),
           ],
         ),

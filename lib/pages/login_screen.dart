@@ -40,9 +40,9 @@ class _LoginScreenState extends State<LoginScreen> {
       if (!mounted) return;
       showDialog(
         context: context,
-        builder: (context) => const AlertDialog(
-          title: Text("Nincs internetkapcsolat"),
-          content: Text("Kérlek, csatlakozz egy hálózathoz."),
+        builder: (context) => AlertDialog(
+          title: Text(AppLocalizations.of(context)!.noInternetConnection),
+          content: Text(AppLocalizations.of(context)!.connectNetwork),
         ),
       );
       return;
@@ -52,9 +52,9 @@ class _LoginScreenState extends State<LoginScreen> {
         passwordController.text.trim().isEmpty) {
       showDialog(
         context: context,
-        builder: (context) => const AlertDialog(
-          title: Text('Hiba'),
-          content: Text('Kérem, az összes mezőt töltse ki!'),
+        builder: (context) => AlertDialog(
+          title: Text(AppLocalizations.of(context)!.error),
+          content: Text(AppLocalizations.of(context)!.fillAllFields),
         ),
       );
       return;
@@ -71,9 +71,9 @@ class _LoginScreenState extends State<LoginScreen> {
         if (!mounted) return;
         showDialog(
           context: context,
-          builder: (context) => const AlertDialog(
-            title: Text('Email not verified'),
-            content: Text('Kérlek, erősítsd meg az email címedet!'),
+          builder: (context) => AlertDialog(
+            title: Text(AppLocalizations.of(context)!.emailNotVerified),
+            content: Text(AppLocalizations.of(context)!.confirmEmail),
           ),
         );
         return;
@@ -87,7 +87,8 @@ class _LoginScreenState extends State<LoginScreen> {
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Hiba'),
-          content: Text(e.message ?? 'Ismeretlen hiba történt.'),
+          content:
+              Text(e.message ?? AppLocalizations.of(context)!.unknownError),
         ),
       );
     }
@@ -100,7 +101,6 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Center(
           child: Column(
             children: [
-              // Image.asset('assets/images/signin_balls.png'),
               const SizedBox(
                 height: 50,
               ),
@@ -124,9 +124,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   if (!await hasInternetConnection()) {
                     showDialog(
                       context: context,
-                      builder: (context) => const AlertDialog(
-                        title: Text("Hálózati hiba"),
-                        content: Text("Nincs internetkapcsolat."),
+                      builder: (context) => AlertDialog(
+                        title: Text(AppLocalizations.of(context)!.networkError),
+                        content: Text(
+                            AppLocalizations.of(context)!.noInternetConnection),
                       ),
                     );
                     return;
@@ -185,9 +186,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     if (!await hasInternetConnection()) {
                       showDialog(
                         context: context,
-                        builder: (context) => const AlertDialog(
-                          title: Text("Hálózati hiba"),
-                          content: Text("Nincs internetkapcsolat."),
+                        builder: (context) => AlertDialog(
+                          title:
+                              Text(AppLocalizations.of(context)!.networkError),
+                          content: Text(AppLocalizations.of(context)!
+                              .noInternetConnection),
                         ),
                       );
                       return;
@@ -198,9 +201,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     if (email.isEmpty) {
                       showDialog(
                         context: context,
-                        builder: (context) => const AlertDialog(
-                          title: Text("Hiányzó email"),
-                          content: Text("Kérlek, add meg az email címed!"),
+                        builder: (context) => AlertDialog(
+                          title: Text(AppLocalizations.of(context)!.emailEmpty),
+                          content: Text(
+                              AppLocalizations.of(context)!.enterYourEmail),
                         ),
                       );
                       return;
@@ -211,26 +215,26 @@ class _LoginScreenState extends State<LoginScreen> {
                           .sendPasswordResetEmail(email: email);
                       showDialog(
                         context: context,
-                        builder: (context) => const AlertDialog(
-                          title: Text("Email elküldve"),
+                        builder: (context) => AlertDialog(
+                          title: Text(AppLocalizations.of(context)!.emailSent),
                           content: Text(
-                              "Jelszó-visszaállító linket küldtünk az email címedre."),
+                              AppLocalizations.of(context)!.getBackPassword),
                         ),
                       );
                     } on FirebaseAuthException catch (e) {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                          title: const Text("Hiba"),
-                          content:
-                              Text(e.message ?? "Ismeretlen hiba történt."),
+                          title: Text(AppLocalizations.of(context)!.error),
+                          content: Text(e.message ??
+                              AppLocalizations.of(context)!.unknownError),
                         ),
                       );
                     }
                   },
-                  child: const Text(
-                    "Elfelejtetted a jelszavad?",
-                    style: TextStyle(fontSize: 14, color: Colors.blue),
+                  child: Text(
+                    AppLocalizations.of(context)!.forgotYourPassword,
+                    style: const TextStyle(fontSize: 14, color: Colors.blue),
                   ),
                 ),
               ),
@@ -246,14 +250,15 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               GradientButton(
                 buttonMargin: 8,
-                text: "Continue as a Guest",
+                text: AppLocalizations.of(context)!.continueAsAGuest,
                 onPressed: () async {
                   if (!await hasInternetConnection()) {
                     showDialog(
                       context: context,
-                      builder: (context) => const AlertDialog(
-                        title: Text("Hálózati hiba"),
-                        content: Text("Nincs internetkapcsolat."),
+                      builder: (context) => AlertDialog(
+                        title: Text(AppLocalizations.of(context)!.networkError),
+                        content: Text(
+                            AppLocalizations.of(context)!.noInternetConnection),
                       ),
                     );
                     return;

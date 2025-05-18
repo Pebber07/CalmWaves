@@ -101,9 +101,9 @@ class MoodScreen extends StatelessWidget {
                     return const CircularProgressIndicator();
                   }
                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    return const Text("No mood history found.");
+                    return Text(AppLocalizations.of(context)!.noMoodHistoryFound);
                   }
-
+                  
                   final moodDocs = snapshot.data!.docs;
 
                   return ListView.builder(
@@ -139,9 +139,9 @@ class MoodScreen extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              const Text(
-                "Mood Trends",
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.moodTrends,
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
                 ),

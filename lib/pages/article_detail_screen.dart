@@ -2,6 +2,7 @@ import "package:firebase_storage/firebase_storage.dart";
 import "package:flutter/material.dart";
 import "package:video_player/video_player.dart";
 import "package:youtube_player_flutter/youtube_player_flutter.dart";
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ArticleDetailScreen extends StatefulWidget {
   final String title;
@@ -50,7 +51,7 @@ class _ArticleDetailScreenState extends State<ArticleDetailScreen> {
           _downloadUrl = url;
         });
       } catch (e) {
-        print('Hiba a letöltési URL lekérésekor: $e');
+        print(AppLocalizations.of(context)!.urlError + ": $e");
       }
     } else {
       setState(() {

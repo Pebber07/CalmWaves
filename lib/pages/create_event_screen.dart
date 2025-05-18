@@ -42,10 +42,14 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
           'createTime': FieldValue.serverTimestamp(),
         });
         ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Az esemény sikeresen létrejött!')));
+          SnackBar(
+            content:
+                Text(AppLocalizations.of(context)!.eventSuccessfullyCreated),
+          ),
+        );
       } catch (e) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Hiba: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(AppLocalizations.of(context)!.error + ' $e')));
       }
     }
   }
@@ -67,11 +71,12 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                 ),
               ),
               CalendarThemeCard(
-                themeCaption: "Set theme and leave notes",
-                themeDescription: "Enter theme",
-                themeNote: "Note",
+                themeCaption:
+                    AppLocalizations.of(context)!.setThemeAndLeaveNotes,
+                themeDescription: AppLocalizations.of(context)!.enterTheme,
+                themeNote: AppLocalizations.of(context)!.note,
                 backgroundColor: Pallete.gradient2,
-                hintText: "Enter theme",
+                hintText: AppLocalizations.of(context)!.enterTheme,
                 titleController: titleController,
                 descriptionController: descriptionController,
               ),
@@ -94,7 +99,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               ),
               GradientButton(
                   onPressed: saveEvent,
-                  text: "Save date",
+                  text: AppLocalizations.of(context)!.saveDate,
                   buttonMargin: 20), //Press után kiírja toastba a dolgokat.
               const SizedBox(
                 width: 50,

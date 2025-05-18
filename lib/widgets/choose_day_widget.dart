@@ -1,6 +1,7 @@
 import 'package:calmwaves_app/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChooseDayWidget extends StatefulWidget {
   final Function(DateTime) onDateChanged;
@@ -111,9 +112,8 @@ class _ChooseDayWidgetState extends State<ChooseDayWidget> {
                       children: [
                         CircleAvatar(
                           radius: 18,
-                          backgroundColor: isToday
-                              ? Colors.yellow
-                              : Pallete.gradient1, 
+                          backgroundColor:
+                              isToday ? Colors.yellow : Pallete.gradient1,
                           child: Text(
                             "$day",
                             style: const TextStyle(color: Colors.white),
@@ -126,9 +126,9 @@ class _ChooseDayWidgetState extends State<ChooseDayWidget> {
                               color: Colors.lightBlue,
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 4, vertical: 2),
-                              child: const Text(
-                                "Kijelölt",
-                                style: TextStyle(
+                              child: Text(
+                                AppLocalizations.of(context)!.marked,
+                                style: const TextStyle(
                                     color: Colors.white, fontSize: 10),
                               ),
                             ),

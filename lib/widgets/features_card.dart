@@ -5,7 +5,12 @@ class Features extends StatelessWidget {
   final String description;
   final String image;
   final Color backgroundColor;
-  const Features({super.key, required this.title, required this.description, required this.image, required this.backgroundColor});
+  const Features(
+      {super.key,
+      required this.title,
+      required this.description,
+      required this.image,
+      required this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {
@@ -20,14 +25,15 @@ class Features extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            title, 
+            title,
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(
             height: 5,
           ),
-          Text('\$$description',
-          style: Theme.of(context).textTheme.bodySmall,
+          Text(
+            '\$$description',
+            style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(
             height: 5,

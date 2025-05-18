@@ -5,6 +5,7 @@ import "package:calmwaves_app/widgets/journal_card.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class JournalScreen extends StatefulWidget {
   const JournalScreen({super.key});
@@ -31,8 +32,8 @@ class _JournalScreenState extends State<JournalScreen> {
     final user = _auth.currentUser;
 
     if (user == null) {
-      return const Center(
-          child: Text("Be kell jelentkezni a napló megtekintéséhez."));
+      return Center(
+          child: Text(AppLocalizations.of(context)!.signInToSeeYourJournal));
     }
 
     return Scaffold(
@@ -45,12 +46,13 @@ class _JournalScreenState extends State<JournalScreen> {
               return const Center(child: CircularProgressIndicator());
             }
             if (snapshot.hasError) {
-              return const Center(
-                  child: Text("Hiba történt az adatok betöltése közben."));
+              return Center(
+                  child: Text(AppLocalizations.of(context)!.errorDuringLoad));
             }
             final docs = snapshot.data?.docs ?? [];
             if (docs.isEmpty) {
-              return const Center(child: Text("Nincsenek naplóbejegyzések."));
+              return Center(
+                  child: Text(AppLocalizations.of(context)!.noJournalEntrys));
             }
 
             return ListView.builder(
@@ -60,11 +62,12 @@ class _JournalScreenState extends State<JournalScreen> {
                 final docId = docs[index].id;
 
                 return JournalCard(
-                  title: data['title'] ?? 'Nincs cím',
-                  content: data['content'] ?? 'Nincs tartalom',
+                  title: data['title'] ?? AppLocalizations.of(context)!.noTitle,
+                  content: data['content'] ??
+                      AppLocalizations.of(context)!.noContent,
                   date: data['lastModified'] != null
                       ? (data['lastModified'] as Timestamp).toDate().toString()
-                      : 'Nincs dátum',
+                      : AppLocalizations.of(context)!.noDate,
                   docId: docId,
                   onEdit: () async {
                     await Navigator.push(
