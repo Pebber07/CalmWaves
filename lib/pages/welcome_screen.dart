@@ -1,11 +1,20 @@
+import "package:calmwaves_app/pages/register_screen.dart";
 import "package:calmwaves_app/widgets/feature.dart";
 import "package:calmwaves_app/widgets/gradient_button.dart";
 import "package:flutter/material.dart";
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
+  static route() => MaterialPageRoute(
+        builder: (context) => const WelcomeScreen(),
+      );
   const WelcomeScreen({super.key});
 
+  @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,16 +59,18 @@ class WelcomeScreen extends StatelessWidget {
                 title: AppLocalizations.of(context)!.receiveSupport,
                 description: AppLocalizations.of(context)!.connectOurcaring,
                 emoji: "\ud83d\udc6b",
-                setEmoji: 48,
+                setEmoji: 35,
               ),
               const SizedBox(
-                height: 60,
+                height: 40,
               ),
               GradientButton(
                 buttonMargin: 20,
                 text: AppLocalizations.of(context)!
                     .next, // It would be nice in the footer
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context, RegisterScreen.route());
+                },
               ),
             ],
           ),

@@ -7,7 +7,12 @@ class SocialButton extends StatelessWidget {
   final String label;
   final double horizontalPaddding;
   final VoidCallback buttonOnPressed;
-  const SocialButton({super.key, required this.iconPath, required this.label, this.horizontalPaddding = 50, required this.buttonOnPressed});
+  const SocialButton(
+      {super.key,
+      required this.iconPath,
+      required this.label,
+      this.horizontalPaddding = 50,
+      required this.buttonOnPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +31,10 @@ class SocialButton extends StatelessWidget {
         ),
       ),
       style: TextButton.styleFrom(
-
-        padding: EdgeInsets.symmetric(vertical: 25, horizontal: horizontalPaddding),
-        shape:  RoundedRectangleBorder(
+        backgroundColor: Pallete.gradient2,
+        padding:
+            EdgeInsets.symmetric(vertical: 25, horizontal: horizontalPaddding),
+        shape: RoundedRectangleBorder(
           side: const BorderSide(
             color: Pallete.borderColor,
             width: 3,

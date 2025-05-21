@@ -317,7 +317,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
                 child: RichText(
                   text: TextSpan(
-                    text: AppLocalizations.of(context)!.dontHaveAnAccount,
+                    text: "${AppLocalizations.of(context)!.dontHaveAnAccount} ",
                     style: Theme.of(context).textTheme.titleMedium,
                     children: [
                       TextSpan(

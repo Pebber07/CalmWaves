@@ -1,4 +1,6 @@
 import 'package:calmwaves_app/pages/login_screen.dart';
+import 'package:calmwaves_app/pages/register_screen.dart';
+import 'package:calmwaves_app/pages/welcome_screen.dart';
 import 'package:calmwaves_app/widgets/gradient_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -27,43 +29,42 @@ class StarterScreen extends StatelessWidget {
                 height: 20,
               ),
               Text(
-                AppLocalizations.of(context)!.securelyManage),
+                  textAlign: TextAlign.center,
+                  AppLocalizations.of(context)!.securelyManage),
               const SizedBox(
                 height: 15,
               ),
               Image.asset(
-                'assets/images/joga_picture.png',
+                // 'assets/images/joga_picture.png',
+                'assets/images/good_wave.png',
                 width: 300,
                 height: 300,
               ),
               const SizedBox(
-                height: 40,
+                height: 45,
               ),
               GradientButton(
                 buttonMargin: 20,
                 text: AppLocalizations.of(context)!.getStarted,
-                onPressed: () {},
-              ),
-              const SizedBox(
-                height: 20,
+                onPressed: () {
+                  Navigator.push(context, WelcomeScreen.route());
+                },
               ),
               Row(
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(context, LoginScreen.route());
+                      Navigator.push(context, RegisterScreen.route());
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(left: 45),
                       child: RichText(
                         text: TextSpan(
-                          text: AppLocalizations.of(context)!.alreadyAMember,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                          text: AppLocalizations.of(context)!.register,
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                       ),
                     ),
@@ -76,13 +77,11 @@ class StarterScreen extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 65),
                       child: RichText(
                         text: TextSpan(
-                          text: AppLocalizations.of(context)!.register,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                          text: AppLocalizations.of(context)!.alreadyAMember,
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                       ),
                     ),
