@@ -36,7 +36,7 @@ class _ForumScreenState extends State<ForumScreen> {
                 style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Colors.lightBlue,
+                  color: Colors.black,
                 ),
               ),
             ),
@@ -75,7 +75,7 @@ class _ForumScreenState extends State<ForumScreen> {
                 ),
               ),
               child: Text(AppLocalizations.of(context)!.newEntry,
-                  style: const TextStyle(fontSize: 16)),
+                  style: const TextStyle(fontSize: 16, color: Colors.white)),
             ),
             const SizedBox(
               height: 16,

@@ -120,24 +120,27 @@ class CustomDrawer extends StatelessWidget {
               padding: EdgeInsets.zero,
               children: [
                 _drawerItem(context, Icons.home, 'Kezdőlap', '/home'),
+                _drawerItem(context, Icons.book, 'Napló', '/journal'),
                 _drawerItem(
-                    context, Icons.settings, 'Beállítások', '/settings'),
+                    context, Icons.mood, 'Hangulat', '/mood'),
+                _drawerItem(context, Icons.forum, 'Fórum', '/forum'),
+                _drawerItem(context, Icons.assistant, 'Asszisztens', '/chatbot'),
                 _drawerItem(context, Icons.article, 'Cikkek', '/articles'),
+                /*
                 _drawerItem(context, Icons.event, 'Események', '/events'),
-                _drawerItem(
-                    context, Icons.health_and_safety, 'Hangulat', '/mood'),
+
                 _drawerItem(context, Icons.login, 'Bejelentkezés', '/login'),
                 _drawerItem(context, Icons.app_registration_outlined,
                     'Regisztráció', '/register'),
                 _drawerItem(context, Icons.start, 'Nyitó oldal', '/starter'),
                 _drawerItem(
                     context, Icons.first_page, 'Köszöntő oldal', '/welcome'),
+                    */
+                _drawerItem(context, Icons.person, 'Profil', '/profile'),
+                _drawerItem(
+                    context, Icons.settings, 'Beállítások', '/settings'),
                 _drawerItem(context, Icons.notifications, 'Értesítések',
                     '/notifications'),
-                _drawerItem(context, Icons.healing, 'Napló', '/journal'),
-                _drawerItem(context, Icons.chat, 'Beszélgetés', '/chatbot'),
-                _drawerItem(context, Icons.forum, 'Fórum', '/forum'),
-                _drawerItem(context, Icons.person, 'Profil', '/profile'),
                 _drawerItem(context, Icons.person, 'Felhasználók kezelése',
                     '/manage_users'),
               ],

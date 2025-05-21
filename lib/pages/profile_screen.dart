@@ -73,7 +73,8 @@ class ProfileScreen extends StatelessWidget {
               TextField(
                 controller: passwordController,
                 obscureText: true,
-                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.password),
+                decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.password),
               ),
             ],
           ),
@@ -107,7 +108,8 @@ class ProfileScreen extends StatelessWidget {
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(AppLocalizations.of(context)!.errorOccuredDuringProfileDelete),
+        content:
+            Text(AppLocalizations.of(context)!.errorOccuredDuringProfileDelete),
       ));
     }
   }
@@ -145,7 +147,8 @@ class ProfileScreen extends StatelessWidget {
                       fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
-                Text("${AppLocalizations.of(context)!.register}: $formattedDate"),
+                Text(
+                    "${AppLocalizations.of(context)!.register}: $formattedDate"),
                 const SizedBox(height: 16),
                 if (isGuest) ...[
                   Container(
@@ -165,7 +168,8 @@ class ProfileScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          AppLocalizations.of(context)!.registerToAccessEveryFunc,
+                          AppLocalizations.of(context)!
+                              .registerToAccessEveryFunc,
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 12),
@@ -227,7 +231,8 @@ class ProfileScreen extends StatelessWidget {
                   icon: const Icon(Icons.logout),
                   label: Text(AppLocalizations.of(context)!.logOut),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueAccent,
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
                     minimumSize: const Size.fromHeight(48),
                   ),
                 ),
@@ -235,8 +240,14 @@ class ProfileScreen extends StatelessWidget {
                 if (!isGuest)
                   OutlinedButton.icon(
                     onPressed: () => _deleteAccount(context),
-                    icon: const Icon(Icons.lock_outline),
-                    label: Text(AppLocalizations.of(context)!.deleteProfile),
+                    icon: const Icon(
+                      Icons.lock_outline,
+                      color: Colors.black,
+                    ),
+                    label: Text(
+                      AppLocalizations.of(context)!.deleteProfile,
+                      style: const TextStyle(color: Colors.black),
+                    ),
                   ),
               ],
             ),

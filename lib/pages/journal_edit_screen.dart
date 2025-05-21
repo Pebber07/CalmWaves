@@ -82,6 +82,10 @@ class _AddJournalEntryScreenState extends State<JournalEditScreen> {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                foregroundColor: Colors.white,
+              ),
               onPressed: () async {
                 final user = _auth.currentUser;
                 if (user != null) {

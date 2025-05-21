@@ -6,7 +6,8 @@ class CalendarThemeCard extends StatelessWidget {
   final String themeDescription;
   final String themeNote;
   final Color backgroundColor;
-  final String hintText;
+  final String hintTextFirst;
+  final String hintTextSecond;
   final TextEditingController titleController;
   final TextEditingController descriptionController;
   const CalendarThemeCard(
@@ -15,14 +16,15 @@ class CalendarThemeCard extends StatelessWidget {
       required this.themeDescription,
       required this.themeNote,
       required this.backgroundColor,
-      required this.hintText,
       required this.titleController,
-      required this.descriptionController});
+      required this.descriptionController,
+      required this.hintTextFirst,
+      required this.hintTextSecond});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(20.0),
+      margin: const EdgeInsets.all(10),
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: backgroundColor,
@@ -33,7 +35,8 @@ class CalendarThemeCard extends StatelessWidget {
         children: [
           Text(
             themeCaption,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
           ),
           const SizedBox(
             height: 10,
@@ -56,7 +59,7 @@ class CalendarThemeCard extends StatelessWidget {
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),
-              hintText: hintText,
+              hintText: hintTextFirst,
             ),
           ),
           const SizedBox(
@@ -80,7 +83,7 @@ class CalendarThemeCard extends StatelessWidget {
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),
-              hintText: hintText,
+              hintText: hintTextSecond,
             ),
           ),
           const SizedBox(

@@ -34,7 +34,7 @@ class _ChooseDayWidgetState extends State<ChooseDayWidget> {
     List<int> days = getDaysInMonth(selectedMonth);
 
     return Container(
-      margin: const EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(horizontal: 2),
       padding: const EdgeInsets.all(10),
       child: Card(
         color: Pallete.gradient2,

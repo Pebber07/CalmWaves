@@ -56,55 +56,79 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const CustomAppBar(),
-      drawer: const CustomDrawer(),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              Text(
-                AppLocalizations.of(context)!.createEvent,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
+    return WillPopScope(
+      onWillPop: () async {
+        final shouldLeave = await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(AppLocalizations.of(context)!.confirmation),
+            content:
+                Text(AppLocalizations.of(context)!.cancelEventCreationPrompt),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: Text(AppLocalizations.of(context)!.no),
               ),
-              CalendarThemeCard(
-                themeCaption:
-                    AppLocalizations.of(context)!.setThemeAndLeaveNotes,
-                themeDescription: AppLocalizations.of(context)!.enterTheme,
-                themeNote: AppLocalizations.of(context)!.note,
-                backgroundColor: Pallete.gradient2,
-                hintText: AppLocalizations.of(context)!.enterTheme,
-                titleController: titleController,
-                descriptionController: descriptionController,
-              ),
-              ChooseDayWidget(
-                onDateChanged: (DateTime newDate) {
-                  setState(() {
-                    selectedDay = newDate;
-                  });
-                },
-              ),
-              ChooseTimeWidget(
-                onTimeChanged: (TimeOfDay newTime) {
-                  setState(() {
-                    selectedTime = newTime;
-                  });
-                },
-              ), // needs an argument
-              const SizedBox(
-                width: 50,
-              ),
-              GradientButton(
-                  onPressed: saveEvent,
-                  text: AppLocalizations.of(context)!.saveDate,
-                  buttonMargin: 20), //Press után kiírja toastba a dolgokat.
-              const SizedBox(
-                width: 50,
+              TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: Text(AppLocalizations.of(context)!.yes),
               ),
             ],
+          ),
+        );
+        return shouldLeave ?? false;
+      },
+      child: Scaffold(
+        appBar: const CustomAppBar(),
+        drawer: const CustomDrawer(),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  AppLocalizations.of(context)!.createEvent,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+                CalendarThemeCard(
+                  themeCaption:
+                      AppLocalizations.of(context)!.setThemeAndLeaveNotes,
+                  themeDescription: AppLocalizations.of(context)!.enterTheme,
+                  themeNote: AppLocalizations.of(context)!.note,
+                  backgroundColor: Pallete.gradient2,
+                  hintTextFirst: AppLocalizations.of(context)!.enterTheme,
+                  hintTextSecond: AppLocalizations.of(context)!.enterComment,
+                  titleController: titleController,
+                  descriptionController: descriptionController,
+                ),
+                ChooseDayWidget(
+                  onDateChanged: (DateTime newDate) {
+                    setState(() {
+                      selectedDay = newDate;
+                    });
+                  },
+                ),
+                ChooseTimeWidget(
+                  onTimeChanged: (TimeOfDay newTime) {
+                    setState(() {
+                      selectedTime = newTime;
+                    });
+                  },
+                ), // needs an argument
+                GradientButton(
+                    onPressed: saveEvent,
+                    text: AppLocalizations.of(context)!.saveDate,
+                    buttonMargin: 20), //Press után kiírja toastba a dolgokat.
+                const SizedBox(
+                  width: 50,
+                ),
+              ],
+            ),
           ),
         ),
       ),

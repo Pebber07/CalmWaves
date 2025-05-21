@@ -33,7 +33,7 @@
   "newPasswordAgain": "Új jelszó újra",
   "refreshPassword": "Új jelszó elmentése",
   "theme": "Téma",
-  "appLanguage": "Alaklmazás nyelve",
+  "appLanguage": "Alkalmazás nyelve",
   "actions": "Műveletek",
   "userProfileSettings": "Profil Beállítások",
   "newUsername": "Új Felhasználónév",
@@ -175,5 +175,10 @@
   "noWaitingArticles": "Nincsen várakozó cikked",
   "noExcerpt": "Nincs rövid leírás",
   "selectedTime": "Kiválasztott időpont",
-  "next": "Következő"
+  "next": "Következő",
+  "confirmation": "Megerősítés",
+  "cancelEventCreationPrompt": "Biztosan megszakítod az esemény létrehozását?",
+  "yes": "Igen",
+  "no": "Mégse",
+  "enterComment": "Megjegyzés megadása"
 }

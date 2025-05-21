@@ -53,7 +53,7 @@ class _ChooseTimeWidgetState extends State<ChooseTimeWidget> {
         }
       },
       child: Container(
-        margin: const EdgeInsets.all(10),
+        margin: const EdgeInsets.symmetric(horizontal: 2),
         padding: const EdgeInsets.all(10),
         child: Card(
           color: Pallete.gradient2,

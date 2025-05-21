@@ -70,7 +70,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
         .where('userinfo.username', isEqualTo: newUsername)
         .get();
     if (isTaken.docs.isNotEmpty) {
-      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.usernameAlreadyUsed);
+      Fluttertoast.showToast(
+          msg: AppLocalizations.of(context)!.usernameAlreadyUsed);
       return;
     }
 
@@ -92,7 +93,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final confirmPass = confirmPasswordController.text.trim();
 
     if (newPass != confirmPass) {
-      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.passwordsNotMatching);
+      Fluttertoast.showToast(
+          msg: AppLocalizations.of(context)!.passwordsNotMatching);
       return;
     }
 
@@ -102,9 +104,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
           EmailAuthProvider.credential(email: user.email!, password: oldPass);
       await user.reauthenticateWithCredential(credential);
       await user.updatePassword(newPass);
-      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.passwordUpdated);
+      Fluttertoast.showToast(
+          msg: AppLocalizations.of(context)!.passwordUpdated);
     } catch (e) {
-      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.errorDuringPassword);
+      Fluttertoast.showToast(
+          msg: AppLocalizations.of(context)!.errorDuringPassword);
     }
   }
 
@@ -147,8 +151,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(AppLocalizations.of(context)!.userProfileSettings,
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Center(
+              child: Text(AppLocalizations.of(context)!.userProfileSettings,
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold)),
+            ),
             const SizedBox(height: 10),
             if (!isUsernameChanged && !_isGuest) ...[
               CustomTextField(
@@ -169,7 +176,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const Divider(),
             if (!_isGuest) ...[
               Text(AppLocalizations.of(context)!.modifyPassword,
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
               CustomTextField(
                 hintText: AppLocalizations.of(context)!.currentPasword,
@@ -204,7 +212,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 Text(
                   AppLocalizations.of(context)!.darkMode,
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 Switch(
                   value: isDarkTheme,
@@ -229,7 +238,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 Text(
                   AppLocalizations.of(context)!.notifications,
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 Switch(
                   value: !_isGuest &&
@@ -269,49 +279,44 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const Divider(),
             const SizedBox(height: 10),
             Text(AppLocalizations.of(context)!.appLanguage,
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(
               height: 16,
             ),
-            LanguageSelector(
-              initialLanguage: "hu",
-              onLanguageSelected: (langCode) {
-                widget.setLocale(
-                  Locale(langCode),
-                );
-                FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(userId)
-                    .update({'settings.preferredLanguage': langCode});
-              },
+            Center(
+              child: LanguageSelector(
+                initialLanguage: "hu",
+                onLanguageSelected: (langCode) {
+                  widget.setLocale(
+                    Locale(langCode),
+                  );
+                  FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(userId)
+                      .update({'settings.preferredLanguage': langCode});
+                },
+              ),
             ),
             const SizedBox(
               height: 16,
             ),
-            Text(AppLocalizations.of(context)!.contactUs, 
+            Text(AppLocalizations.of(context)!.contactUs,
                 style:
                     const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
-            InkWell(
-              onTap: () => launchEmail(),
-              child: const Text(
-                "support@calmwaves.com",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.blueAccent,
-                  decoration: TextDecoration.underline,
+            Center(
+              child: InkWell(
+                onTap: () => launchEmail(),
+                child: const Text(
+                  "support@calmwaves.com",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.blueAccent,
+                    decoration: TextDecoration.underline,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 30),
-            const Divider(),
-            Text(AppLocalizations.of(context)!.actions,
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 10),
-            GradientButton(
-              onPressed: _signOut,
-              text: AppLocalizations.of(context)!.logOut,
-              buttonMargin: 8,
             ),
           ],
         ),

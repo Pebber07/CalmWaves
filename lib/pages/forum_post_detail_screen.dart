@@ -122,7 +122,11 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
     final currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.posts)),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.posts),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: FutureBuilder<String>(
@@ -235,7 +239,8 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
                       child: TextField(
                         controller: _commentController,
                         decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context)!.newPost), // Todo
+                            hintText:
+                                AppLocalizations.of(context)!.newPost), // Todo
                       ),
                     ),
                     IconButton(

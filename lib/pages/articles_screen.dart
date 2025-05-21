@@ -215,6 +215,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blue,
         onPressed: () => _showAddArticlePopup(context),
         child: const Icon(Icons.add),
       ),

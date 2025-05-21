@@ -1,3 +1,4 @@
+import 'package:calmwaves_app/pages/create_event_screen.dart';
 import 'package:calmwaves_app/palette.dart';
 import 'package:calmwaves_app/widgets/activity_type.dart';
 import 'package:calmwaves_app/widgets/custom_app_bar.dart';
@@ -125,6 +126,18 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blue,
+        child: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CreateEventScreen(),
+            ),
+          );
+        },
       ),
     );
   }

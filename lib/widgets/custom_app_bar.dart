@@ -9,35 +9,20 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Pallete.backgroundColor,
-      title: const Text("CalmWaves"),
+      backgroundColor: Colors.blue, //Pallete.backgroundColor,
+      title: const Text(
+        "CalmWaves",
+        style: TextStyle(color: Colors.white),
+      ),
       centerTitle: true,
       leading: Builder(
         builder: (context) {
           return IconButton(
+            color: Colors.white,
               onPressed: Scaffold.of(context).openDrawer,
               icon: const Icon(Icons.menu));
         },
       ),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.notifications),
-          onPressed: () {
-            AwesomeNotifications().createNotification(
-              content: NotificationContent(
-                id: 1,
-                channelKey: "basic_channel",
-                title: "CalmWaves",
-                body: AppLocalizations.of(context)!.itsTime,
-              ),
-            );
-          },
-        ),
-        IconButton(
-          icon: const Icon(Icons.account_circle),
-          onPressed: () {},
-        ),
-      ],
     );
   }
 
