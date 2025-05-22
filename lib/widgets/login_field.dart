@@ -42,7 +42,7 @@ class CustomTextField extends StatelessWidget {
             floatingLabelBehavior: FloatingLabelBehavior.always,
             hintText: hintText,
             hintStyle: TextStyle(
-              color: Colors.grey.shade500,
+              color: Colors.grey.shade700,
             )),
       ),
     );

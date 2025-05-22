@@ -83,25 +83,36 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          content: AddArticle(
-            articleTitle: "",
-            articleImage: "",
-            articleText: "",
-            articleTitleController: titleController,
-            articleExcerptController: excerptController,
-            articleOptionalImageController: imageController,
-            articleOptionalVideoController: videoController,
-            articleTextController: contentController,
-            pressPostArticle: () async {
-              Navigator.pop(context);
-              await _addArticleToFirestore(
-                titleController.text.trim(),
-                excerptController.text.trim(),
-                imageController.text.trim(),
-                videoController.text.trim(),
-                contentController.text.trim(),
-              );
-            },
+          backgroundColor: Colors.transparent,
+          contentPadding: EdgeInsets.zero,
+          content: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * 0.9,
+              maxHeight: MediaQuery.of(context).size.height *
+                  0.7, // max 70% képernyőmagasság
+            ),
+            child: SingleChildScrollView(
+              child: AddArticle(
+                articleTitle: "",
+                articleImage: "",
+                articleText: "",
+                articleTitleController: titleController,
+                articleExcerptController: excerptController,
+                articleOptionalImageController: imageController,
+                articleOptionalVideoController: videoController,
+                articleTextController: contentController,
+                pressPostArticle: () async {
+                  Navigator.pop(context);
+                  await _addArticleToFirestore(
+                    titleController.text.trim(),
+                    excerptController.text.trim(),
+                    imageController.text.trim(),
+                    videoController.text.trim(),
+                    contentController.text.trim(),
+                  );
+                },
+              ),
+            ),
           ),
         );
       },

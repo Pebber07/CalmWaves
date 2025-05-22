@@ -174,6 +174,9 @@ class ProfileScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.black,
+                          ),
                           onPressed: () {
                             Navigator.pushNamed(context, '/register');
                           },
@@ -209,19 +212,6 @@ class ProfileScreen extends StatelessWidget {
                         weeklyStreaks: weeklyStreaks,
                         currentStreakCount: currentStreakCount,
                       );
-                    },
-                  ),
-                ],
-                if (role == 'admin') ...[
-                  const SizedBox(height: 16),
-                  Text(AppLocalizations.of(context)!.adminFunctions,
-                      style: Theme.of(context).textTheme.titleLarge),
-                  const SizedBox(height: 8),
-                  ElevatedButton.icon(
-                    icon: const Icon(Icons.manage_accounts),
-                    label: Text(AppLocalizations.of(context)!.userHandle),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/manage_users');
                     },
                   ),
                 ],

@@ -80,55 +80,83 @@ class _AddArticleState extends State<AddArticle> {
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Pallete.backgroundColor,
+        color: Colors.blue[300],
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            AppLocalizations.of(context)!.addOwnArticle,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
+          Center(
+            child: Text(
+              AppLocalizations.of(context)!.addOwnArticle,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Colors.white,
+              ),
             ),
+          ),
+          const SizedBox(
+            height: 15,
           ),
           CustomTextField(
               hintText: AppLocalizations.of(context)!.articleTitle,
               controller: widget.articleTitleController,
               buttonLabelText: AppLocalizations.of(context)!.title,
               hideText: false),
+          const SizedBox(
+            height: 15,
+          ),
           CustomTextField(
               hintText: AppLocalizations.of(context)!.articleExcerpt,
               controller: widget.articleExcerptController,
               buttonLabelText: AppLocalizations.of(context)!.excerpt,
               hideText: false),
+          const SizedBox(
+            height: 15,
+          ),
           TextField(
             controller: widget.articleTextController,
             maxLines: 5,
             decoration: InputDecoration(
               hintText: AppLocalizations.of(context)!.writeArticleContent,
+              hintStyle: const TextStyle(
+                color: Colors.white,
+              ),
               enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.white),
+                borderSide: BorderSide(color: Colors.blue),
               ),
               focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.white, width: 1.0),
+                borderSide: BorderSide(color: Colors.blue, width: 1.0),
               ),
             ),
           ),
-          ElevatedButton.icon(
-            onPressed: _isUploadingImage ? null : _pickAndUploadImage,
-            icon: const Icon(Icons.image),
-            label: _isUploadingImage
-                ? const CircularProgressIndicator()
-                : Text(AppLocalizations.of(context)!.chooseAPicture),
+          const SizedBox(
+            height: 15,
           ),
-          ElevatedButton.icon(
-            onPressed: _isUploadingVideo ? null : _pickAndUploadVideo,
-            icon: const Icon(Icons.video_library),
-            label: _isUploadingVideo
-                ? const CircularProgressIndicator()
-                : Text(AppLocalizations.of(context)!.chooseAVideo),
+          Center(
+            child: ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                foregroundColor: Colors.white,
+              ),
+              onPressed: _isUploadingImage ? null : _pickAndUploadImage,
+              icon: const Icon(Icons.image),
+              label: _isUploadingImage
+                  ? const CircularProgressIndicator()
+                  : Text(AppLocalizations.of(context)!.chooseAPicture),
+            ),
+          ),
+          Center(
+            child: ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue, foregroundColor: Colors.white),
+              onPressed: _isUploadingVideo ? null : _pickAndUploadVideo,
+              icon: const Icon(Icons.video_library),
+              label: _isUploadingVideo
+                  ? const CircularProgressIndicator()
+                  : Text(AppLocalizations.of(context)!.chooseAVideo),
+            ),
           ),
           GradientButton(
               onPressed: widget.pressPostArticle,

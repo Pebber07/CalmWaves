@@ -7,6 +7,7 @@ import "package:calmwaves_app/widgets/login_field.dart";
 import "package:calmwaves_app/widgets/social_button.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
+import "package:firebase_storage/firebase_storage.dart";
 import "package:flutter/material.dart";
 import "package:google_sign_in/google_sign_in.dart";
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -274,6 +275,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       .get();
 
                   if (!existingDoc.exists) {
+                    final storageRef = FirebaseStorage.instance
+                        .ref()
+                        .child('profile_pictures/template_profile_picture.png');
+                    final downloadUrl = await storageRef.getDownloadURL();
+
                     final guests = await FirebaseFirestore.instance
                         .collection('users')
                         .where('userinfo.username',
@@ -290,7 +296,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       'userinfo': {
                         'username': generatedUsername,
                         'isUsernameChanged': true,
-                        'profileImage': "",
+                        'profileImage': downloadUrl,
                         'email': "",
                         'role': 'guest',
                         'createdAt': Timestamp.now(),

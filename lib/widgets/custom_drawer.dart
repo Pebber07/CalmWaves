@@ -27,6 +27,7 @@ class CustomDrawer extends StatelessWidget {
       'profileImage': data?['userinfo']?['profileImage'] ??
           'gs://profile_pictures/template_profile_picture',
       'userId': user.uid,
+      'role': data?['userinfo']?['role'] ?? 'guest',
     };
   }
 
@@ -116,34 +117,51 @@ class CustomDrawer extends StatelessWidget {
             },
           ),
           Expanded(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                _drawerItem(context, Icons.home, 'Kezdőlap', '/home'),
-                _drawerItem(context, Icons.book, 'Napló', '/journal'),
-                _drawerItem(
-                    context, Icons.mood, 'Hangulat', '/mood'),
-                _drawerItem(context, Icons.forum, 'Fórum', '/forum'),
-                _drawerItem(context, Icons.assistant, 'Asszisztens', '/chatbot'),
-                _drawerItem(context, Icons.article, 'Cikkek', '/articles'),
-                /*
-                _drawerItem(context, Icons.event, 'Események', '/events'),
+            child: FutureBuilder<Map<String, dynamic>>(
+              future: _getUserInfo(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-                _drawerItem(context, Icons.login, 'Bejelentkezés', '/login'),
-                _drawerItem(context, Icons.app_registration_outlined,
-                    'Regisztráció', '/register'),
-                _drawerItem(context, Icons.start, 'Nyitó oldal', '/starter'),
-                _drawerItem(
-                    context, Icons.first_page, 'Köszöntő oldal', '/welcome'),
-                    */
-                _drawerItem(context, Icons.person, 'Profil', '/profile'),
-                _drawerItem(
-                    context, Icons.settings, 'Beállítások', '/settings'),
-                _drawerItem(context, Icons.notifications, 'Értesítések',
-                    '/notifications'),
-                _drawerItem(context, Icons.person, 'Felhasználók kezelése',
-                    '/manage_users'),
-              ],
+                final role = snapshot.data!['role'];
+                final List<Widget> drawerItems = [];
+
+                // Guest users
+                drawerItems.addAll([
+                  _drawerItem(context, Icons.home, 'Kezdőlap', '/home'),
+                  _drawerItem(context, Icons.book, 'Napló', '/journal'),
+                  _drawerItem(context, Icons.person, 'Profil', '/profile'),
+                  _drawerItem(
+                      context, Icons.settings, 'Beállítások', '/settings'),
+                ]);
+
+                // User or admin
+                if (role == 'user' || role == 'admin') {
+                  drawerItems.addAll([
+                    _drawerItem(context, Icons.mood, 'Hangulat', '/mood'),
+                    _drawerItem(context, Icons.forum, 'Fórum', '/forum'),
+                    _drawerItem(
+                        context, Icons.assistant, 'Asszisztens', '/chatbot'),
+                    _drawerItem(context, Icons.article, 'Cikkek', '/articles'),
+                  ]);
+                }
+
+                // Just admin
+                if (role == 'admin') {
+                  drawerItems.addAll([
+                    _drawerItem(context, Icons.notifications, 'Értesítések',
+                        '/notifications'),
+                    _drawerItem(context, Icons.person, 'Felhasználók kezelése',
+                        '/manage_users'),
+                  ]);
+                }
+
+                return ListView(
+                  padding: EdgeInsets.zero,
+                  children: drawerItems,
+                );
+              },
             ),
           ),
         ],
