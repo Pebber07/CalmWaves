@@ -30,12 +30,10 @@ class EventCard extends StatelessWidget {
           .doc(userId)
           .get();
       if (userDoc.exists) {
-        final gsUrl = userDoc['userinfo']['profilePicture'] ?? '';
+        final gsUrl = userDoc['userinfo']['profileImage'] ?? '';
         if (gsUrl.startsWith('gs://')) {
-          final filePath = gsUrl.replaceFirst(
-              'gs://calmwaves-c6569.firebasestorage.app', '');
-          final downloadUrl =
-              await FirebaseStorage.instance.ref(filePath).getDownloadURL();
+          final ref = FirebaseStorage.instance.refFromURL(gsUrl);
+          final downloadUrl = await ref.getDownloadURL();
           return downloadUrl;
         }
         return gsUrl;
@@ -77,15 +75,16 @@ class EventCard extends StatelessWidget {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
                       }
-                      final profileImage =
-                          snapshot.hasData && snapshot.data!.isNotEmpty
-                              ? snapshot.data!
-                              : 'assets/images/template_profile_pic.png';
 
                       return CircleAvatar(
                         radius: 30,
                         backgroundColor: Colors.black,
-                        backgroundImage: NetworkImage(profileImage),
+                        backgroundImage: snapshot.hasData &&
+                                snapshot.data!.isNotEmpty
+                            ? NetworkImage(snapshot.data!)
+                            : const AssetImage(
+                                    'assets/images/template_profile_pic.png')
+                                as ImageProvider,
                       );
                     }),
                 const SizedBox(

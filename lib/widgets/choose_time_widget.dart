@@ -43,6 +43,23 @@ class _ChooseTimeWidgetState extends State<ChooseTimeWidget> {
         TimeOfDay? newTime = await showTimePicker(
           context: context,
           initialTime: selectedTime,
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: Theme.of(context).copyWith(
+                colorScheme: const ColorScheme.light(
+                  primary: Colors.blue, 
+                  onPrimary: Colors.white, 
+                  onSurface: Colors.black, 
+                ),
+                textButtonTheme: TextButtonThemeData(
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.blue, 
+                  ),
+                ),
+              ),
+              child: child!,
+            );
+          },
         );
 
         if (newTime != null) {
@@ -81,7 +98,7 @@ class _ChooseTimeWidgetState extends State<ChooseTimeWidget> {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  "${AppLocalizations.of(context)!.selectedTime}: ${TimeOfDay.now().format(context)}",
+                  "${AppLocalizations.of(context)!.selectedTime}: ${selectedTime.format(context)}",
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,

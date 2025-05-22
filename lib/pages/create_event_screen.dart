@@ -27,6 +27,16 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   void saveEvent() async {
     final title = titleController.text.trim();
     final description = descriptionController.text.trim();
+
+    if (title.isEmpty || description.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.fillRequiredFields),
+        ),
+      );
+      return;
+    }
+
     final day = DateFormat('yyyy-MM-dd').format(selectedDay);
     final time = selectedTime.format(context);
     final userId = FirebaseAuth.instance.currentUser?.uid;
@@ -41,15 +51,20 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
           'author': userId,
           'createTime': FieldValue.serverTimestamp(),
         });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content:
-                Text(AppLocalizations.of(context)!.eventSuccessfullyCreated),
-          ),
-        );
+
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content:
+                  Text(AppLocalizations.of(context)!.eventSuccessfullyCreated),
+            ),
+          );
+          Navigator.pop(context);
+        }
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(AppLocalizations.of(context)!.error + ' $e')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('${AppLocalizations.of(context)!.error} $e')),
+        );
       }
     }
   }

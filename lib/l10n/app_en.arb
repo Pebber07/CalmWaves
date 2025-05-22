@@ -180,5 +180,6 @@
   "cancelEventCreationPrompt": "Are you sure you want to cancel creating the event?",
   "yes": "Yes",
   "no": "No",
-  "enterComment": "Enter a comment"
+  "enterComment": "Enter a comment",
+  "fillRequiredFields":"Please also fill in the Subject and Comment fields."
 }
