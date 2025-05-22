@@ -171,7 +171,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ] else
               Text(AppLocalizations.of(context)!.usernameAlreadyUpdated,
-                  style: const TextStyle(color: Colors.grey)),
+                  style: const TextStyle(color: Colors.black)),
             const SizedBox(height: 20),
             const Divider(),
             if (!_isGuest) ...[

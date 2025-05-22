@@ -124,36 +124,46 @@ class CustomDrawer extends StatelessWidget {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                final role = snapshot.data!['role'];
+                final role = snapshot.data!['role'] ?? 'guest';
                 final List<Widget> drawerItems = [];
 
-                // Guest users
-                drawerItems.addAll([
-                  _drawerItem(context, Icons.home, 'Kezdőlap', '/home'),
-                  _drawerItem(context, Icons.book, 'Napló', '/journal'),
-                  _drawerItem(context, Icons.person, 'Profil', '/profile'),
-                  _drawerItem(
-                      context, Icons.settings, 'Beállítások', '/settings'),
-                ]);
-
-                // User or admin
-                if (role == 'user' || role == 'admin') {
+                if (role == 'guest') {
                   drawerItems.addAll([
+                    _drawerItem(context, Icons.home, 'Kezdőlap', '/home'),
+                    _drawerItem(context, Icons.book, 'Napló', '/journal'),
+                    _drawerItem(context, Icons.person, 'Profil', '/profile'),
+                    _drawerItem(
+                        context, Icons.settings, 'Beállítások', '/settings'),
+                  ]);
+                } else if (role == 'user') {
+                  drawerItems.addAll([
+                    _drawerItem(context, Icons.home, 'Kezdőlap', '/home'),
+                    _drawerItem(context, Icons.book, 'Napló', '/journal'),
                     _drawerItem(context, Icons.mood, 'Hangulat', '/mood'),
                     _drawerItem(context, Icons.forum, 'Fórum', '/forum'),
                     _drawerItem(
                         context, Icons.assistant, 'Asszisztens', '/chatbot'),
                     _drawerItem(context, Icons.article, 'Cikkek', '/articles'),
+                    _drawerItem(context, Icons.person, 'Profil', '/profile'),
+                    _drawerItem(
+                        context, Icons.settings, 'Beállítások', '/settings'),
                   ]);
-                }
-
-                // Just admin
-                if (role == 'admin') {
+                } else if (role == 'admin') {
                   drawerItems.addAll([
+                    _drawerItem(context, Icons.home, 'Kezdőlap', '/home'),
+                    _drawerItem(context, Icons.book, 'Napló', '/journal'),
+                    _drawerItem(context, Icons.person, 'Profil', '/profile'),
+                    _drawerItem(context, Icons.mood, 'Hangulat', '/mood'),
+                    _drawerItem(context, Icons.forum, 'Fórum', '/forum'),
+                    _drawerItem(
+                        context, Icons.assistant, 'Asszisztens', '/chatbot'),
+                    _drawerItem(context, Icons.article, 'Cikkek', '/articles'),
                     _drawerItem(context, Icons.notifications, 'Értesítések',
                         '/notifications'),
                     _drawerItem(context, Icons.person, 'Felhasználók kezelése',
                         '/manage_users'),
+                    _drawerItem(
+                        context, Icons.settings, 'Beállítások', '/settings'),
                   ]);
                 }
 
