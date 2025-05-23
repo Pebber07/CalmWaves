@@ -11,6 +11,7 @@ import "package:flutter/material.dart";
 import "package:intl/intl.dart";
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// The screen where the users can create events for themselves.
 class CreateEventScreen extends StatefulWidget {
   const CreateEventScreen({super.key});
 
@@ -138,7 +139,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                 GradientButton(
                     onPressed: saveEvent,
                     text: AppLocalizations.of(context)!.saveDate,
-                    buttonMargin: 20), //Press után kiírja toastba a dolgokat.
+                    buttonMargin: 20), // after 'Press' writes it out in a Toast.
                 const SizedBox(
                   width: 50,
                 ),

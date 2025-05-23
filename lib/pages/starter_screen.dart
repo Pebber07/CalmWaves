@@ -5,6 +5,7 @@ import 'package:calmwaves_app/widgets/gradient_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// When the application starts this is the first screen, from here registration, login, welcome_screen accessable.
 class StarterScreen extends StatelessWidget {
   const StarterScreen({super.key});
 
@@ -35,7 +36,6 @@ class StarterScreen extends StatelessWidget {
                 height: 15,
               ),
               Image.asset(
-                // 'assets/images/joga_picture.png',
                 'assets/images/good_wave.png',
                 width: 300,
                 height: 300,

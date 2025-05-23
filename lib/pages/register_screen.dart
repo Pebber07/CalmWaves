@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:calmwaves_app/pages/login_screen.dart';
 
+/// Registration screen, email - password, or with Google account.
 class RegisterScreen extends StatefulWidget {
   static route() => MaterialPageRoute(
         builder: (context) => const RegisterScreen(),

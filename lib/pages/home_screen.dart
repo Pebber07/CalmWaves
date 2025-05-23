@@ -1,15 +1,13 @@
 import 'package:calmwaves_app/pages/create_event_screen.dart';
-import 'package:calmwaves_app/palette.dart';
-import 'package:calmwaves_app/widgets/activity_type.dart';
 import 'package:calmwaves_app/widgets/custom_app_bar.dart';
 import 'package:calmwaves_app/widgets/custom_drawer.dart';
 import 'package:calmwaves_app/widgets/event_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:calmwaves_app/widgets/gradient_button.dart';
 import 'package:intl/intl.dart';
 
+/// The users events are getting listed here, day by day.
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -65,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: const CustomDrawer(),
       body: Column(
         children: [
-          // Görgethető hét napjai
+          // Scrollable weekdays.
           SizedBox(
             height: 120,
             child: ListView.builder(

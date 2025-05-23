@@ -4,6 +4,7 @@ import "package:calmwaves_app/widgets/gradient_button.dart";
 import "package:flutter/material.dart";
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Welcome Screen introduces the application.
 class WelcomeScreen extends StatefulWidget {
   static route() => MaterialPageRoute(
         builder: (context) => const WelcomeScreen(),
@@ -18,7 +19,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Make it constant again.
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -67,7 +67,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               GradientButton(
                 buttonMargin: 20,
                 text: AppLocalizations.of(context)!
-                    .next, // It would be nice in the footer
+                    .next,
                 onPressed: () {
                   Navigator.push(context, RegisterScreen.route());
                 },

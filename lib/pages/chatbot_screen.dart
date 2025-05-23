@@ -5,6 +5,7 @@ import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
 
+/// The Assistant screen, where the users are able to ask questions from an assistant.
 class ChatbotScreen extends StatefulWidget {
   const ChatbotScreen({super.key});
 
@@ -62,24 +63,25 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     );
 
     List<Map<String, dynamic>> _messagesHistory = [
-    {
-      "role": "system",
-      "content": "Te egy mentális egészséggel foglalkozó chatbot vagy. Csak mentális egészséggel kapcsolatos kérdésekre válaszolj.",
-    },
-    ..._messages.reversed.map((m) {
-      if (m.user == _currentUser) {
-        return {
-          "role": "user",
-          "content": m.text,
-        };
-      } else {
-        return {
-          "role": "assistant",
-          "content": m.text,
-        };
-      }
-    }),
-  ];
+      {
+        "role": "system",
+        "content":
+            "Te egy mentális egészséggel foglalkozó chatbot vagy. Csak mentális egészséggel kapcsolatos kérdésekre válaszolj.",
+      },
+      ..._messages.reversed.map((m) {
+        if (m.user == _currentUser) {
+          return {
+            "role": "user",
+            "content": m.text,
+          };
+        } else {
+          return {
+            "role": "assistant",
+            "content": m.text,
+          };
+        }
+      }),
+    ];
 
     final request = ChatCompleteText(
       model: GptTurboChatModel(),

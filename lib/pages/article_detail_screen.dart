@@ -4,6 +4,7 @@ import "package:video_player/video_player.dart";
 import "package:youtube_player_flutter/youtube_player_flutter.dart";
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// The article itself, possibly containing pictures, videos, and the text.
 class ArticleDetailScreen extends StatefulWidget {
   final String title;
   final String content;
@@ -42,6 +43,7 @@ class _ArticleDetailScreenState extends State<ArticleDetailScreen> {
     super.dispose();
   }
 
+  // Load image from Storage.
   Future<void> _loadImage() async {
     if (widget.imageUrl.startsWith('gs://')) {
       try {

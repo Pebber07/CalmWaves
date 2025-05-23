@@ -7,6 +7,7 @@ import '../widgets/new_post_popup.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// The public forum screen where the users can ask questions from users.
 class ForumScreen extends StatefulWidget {
   const ForumScreen({super.key});
 

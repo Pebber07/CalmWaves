@@ -7,6 +7,7 @@ import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Notifications Screen is only accessible for admins, they can accept - deny the users articles.
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
 

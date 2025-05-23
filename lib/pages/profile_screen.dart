@@ -9,6 +9,7 @@ import 'package:calmwaves_app/widgets/profile_picture_picker.dart';
 import 'package:calmwaves_app/services/user_streak_service.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Profile Screen where the users can see the streak, log out, and delete their profile.
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 

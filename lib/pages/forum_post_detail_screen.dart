@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// The comment section under a forum questions post.
 class ForumPostDetailScreen extends StatefulWidget {
   const ForumPostDetailScreen({super.key});
 
@@ -240,7 +241,7 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
                         controller: _commentController,
                         decoration: InputDecoration(
                             hintText:
-                                AppLocalizations.of(context)!.newPost), // Todo
+                                AppLocalizations.of(context)!.newPost),
                       ),
                     ),
                     IconButton(

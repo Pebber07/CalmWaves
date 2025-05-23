@@ -1,5 +1,3 @@
-import "dart:convert";
-
 import "package:calmwaves_app/pages/article_detail_screen.dart";
 import "package:calmwaves_app/widgets/add_article.dart";
 import "package:calmwaves_app/widgets/article_card.dart";
@@ -11,6 +9,7 @@ import "package:flutter/material.dart";
 import "package:fluttertoast/fluttertoast.dart";
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// All the articles can be found here, besides that the article creation, like articles.
 class ArticlesScreen extends StatefulWidget {
   const ArticlesScreen({super.key});
 
@@ -89,7 +88,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
             constraints: BoxConstraints(
               maxWidth: MediaQuery.of(context).size.width * 0.9,
               maxHeight: MediaQuery.of(context).size.height *
-                  0.7, // max 70% képernyőmagasság
+                  0.7, // screen height max. 70%
             ),
             child: SingleChildScrollView(
               child: AddArticle(
@@ -171,7 +170,9 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
           Expanded(
             child: StreamBuilder(
               stream: articlesCollection
-                  .where("status", isEqualTo: "approved")
+                  .where("status",
+                      isEqualTo:
+                          "approved") // if the users article approved, it can appear in the public screen.
                   .snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {

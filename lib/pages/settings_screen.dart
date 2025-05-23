@@ -1,5 +1,3 @@
-import "dart:ffi";
-
 import "package:calmwaves_app/widgets/custom_app_bar.dart";
 import "package:calmwaves_app/widgets/custom_drawer.dart";
 import "package:calmwaves_app/widgets/gradient_button.dart";
@@ -12,8 +10,9 @@ import "package:fluttertoast/fluttertoast.dart";
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import "package:workmanager/workmanager.dart";
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Settings Screen where users can alter their username once, password,
+///  turn of notifications, switch the apps language, or the apps theme.
 class SettingsScreen extends StatefulWidget {
   final void Function(Locale) setLocale;
   final void Function(bool) toggleTheme;
@@ -309,7 +308,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: InkWell(
                 onTap: () => launchEmail(),
                 child: const Text(
-                  "support@calmwaves.com",
+                  "tapodinorman7@gmail.com",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.blueAccent,

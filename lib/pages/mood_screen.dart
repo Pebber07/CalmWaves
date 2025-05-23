@@ -1,13 +1,13 @@
 import "package:calmwaves_app/widgets/custom_app_bar.dart";
 import "package:calmwaves_app/widgets/custom_drawer.dart";
 import "package:calmwaves_app/widgets/feeling_card.dart";
-import "package:calmwaves_app/widgets/gradient_button.dart";
 import "package:calmwaves_app/widgets/mood_trends_chart.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Mood screen where the users can enter their mood, and checkout statistics.
 class MoodScreen extends StatelessWidget {
   const MoodScreen({super.key});
 

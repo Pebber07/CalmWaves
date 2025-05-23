@@ -1,7 +1,7 @@
-import "package:calmwaves_app/widgets/custom_app_bar.dart";
 import "package:calmwaves_app/widgets/custom_drawer.dart";
 import "package:flutter/material.dart";
 
+/// Administrator accepts or denies the article written by a regular user.
 class ArticleAcceptScreen extends StatelessWidget {
   final String title;
   final String content;

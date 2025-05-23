@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Manage Users Screen is only accessable for admin users, they can for instance delete user accounts.
 class ManageUsersScreen extends StatelessWidget {
   const ManageUsersScreen({super.key});
 
@@ -45,7 +46,7 @@ class ManageUsersScreen extends StatelessWidget {
       await post.reference.delete();
     }
 
-    // Kommentek, más posztoknál
+    // Comments at other posts.
     final allForumDocs =
         await FirebaseFirestore.instance.collection('forum').get();
     for (final doc in allForumDocs.docs) {

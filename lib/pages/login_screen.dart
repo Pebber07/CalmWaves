@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:calmwaves_app/pages/register_screen.dart';
 
+/// Login screen where the already registered, and guest users can enter the application.
 class LoginScreen extends StatefulWidget {
   static route() => MaterialPageRoute(
         builder: (context) => const LoginScreen(),
