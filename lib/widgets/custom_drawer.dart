@@ -152,7 +152,6 @@ class CustomDrawer extends StatelessWidget {
                   drawerItems.addAll([
                     _drawerItem(context, Icons.home, 'Kezdőlap', '/home'),
                     _drawerItem(context, Icons.book, 'Napló', '/journal'),
-                    _drawerItem(context, Icons.person, 'Profil', '/profile'),
                     _drawerItem(context, Icons.mood, 'Hangulat', '/mood'),
                     _drawerItem(context, Icons.forum, 'Fórum', '/forum'),
                     _drawerItem(
@@ -162,6 +161,7 @@ class CustomDrawer extends StatelessWidget {
                         '/notifications'),
                     _drawerItem(context, Icons.person, 'Felhasználók kezelése',
                         '/manage_users'),
+                    _drawerItem(context, Icons.person, 'Profil', '/profile'),
                     _drawerItem(
                         context, Icons.settings, 'Beállítások', '/settings'),
                   ]);

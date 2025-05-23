@@ -1,16 +1,12 @@
-import "package:calmwaves_app/pages/register_screen.dart";
-import "package:calmwaves_app/services/google_auth.dart";
-import "package:calmwaves_app/widgets/check_internet.dart";
-import "package:calmwaves_app/widgets/gradient_button.dart";
-import "package:calmwaves_app/widgets/language_selector_widget.dart";
-import "package:calmwaves_app/widgets/login_field.dart";
-import "package:calmwaves_app/widgets/social_button.dart";
-import "package:cloud_firestore/cloud_firestore.dart";
-import "package:firebase_auth/firebase_auth.dart";
-import "package:firebase_storage/firebase_storage.dart";
-import "package:flutter/material.dart";
-import "package:google_sign_in/google_sign_in.dart";
+import 'package:calmwaves_app/services/auth_service.dart';
+import 'package:calmwaves_app/services/google_auth.dart';
+import 'package:calmwaves_app/widgets/check_internet.dart';
+import 'package:calmwaves_app/widgets/gradient_button.dart';
+import 'package:calmwaves_app/widgets/login_field.dart';
+import 'package:calmwaves_app/widgets/social_button.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:calmwaves_app/pages/register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   static route() => MaterialPageRoute(
@@ -23,321 +19,196 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  final AuthService _authService = AuthService();
+  final GoogleAuthService _googleAuthService = GoogleAuthService();
 
   @override
   void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
-  final googleAuthService = GoogleAuthService();
-
-  Future<void> loginUserWithEmailAndPassword() async {
+  Future<void> _handleLogin() async {
     if (!await hasInternetConnection()) {
-      if (!mounted) return;
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(AppLocalizations.of(context)!.noInternetConnection),
-          content: Text(AppLocalizations.of(context)!.connectNetwork),
-        ),
+      _showErrorDialog(AppLocalizations.of(context)!.noInternetConnection,
+          AppLocalizations.of(context)!.connectNetwork);
+      return;
+    }
+
+    final result = await _authService.login(
+      context: context,
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
+    );
+
+    if (!mounted) return;
+
+    if (result['success']) {
+      Navigator.pushReplacementNamed(context, '/home');
+    } else {
+      _showErrorDialog(AppLocalizations.of(context)!.error, result['error']);
+    }
+  }
+
+  void _showErrorDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+      ),
+    );
+  }
+
+  Future<void> _resetPassword() async {
+    final email = _emailController.text.trim();
+    final loc = AppLocalizations.of(context)!;
+
+    if (!await hasInternetConnection()) {
+      _showErrorDialog(loc.networkError, loc.noInternetConnection);
+      return;
+    }
+
+    if (email.isEmpty) {
+      _showErrorDialog(loc.emailEmpty, loc.enterYourEmail);
+      return;
+    }
+
+    try {
+      await AuthService().sendPasswordResetEmail(email);
+      _showErrorDialog(loc.emailSent, loc.getBackPassword);
+    } catch (e) {
+      _showErrorDialog(loc.error, e.toString());
+    }
+  }
+
+  Future<void> _loginAsGuest() async {
+    if (!await hasInternetConnection()) {
+      _showErrorDialog(
+        AppLocalizations.of(context)!.networkError,
+        AppLocalizations.of(context)!.noInternetConnection,
       );
       return;
     }
 
-    if (emailController.text.trim().isEmpty ||
-        passwordController.text.trim().isEmpty) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(AppLocalizations.of(context)!.error),
-          content: Text(AppLocalizations.of(context)!.fillAllFields),
-        ),
+    final success = await _authService.loginAsGuest(context);
+    if (success && mounted) {
+      Navigator.pushReplacementNamed(context, '/home');
+    }
+  }
+
+  Future<void> _signInWithGoogle() async {
+    if (!await hasInternetConnection()) {
+      _showErrorDialog(
+        AppLocalizations.of(context)!.networkError,
+        AppLocalizations.of(context)!.noInternetConnection,
       );
       return;
     }
 
     try {
-      final userCredential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
-
-      if (!userCredential.user!.emailVerified) {
-        if (!mounted) return;
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(AppLocalizations.of(context)!.emailNotVerified),
-            content: Text(AppLocalizations.of(context)!.confirmEmail),
-          ),
-        );
-        return;
+      final userCredential = await _googleAuthService.signInWithGoogle();
+      if (userCredential != null && mounted) {
+        Navigator.pushReplacementNamed(context, '/home');
       }
-
-      // Sikeres bejelentkezés
-      if (!mounted) return;
-      Navigator.pushReplacementNamed(context, '/home');
-    } on FirebaseAuthException catch (e) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Hiba'),
-          content:
-              Text(e.message ?? AppLocalizations.of(context)!.unknownError),
-        ),
+    } catch (e) {
+      _showErrorDialog(
+        AppLocalizations.of(context)!.error,
+        e.toString(),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 50,
-              ),
-              const SizedBox(
-                height: 50,
-              ),
-              Text(
-                AppLocalizations.of(context)!.signIn,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 50,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Column(
+              children: [
+                const SizedBox(height: 50),
+                Text(
+                  loc.signIn,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 50,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 50,
-              ),
-              SocialButton(
-                iconPath: 'assets/svgs/g_logo.svg',
-                label: AppLocalizations.of(context)!.continueWithGoogle,
-                buttonOnPressed: () async {
-                  if (!await hasInternetConnection()) {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text(AppLocalizations.of(context)!.networkError),
-                        content: Text(
-                            AppLocalizations.of(context)!.noInternetConnection),
-                      ),
-                    );
-                    return;
-                  }
-
-                  try {
-                    final userCredential =
-                        await googleAuthService.signInWithGoogle();
-                    if (userCredential != null) {
-                      if (!mounted) return;
-                      Navigator.pushReplacementNamed(context, '/home');
-                    }
-                  } catch (e) {
-                    if (!mounted) return;
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text('Hiba'),
-                        content: Text(e.toString()),
-                      ),
-                    );
-                  }
-                },
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                AppLocalizations.of(context)!.or,
-                style: const TextStyle(
-                  fontSize: 17,
+                const SizedBox(height: 50),
+                SocialButton(
+                  iconPath: 'assets/svgs/g_logo.svg',
+                  label: loc.continueWithGoogle,
+                  buttonOnPressed: _signInWithGoogle,
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              CustomTextField(
-                controller: emailController,
-                hideText: false,
-                buttonLabelText: AppLocalizations.of(context)!.username,
-                hintText: AppLocalizations.of(context)!.enterYourUsername,
-              ),
-              const SizedBox(
-                height: 13,
-              ),
-              CustomTextField(
-                controller: passwordController,
-                hideText: true,
-                buttonLabelText: AppLocalizations.of(context)!.password,
-                hintText: AppLocalizations.of(context)!.enterYourPassword,
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () async {
-                    if (!await hasInternetConnection()) {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title:
-                              Text(AppLocalizations.of(context)!.networkError),
-                          content: Text(AppLocalizations.of(context)!
-                              .noInternetConnection),
-                        ),
-                      );
-                      return;
-                    }
-
-                    final email = emailController.text.trim();
-
-                    if (email.isEmpty) {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text(AppLocalizations.of(context)!.emailEmpty),
-                          content: Text(
-                              AppLocalizations.of(context)!.enterYourEmail),
-                        ),
-                      );
-                      return;
-                    }
-
-                    try {
-                      await FirebaseAuth.instance
-                          .sendPasswordResetEmail(email: email);
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text(AppLocalizations.of(context)!.emailSent),
-                          content: Text(
-                              AppLocalizations.of(context)!.getBackPassword),
-                        ),
-                      );
-                    } on FirebaseAuthException catch (e) {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text(AppLocalizations.of(context)!.error),
-                          content: Text(e.message ??
-                              AppLocalizations.of(context)!.unknownError),
-                        ),
-                      );
-                    }
+                const SizedBox(height: 10),
+                Text(loc.or, style: const TextStyle(fontSize: 17)),
+                const SizedBox(height: 10),
+                CustomTextField(
+                  controller: _emailController,
+                  hideText: false,
+                  buttonLabelText: loc.email,
+                  hintText: loc.enterYourEmail,
+                ),
+                const SizedBox(height: 13),
+                CustomTextField(
+                  controller: _passwordController,
+                  hideText: true,
+                  buttonLabelText: loc.password,
+                  hintText: loc.enterYourPassword,
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: _resetPassword,
+                    child: Text(
+                      loc.forgotYourPassword,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 25),
+                GradientButton(
+                  buttonMargin: 20,
+                  text: loc.logIN,
+                  onPressed: _handleLogin,
+                ),
+                GradientButton(
+                  buttonMargin: 8,
+                  text: loc.continueAsAGuest,
+                  onPressed: _loginAsGuest,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, RegisterScreen.route());
                   },
-                  child: Text(
-                    AppLocalizations.of(context)!.forgotYourPassword,
-                    style: const TextStyle(fontSize: 14, color: Colors.blue),
+                  child: RichText(
+                    text: TextSpan(
+                      text: "${loc.dontHaveAnAccount} ",
+                      style: Theme.of(context).textTheme.titleMedium,
+                      children: [
+                        TextSpan(
+                          text: loc.signUp,
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              GradientButton(
-                buttonMargin: 20,
-                text: AppLocalizations.of(context)!.logIN,
-                onPressed: () async {
-                  await loginUserWithEmailAndPassword();
-                },
-              ),
-              GradientButton(
-                buttonMargin: 8,
-                text: AppLocalizations.of(context)!.continueAsAGuest,
-                onPressed: () async {
-                  if (!await hasInternetConnection()) {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text(AppLocalizations.of(context)!.networkError),
-                        content: Text(
-                            AppLocalizations.of(context)!.noInternetConnection),
-                      ),
-                    );
-                    return;
-                  }
-
-                  final credential =
-                      await FirebaseAuth.instance.signInAnonymously();
-                  final userId = credential.user!.uid;
-
-                  final existingDoc = await FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(userId)
-                      .get();
-
-                  if (!existingDoc.exists) {
-                    final storageRef = FirebaseStorage.instance
-                        .ref()
-                        .child('profile_pictures/template_profile_picture.png');
-                    final downloadUrl = await storageRef.getDownloadURL();
-
-                    final guests = await FirebaseFirestore.instance
-                        .collection('users')
-                        .where('userinfo.username',
-                            isGreaterThanOrEqualTo: 'Guest#')
-                        .get();
-                    final guestNumber =
-                        (guests.docs.length + 1).toString().padLeft(3, '0');
-                    final generatedUsername = 'Guest#$guestNumber';
-
-                    await FirebaseFirestore.instance
-                        .collection('users')
-                        .doc(userId)
-                        .set({
-                      'userinfo': {
-                        'username': generatedUsername,
-                        'isUsernameChanged': true,
-                        'profileImage': downloadUrl,
-                        'email': "",
-                        'role': 'guest',
-                        'createdAt': Timestamp.now(),
-                      },
-                      'messages': [],
-                      'calendar': [],
-                      'mood': [],
-                      'settings': {
-                        'notificationsEnabled': false,
-                        'preferredLangugae': 'hu',
-                        'preferredTheme': 'light',
-                      },
-                      'articles': [],
-                    });
-                  }
-
-                  if (!mounted) return;
-                  Navigator.pushReplacementNamed(context, '/home');
-                },
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(context, RegisterScreen.route());
-                },
-                child: RichText(
-                  text: TextSpan(
-                    text: "${AppLocalizations.of(context)!.dontHaveAnAccount} ",
-                    style: Theme.of(context).textTheme.titleMedium,
-                    children: [
-                      TextSpan(
-                        text: AppLocalizations.of(context)!.signUp,
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
