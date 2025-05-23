@@ -1,6 +1,7 @@
 import "package:calmwaves_app/palette.dart";
 import "package:flutter/material.dart";
 
+/// Card where the user enter the events title, and description.
 class CalendarThemeCard extends StatelessWidget {
   final String themeCaption;
   final String themeDescription;

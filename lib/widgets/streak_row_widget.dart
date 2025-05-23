@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Horizontally scrollable widget, that shows the streak days.
 class StreakRowWidget extends StatelessWidget {
   final List<bool> weeklyStreaks;
   final int currentStreakCount;

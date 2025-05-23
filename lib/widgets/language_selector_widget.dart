@@ -1,7 +1,8 @@
 import "package:flutter/material.dart";
 
+/// The user can switch betweeen hungarian and english app language.
 class LanguageSelector extends StatefulWidget {
-  final String initialLanguage; // "hu", "gb", "de"
+  final String initialLanguage; // "hu", "gb"
   final Function(String) onLanguageSelected;
 
   const LanguageSelector(

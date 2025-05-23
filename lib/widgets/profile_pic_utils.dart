@@ -1,6 +1,7 @@
 import "dart:typed_data";
 import "package:image_picker/image_picker.dart";
 
+/// Utilities to be able to set own profile picture.
 Future<Uint8List?> pickImage(ImageSource source) async {
   final ImagePicker imagePicker = ImagePicker();
   XFile? file = await imagePicker.pickImage(source: source);

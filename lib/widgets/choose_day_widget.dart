@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Choose the day where the event is organized on.
 class ChooseDayWidget extends StatefulWidget {
   final Function(DateTime) onDateChanged;
   const ChooseDayWidget({
@@ -19,7 +20,6 @@ class _ChooseDayWidgetState extends State<ChooseDayWidget> {
   DateTime? selectedDay;
 
   List<int> getDaysInMonth(DateTime month) {
-    // final firstDayOfMonth = DateTime(month.year, month.month, 1);
     final lastDayOfMonth = DateTime(month.year, month.month + 1, 0);
 
     List<int> days = [];

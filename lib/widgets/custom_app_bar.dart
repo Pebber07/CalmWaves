@@ -1,7 +1,4 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:calmwaves_app/palette.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});
@@ -9,7 +6,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.blue, //Pallete.backgroundColor,
+      backgroundColor: Colors.blue, 
       title: const Text(
         "CalmWaves",
         style: TextStyle(color: Colors.white),

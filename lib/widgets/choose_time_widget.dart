@@ -3,6 +3,7 @@ import 'package:calmwaves_app/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Choose the exact time when the event starts.
 class ChooseTimeWidget extends StatefulWidget {
   final Function(TimeOfDay) onTimeChanged;
   const ChooseTimeWidget({super.key, required this.onTimeChanged});

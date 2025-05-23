@@ -2,6 +2,7 @@ import "package:calmwaves_app/palette.dart";
 import "package:flutter/material.dart";
 import "package:flutter_svg/flutter_svg.dart";
 
+/// Used for the Google logo.
 class SocialButton extends StatelessWidget {
   final String iconPath;
   final String label;

@@ -4,6 +4,7 @@ import "package:fl_chart/fl_chart.dart";
 import "package:flutter/material.dart";
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Chart that display the mood statistics.
 class MoodTrendsChart extends StatelessWidget {
   const MoodTrendsChart({super.key});
 

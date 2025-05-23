@@ -2,7 +2,7 @@ import "package:calmwaves_app/widgets/custom_app_bar.dart";
 import "package:calmwaves_app/widgets/custom_drawer.dart";
 import "package:calmwaves_app/widgets/gradient_button.dart";
 import "package:calmwaves_app/widgets/language_selector_widget.dart";
-import "package:calmwaves_app/widgets/login_field.dart";
+import "package:calmwaves_app/widgets/custom_text_field.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";

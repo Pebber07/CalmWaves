@@ -2,7 +2,7 @@ import 'package:calmwaves_app/services/auth_service.dart';
 import 'package:calmwaves_app/services/google_auth.dart';
 import 'package:calmwaves_app/widgets/check_internet.dart';
 import 'package:calmwaves_app/widgets/gradient_button.dart';
-import 'package:calmwaves_app/widgets/login_field.dart';
+import 'package:calmwaves_app/widgets/custom_text_field.dart';
 import 'package:calmwaves_app/widgets/social_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

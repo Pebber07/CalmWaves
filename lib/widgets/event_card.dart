@@ -1,10 +1,8 @@
 import "package:calmwaves_app/palette.dart";
-import "package:calmwaves_app/widgets/activity_type.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_storage/firebase_storage.dart";
 import "package:flutter/material.dart";
 import "package:intl/intl.dart";
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EventCard extends StatelessWidget {
   final String author;
@@ -48,7 +46,7 @@ class EventCard extends StatelessWidget {
   Widget build(BuildContext context) {
     String formattedDate = DateFormat('dd MMM yyyy').format(eventDate);
     final timeParts =
-        time.split(':'); // 13:22 idő formátum miatt kell összeszerkeszteni.
+        time.split(':'); // 13:22 idő formátum miatt kell összeszerkeszteni. // Due to [13:22] format it has to be edited.
     final eventTime = DateTime(
       eventDate.year,
       eventDate.month,

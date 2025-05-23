@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 
+/// Article card that appears as a list on the articles screen.
 class ArticleCard extends StatelessWidget {
   final String title;
   final String articleText;

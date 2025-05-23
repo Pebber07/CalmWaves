@@ -2,6 +2,7 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Card that appers on journal screen.
 class JournalCard extends StatelessWidget {
   final String title;
   final String content;

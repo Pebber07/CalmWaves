@@ -1,12 +1,12 @@
-import "package:calmwaves_app/palette.dart";
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
 import "package:calmwaves_app/widgets/gradient_button.dart";
-import "package:calmwaves_app/widgets/login_field.dart";
+import "package:calmwaves_app/widgets/custom_text_field.dart";
 import "package:flutter/material.dart";
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Widget, that teh users use to create new article posts.
 class AddArticle extends StatefulWidget {
   final String articleTitle;
   final String articleImage;

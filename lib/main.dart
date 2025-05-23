@@ -1,4 +1,3 @@
-// import 'package:calmwaves_app/pages/home_screen.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:calmwaves_app/firebase_options.dart';
 import 'package:calmwaves_app/pages/articles_screen.dart';
@@ -12,13 +11,10 @@ import 'package:calmwaves_app/pages/mood_screen.dart';
 import 'package:calmwaves_app/pages/login_screen.dart';
 import 'package:calmwaves_app/pages/notifications_screen.dart';
 import 'package:calmwaves_app/pages/profile_screen.dart';
-// import 'package:calmwaves_app/pages/login_screen.dart';
 import 'package:calmwaves_app/pages/register_screen.dart';
 import 'package:calmwaves_app/pages/settings_screen.dart';
 import 'package:calmwaves_app/pages/starter_screen.dart';
 import 'package:calmwaves_app/pages/welcome_screen.dart';
-// import 'package:calmwaves_app/pages/register_screen.dart';
-import 'package:calmwaves_app/palette.dart';
 import 'package:calmwaves_app/services/notification_controller.dart';
 import 'package:calmwaves_app/widgets/background_tasks.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -198,7 +194,6 @@ class _MyAppState extends State<MyApp> {
       navigatorKey: navigatorKey,
       title: "CalmWaves",
       theme:
-          // ThemeData.dark().copyWith(scaffoldBackgroundColor: Pallete.backgroundColor,),
           ThemeData(
         scaffoldBackgroundColor:
             _isDarkTheme ? Colors.blueGrey[900] : Colors.lightBlue[100],

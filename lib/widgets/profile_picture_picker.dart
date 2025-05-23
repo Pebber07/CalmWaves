@@ -8,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Hepls to set an own Profile picture.
 class ProfilePicturePicker extends StatefulWidget {
   const ProfilePicturePicker({super.key});
 
@@ -28,7 +29,7 @@ class _MyWidgetState extends State<ProfilePicturePicker> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _loadProfileImage(); // Képernyő visszatérés
+    _loadProfileImage(); // Return to the previous screen.
   }
 
   Future<void> _loadProfileImage() async {
@@ -70,16 +71,16 @@ class _MyWidgetState extends State<ProfilePicturePicker> {
     }
 
     try {
-      // Egyedi fájlnév
+      // Unique filename.
       String fileName =
           "${DateTime.now().millisecondsSinceEpoch}_${FirebaseAuth.instance.currentUser?.uid}.jpg";
 
-      // Storage referencia
+      // Storage reference.
       Reference storageRef =
           FirebaseStorage.instance.ref().child('profile_pictures/$fileName');
       UploadTask uploadTask = storageRef.putData(_image!);
 
-      // Feltöltés és url lekérdezés
+      // Upload az url query.
       TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() {});
       String imageUrl = await taskSnapshot.ref.getDownloadURL();
 

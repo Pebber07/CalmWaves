@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 
+/// The articles card, that the admin will accept or deny.
 class AcceptArticleCard extends StatelessWidget {
   final String title;
   final String articleText;

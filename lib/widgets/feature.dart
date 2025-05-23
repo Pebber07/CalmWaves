@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 
+/// Appears on welcome screen.
 class Feature extends StatelessWidget {
   final String title;
   final String description;
