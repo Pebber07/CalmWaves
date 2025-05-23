@@ -183,5 +183,13 @@
   "enterComment": "Megjegyzés megadása",
   "fillRequiredFields": "Kérlek, töltsd ki a Téma és Megjegyzés mezőket is.",
   "events": "Események",
-  "yourJournalEntries": "Naplóbejegyzéseid"
+  "yourJournalEntries": "Naplóbejegyzéseid",
+  "howCanIHelpYou": "Miben segíthetek?",
+  "home": "Kezdőlap",
+  "journal": "Napló",
+  "mood": "Hangulat",
+  "assistant": "Asszisztens",
+  "profile": "Profil",
+  "settings": "Settings",
+  "manageUsers": "Felhasználók kezelése"
 }

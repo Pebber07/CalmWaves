@@ -4,6 +4,7 @@ import 'package:calmwaves_app/widgets/custom_drawer.dart';
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// The Assistant screen, where the users are able to ask questions from an assistant.
 class ChatbotScreen extends StatefulWidget {
@@ -48,11 +49,24 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
           ),
           inputOptions: InputOptions(
             inputTextStyle: const TextStyle(
-              color: Colors.black87, 
+              color: Colors.black87,
               fontSize: 16,
             ),
             cursorStyle: const CursorStyle(
               color: Colors.lightBlue,
+            ),
+            inputDecoration: InputDecoration(
+              hintText: AppLocalizations.of(context)!.howCanIHelpYou,
+              filled: true,
+              fillColor: Colors.white,
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              border: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(30),
+                ),
+                borderSide: BorderSide.none,
+              ),
             ),
             sendButtonBuilder: (send) {
               return IconButton(

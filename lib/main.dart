@@ -193,8 +193,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       navigatorKey: navigatorKey,
       title: "CalmWaves",
-      theme:
-          ThemeData(
+      theme: ThemeData(
         scaffoldBackgroundColor:
             _isDarkTheme ? Colors.blueGrey[900] : Colors.lightBlue[100],
         brightness: _isDarkTheme ? Brightness.dark : Brightness.light,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:calmwaves_app/services/user_streak_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
@@ -129,41 +130,62 @@ class CustomDrawer extends StatelessWidget {
 
                 if (role == 'guest') {
                   drawerItems.addAll([
-                    _drawerItem(context, Icons.home, 'Kezdőlap', '/home'),
-                    _drawerItem(context, Icons.book, 'Napló', '/journal'),
-                    _drawerItem(context, Icons.person, 'Profil', '/profile'),
-                    _drawerItem(
-                        context, Icons.settings, 'Beállítások', '/settings'),
+                    _drawerItem(context, Icons.home,
+                        AppLocalizations.of(context)!.home, '/home'),
+                    _drawerItem(context, Icons.book,
+                        AppLocalizations.of(context)!.journal, '/journal'),
+                    _drawerItem(context, Icons.person,
+                        AppLocalizations.of(context)!.profile, '/profile'),
+                    _drawerItem(context, Icons.settings,
+                        AppLocalizations.of(context)!.settings, '/settings'),
                   ]);
                 } else if (role == 'user') {
                   drawerItems.addAll([
-                    _drawerItem(context, Icons.home, 'Kezdőlap', '/home'),
-                    _drawerItem(context, Icons.book, 'Napló', '/journal'),
-                    _drawerItem(context, Icons.mood, 'Hangulat', '/mood'),
-                    _drawerItem(context, Icons.forum, 'Fórum', '/forum'),
-                    _drawerItem(
-                        context, Icons.assistant, 'Asszisztens', '/chatbot'),
-                    _drawerItem(context, Icons.article, 'Cikkek', '/articles'),
-                    _drawerItem(context, Icons.person, 'Profil', '/profile'),
-                    _drawerItem(
-                        context, Icons.settings, 'Beállítások', '/settings'),
+                    _drawerItem(context, Icons.home,
+                        AppLocalizations.of(context)!.home, '/home'),
+                    _drawerItem(context, Icons.book,
+                        AppLocalizations.of(context)!.journal, '/journal'),
+                    _drawerItem(context, Icons.mood,
+                        AppLocalizations.of(context)!.mood, '/mood'),
+                    _drawerItem(context, Icons.forum,
+                        AppLocalizations.of(context)!.forum, '/forum'),
+                    _drawerItem(context, Icons.assistant,
+                        AppLocalizations.of(context)!.assistant, '/chatbot'),
+                    _drawerItem(context, Icons.article,
+                        AppLocalizations.of(context)!.articles, '/articles'),
+                    _drawerItem(context, Icons.person,
+                        AppLocalizations.of(context)!.profile, '/profile'),
+                    _drawerItem(context, Icons.settings,
+                        AppLocalizations.of(context)!.settings, '/settings'),
                   ]);
                 } else if (role == 'admin') {
                   drawerItems.addAll([
-                    _drawerItem(context, Icons.home, 'Kezdőlap', '/home'),
-                    _drawerItem(context, Icons.book, 'Napló', '/journal'),
-                    _drawerItem(context, Icons.mood, 'Hangulat', '/mood'),
-                    _drawerItem(context, Icons.forum, 'Fórum', '/forum'),
+                    _drawerItem(context, Icons.home,
+                        AppLocalizations.of(context)!.home, '/home'),
+                    _drawerItem(context, Icons.book,
+                        AppLocalizations.of(context)!.journal, '/journal'),
+                    _drawerItem(context, Icons.mood,
+                        AppLocalizations.of(context)!.mood, '/mood'),
+                    _drawerItem(context, Icons.forum,
+                        AppLocalizations.of(context)!.forum, '/forum'),
+                    _drawerItem(context, Icons.assistant,
+                        AppLocalizations.of(context)!.assistant, '/chatbot'),
+                    _drawerItem(context, Icons.article,
+                        AppLocalizations.of(context)!.articles, '/articles'),
                     _drawerItem(
-                        context, Icons.assistant, 'Asszisztens', '/chatbot'),
-                    _drawerItem(context, Icons.article, 'Cikkek', '/articles'),
-                    _drawerItem(context, Icons.notifications, 'Értesítések',
+                        context,
+                        Icons.notifications,
+                        AppLocalizations.of(context)!.notifications,
                         '/notifications'),
-                    _drawerItem(context, Icons.person, 'Felhasználók kezelése',
-                        '/manage_users'),
-                    _drawerItem(context, Icons.person, 'Profil', '/profile'),
                     _drawerItem(
-                        context, Icons.settings, 'Beállítások', '/settings'),
+                        context,
+                        Icons.person,
+                        AppLocalizations.of(context)!.manageUsers,
+                        '/manage_users'),
+                    _drawerItem(context, Icons.person,
+                        AppLocalizations.of(context)!.profile, '/profile'),
+                    _drawerItem(context, Icons.settings,
+                        AppLocalizations.of(context)!.settings, '/settings'),
                   ]);
                 }
 

@@ -177,7 +177,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                     child: RichText(
                       text: TextSpan(
-                        text: loc.alreadyAMember,
+                        text: "${loc.alreadyAMember} ",
                         style: Theme.of(context).textTheme.titleMedium,
                         children: [
                           TextSpan(

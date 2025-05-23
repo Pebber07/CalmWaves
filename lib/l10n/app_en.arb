@@ -181,7 +181,15 @@
   "yes": "Yes",
   "no": "No",
   "enterComment": "Enter a comment",
-  "fillRequiredFields":"Please also fill in the Subject and Comment fields.",
+  "fillRequiredFields": "Please also fill in the Subject and Comment fields.",
   "events": "Events",
-  "yourJournalEntries": "Your journal entries"
+  "yourJournalEntries": "Your journal entries",
+  "howCanIHelpYou": "How can I help you?",
+  "home": "Home",
+  "journal": "Journal",
+  "mood": "Mood",
+  "assistant": "Assistant",
+  "profile": "Profile",
+  "settings": "Settings",
+  "manageUsers": "Manage users"
 }
