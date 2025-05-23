@@ -28,7 +28,7 @@ class GoogleAuthService {
       final docSnapshot = await userRef.get();
 
       if (!docSnapshot.exists) {
-        // Ha nem létezik a felhasználó, hozd létre az adatokat
+        // If the user doesn't exist, create their doc.
         await userRef.set({
           'userinfo': {
             'username': userCredential.user!.displayName ?? 'No Name',

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+/// Calculate the streaks, the number of days, where the users filled their mood consecutively. 
 class UserStreakService {
   static Future<int> calculateCurrentStreak(String userId) async {
     final now = DateTime.now();

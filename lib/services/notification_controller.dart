@@ -1,22 +1,22 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 
 class NotificationController {
-  // when a new notification gets created.
+  // When a new notification gets created.
   @pragma("vm:entry-point")
   static Future<void> onNotificationCreatedMethod(
       ReceivedNotification receivedNotification) async {}
 
-  // notification is displayed.
+  // Notification is displayed.
   @pragma("vm:entry-point")
   static Future<void> onNotificationDisplayedMethod(
       ReceivedNotification receivedNotification) async {}
 
-  // notification gets dismissed.
+  // Notification gets dismissed.
   @pragma("vm:entry-point")
   static Future<void> onDismissActionReceivedMethod(
       ReceivedAction receivedAction) async {}
 
-  // notification gets clicked on.
+  // Notification gets clicked on.
   @pragma("vm:entry-point")
   static Future<void> onActionReceivedMethod(
       ReceivedAction receivedAction) async {}

@@ -25,7 +25,7 @@ class AuthService {
     return hasUppercase && hasSpecialCharacter && hasMinLength;
   }
 
-    // login email + password
+    // Login email + password.
   Future<Map<String, dynamic>> login({
     required BuildContext context,
     required String email,
@@ -53,7 +53,7 @@ class AuthService {
     }
   }
 
-  // register
+  // Register.
   Future<Map<String, dynamic>> register({
     required BuildContext context,
     required String username,
