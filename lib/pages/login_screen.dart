@@ -135,12 +135,12 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Column(
               children: [
-                const SizedBox(height: 50),
+                const SizedBox(height: 75),
                 Text(
                   loc.signIn,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 50,
+                    fontSize: 40,
                   ),
                 ),
                 const SizedBox(height: 50),
@@ -178,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 25),
+                const SizedBox(height: 30),
                 GradientButton(
                   buttonMargin: 20,
                   text: loc.logIN,

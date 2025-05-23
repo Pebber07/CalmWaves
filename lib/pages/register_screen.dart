@@ -121,12 +121,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
               key: _formKey,
               child: Column(
                 children: [
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 75),
                   Text(
                     loc.register,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 50,
+                      fontSize: 40,
                     ),
                   ),
                   const SizedBox(height: 35),
@@ -165,7 +165,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     buttonLabelText: loc.passwordAgain,
                     hintText: 'SecurePassword!123',
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 35),
                   GradientButton(
                     buttonMargin: 15,
                     text: loc.register,
