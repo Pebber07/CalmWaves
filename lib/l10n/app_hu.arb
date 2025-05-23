@@ -181,5 +181,7 @@
   "yes": "Igen",
   "no": "Mégse",
   "enterComment": "Megjegyzés megadása",
-  "fillRequiredFields": "Kérlek, töltsd ki a Téma és Megjegyzés mezőket is."
+  "fillRequiredFields": "Kérlek, töltsd ki a Téma és Megjegyzés mezőket is.",
+  "events": "Események",
+  "yourJournalEntries": "Naplóbejegyzéseid"
 }

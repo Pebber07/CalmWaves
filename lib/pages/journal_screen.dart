@@ -7,7 +7,7 @@ import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-/// The screen, where the users see all their journals. 
+/// The screen, where the users see all their journals.
 class JournalScreen extends StatefulWidget {
   const JournalScreen({super.key});
 
@@ -56,34 +56,49 @@ class _JournalScreenState extends State<JournalScreen> {
                   child: Text(AppLocalizations.of(context)!.noJournalEntrys));
             }
 
-            return ListView.builder(
-              itemCount: docs.length,
-              itemBuilder: (context, index) {
-                final data = docs[index].data() as Map<String, dynamic>;
-                final docId = docs[index].id;
+            return ListView(
+              padding: const EdgeInsets.all(16.0),
+              children: [
+                Center(
+                  child: Text(
+                    AppLocalizations.of(context)!.yourJournalEntries,
+                    style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                ...docs.map((doc) {
+                  final data = doc.data() as Map<String, dynamic>;
+                  final docId = doc.id;
 
-                return JournalCard(
-                  title: data['title'] ?? AppLocalizations.of(context)!.noTitle,
-                  content: data['content'] ??
-                      AppLocalizations.of(context)!.noContent,
-                  date: data['lastModified'] != null
-                      ? (data['lastModified'] as Timestamp).toDate().toString()
-                      : AppLocalizations.of(context)!.noDate,
-                  docId: docId,
-                  onEdit: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => JournalEditScreen(
-                          docId: docId,
-                          initialTitle: data['title'] ?? '',
-                          initialContent: data['content'] ?? '',
+                  return JournalCard(
+                    title:
+                        data['title'] ?? AppLocalizations.of(context)!.noTitle,
+                    content: data['content'] ??
+                        AppLocalizations.of(context)!.noContent,
+                    date: data['lastModified'] != null
+                        ? (data['lastModified'] as Timestamp)
+                            .toDate()
+                            .toString()
+                        : AppLocalizations.of(context)!.noDate,
+                    docId: docId,
+                    onEdit: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => JournalEditScreen(
+                            docId: docId,
+                            initialTitle: data['title'] ?? '',
+                            initialContent: data['content'] ?? '',
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                );
-              },
+                      );
+                    },
+                  );
+                })
+              ],
             );
           }),
       floatingActionButton: FloatingActionButton(

@@ -60,10 +60,19 @@ class JournalCard extends StatelessWidget {
           title,
           style: const TextStyle(
             fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
         ),
-        subtitle: Text(content, maxLines: 2, overflow: TextOverflow.ellipsis),
+        subtitle: Text(
+          content,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        ),
         trailing: IconButton(
+          color: Colors.white,
           icon: const Icon(Icons.delete),
           onPressed: () {
             _deleteJournalEntry(context);

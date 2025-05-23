@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// The users events are getting listed here, day by day.
 class HomeScreen extends StatefulWidget {
@@ -63,6 +64,17 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: const CustomDrawer(),
       body: Column(
         children: [
+          const SizedBox(
+            height: 20,
+          ),
+          Text(
+            AppLocalizations.of(context)!.events,
+            style: const TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
           // Scrollable weekdays.
           SizedBox(
             height: 120,

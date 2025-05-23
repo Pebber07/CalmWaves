@@ -67,6 +67,11 @@ class _AddJournalEntryScreenState extends State<JournalEditScreen> {
                 labelText: "${AppLocalizations.of(context)!.title}:",
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: Colors.blue),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: Colors.blue, width: 2.0),
                 ),
               ),
             ),
@@ -77,6 +82,11 @@ class _AddJournalEntryScreenState extends State<JournalEditScreen> {
                 labelText: "${AppLocalizations.of(context)!.content}:",
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: Colors.blue),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: Colors.blue, width: 2.0),
                 ),
               ),
               maxLines: 5,

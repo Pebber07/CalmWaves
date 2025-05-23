@@ -153,9 +153,9 @@ class _MyAppState extends State<MyApp> {
       final hasConnection = result != ConnectivityResult.none;
 
       if (hasConnection && _isOffline) {
-        _showSnackBar("Internetkapcsolat helyreállt");
+        _showSnackBar(AppLocalizations.of(context)!.connectionBack);
       } else if (!hasConnection && !_isOffline) {
-        _showSnackBar("Internetkapcsolat elveszett");
+        _showSnackBar(AppLocalizations.of(context)!.connectionLost);
       }
 
       setState(() {
