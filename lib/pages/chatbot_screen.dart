@@ -27,7 +27,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   final ChatUser _currentUser =
       ChatUser(id: "1", firstName: "Norman", lastName: "Tapodi");
   final ChatUser _gptChatUser =
-      ChatUser(id: "2", firstName: "Chat", lastName: "GPT");
+      ChatUser(id: "2", firstName: "Your", lastName: "Assistant"); // Chat + GPT
 
   final List<ChatMessage> _messages = <ChatMessage>[];
   final List<ChatUser> _typingUsers = <ChatUser>[];
@@ -45,6 +45,21 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
             currentUserTextColor: Colors.white,
             containerColor: Colors.blue,
             textColor: Colors.white,
+          ),
+          inputOptions: InputOptions(
+            inputTextStyle: const TextStyle(
+              color: Colors.black87, 
+              fontSize: 16,
+            ),
+            cursorStyle: const CursorStyle(
+              color: Colors.lightBlue,
+            ),
+            sendButtonBuilder: (send) {
+              return IconButton(
+                icon: const Icon(Icons.send, color: Colors.lightBlue),
+                onPressed: send,
+              );
+            },
           ),
           onSend: (ChatMessage m) {
             getChatresponse(m);
