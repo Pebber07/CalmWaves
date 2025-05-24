@@ -1,16 +1,13 @@
-# calmwaves_app
+# CalmWaves Mobile App
 
-A new Flutter project.
+Author: Norman Tapodi
+Email: tapodinorman7@gmail.com
 
-## Getting Started
+## App Description
+CalmWaves is a mental health related mobile app, where the users are able to create journals, events, and monitor their mental health.
+Besides that, they can read articles, participate in forum chats, or use an AI assistant.
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
